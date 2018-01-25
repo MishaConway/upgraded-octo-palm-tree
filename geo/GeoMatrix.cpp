@@ -782,6 +782,11 @@ GeoMatrix GeoMatrix::Translation( const float x, const float y, const float z )
 	return translation_matrix;
 }
 
+GeoMatrix GeoMatrix::Translation( const GeoVector& vec ){
+    return GeoMatrix::Translation(vec.x, vec.y, vec.z);
+}
+
+
 GeoMatrix GeoMatrix::Scaling( const float x, const float y, const float z )
 {
 	GeoMatrix scaling_matrix;

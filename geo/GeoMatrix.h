@@ -80,6 +80,7 @@ struct GeoMatrix
 
 	/* TRANSLATION CONSTRUCTOR */
 	static GeoMatrix Translation( const float x, const float y, const float z );
+    static GeoMatrix Translation( const GeoVector& vec );
 
 	/* SCALING CONSTRUCTOR */
 	static GeoMatrix Scaling( const float x, const float y, const float z );
