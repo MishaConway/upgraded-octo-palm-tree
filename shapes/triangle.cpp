@@ -78,10 +78,13 @@ std::vector<vert3> Triangle::Triangulate(){
     return tris;
 }
 
-void Triangle::ReverseWinding(){
+Shape& Triangle::ReverseWinding(){
     Vertex temp = vertices[0];
     vertices[0] = vertices[2];
     vertices[2] = temp;
+    for( int i = 0; i < vertices.size(); i++ )
+        vertices[i].normal = (GeoVector( vertices[i].normal ) * -1).ToGeoFloat3();
+    return *this;
 }
 
 

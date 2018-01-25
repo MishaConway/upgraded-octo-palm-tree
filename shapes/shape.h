@@ -32,8 +32,10 @@ public:
     virtual ~Shape();
     virtual std::vector<Vertex> ToVertices() = 0;
     virtual std::vector<vert3> Triangulate() = 0;
-    virtual void ReverseWinding() = 0;
-    virtual void Transform( const GeoMatrix& matrix );
+    virtual Shape& ReverseWinding() = 0;
+    virtual Shape& Transform( const GeoMatrix& matrix );
+    virtual Shape& TranslateAlongNormal( const float distance );
+
 protected:
     std::vector<Vertex> vertices;
 };

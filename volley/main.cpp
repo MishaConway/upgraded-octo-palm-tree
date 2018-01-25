@@ -9,6 +9,8 @@
 #include "../shapes/shape.h"
 #include "../shapes/triangle.h"
 #include "../shapes/quad.h"
+#include "../shapes/cube.h"
+#include "../shapes/rounded_cube.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -67,7 +69,7 @@ int Display_SetViewport(int width, int height)
 void Display_Render()
 {
     glLoadIdentity();
-    glTranslatef(0, 0.0f, -6.0f);
+    glTranslatef(2, 0.0f, -6.0f);
 
     /*
     glBegin(GL_TRIANGLES);
@@ -93,13 +95,19 @@ void Display_Render()
     
     Quad quad = Quad::XYUnitQuad();
     
+    Cube cube = Cube::UnitCube();
+    
+    RoundedCube rounded_cube = RoundedCube::UnitRoundedCube(40, 0.3f);
+    
     //glFrontFace(GL_CCW);
     
+    glDisable(GL_CULL_FACE);
     
     
+    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     
     //DebugDraw(tri.ToVertices());
-    DebugDraw(quad.ToVertices());
+    DebugDraw(rounded_cube.ToVertices());
     
 
     

@@ -16,7 +16,7 @@ public:
     GeoVector ComputeNormal();
     virtual std::vector<Vertex> ToVertices();
     virtual std::vector<vert3> Triangulate();
-    virtual void ReverseWinding();
+    virtual Shape& ReverseWinding();
 private:
     
 };

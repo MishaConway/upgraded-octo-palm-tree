@@ -19,6 +19,7 @@
 		9596D97B2018145D00D5BC04 /* quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9732018145D00D5BC04 /* quad.cpp */; };
 		9596D97C2018145D00D5BC04 /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9752018145D00D5BC04 /* triangle.cpp */; };
 		9596D97D2018145D00D5BC04 /* shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9772018145D00D5BC04 /* shape.cpp */; };
+		9596D98220195DCA00D5BC04 /* rounded_cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D98020195DCA00D5BC04 /* rounded_cube.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,6 +59,8 @@
 		9596D9772018145D00D5BC04 /* shape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = shape.cpp; path = shapes/shape.cpp; sourceTree = SOURCE_ROOT; };
 		9596D9782018145D00D5BC04 /* shape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = shape.h; path = shapes/shape.h; sourceTree = SOURCE_ROOT; };
 		9596D97F20182F2600D5BC04 /* triple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = triple.h; path = std/triple.h; sourceTree = SOURCE_ROOT; };
+		9596D98020195DCA00D5BC04 /* rounded_cube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rounded_cube.cpp; path = shapes/rounded_cube.cpp; sourceTree = SOURCE_ROOT; };
+		9596D98120195DCA00D5BC04 /* rounded_cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rounded_cube.h; path = shapes/rounded_cube.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +132,8 @@
 		9596D96E20180EB700D5BC04 /* shapes */ = {
 			isa = PBXGroup;
 			children = (
+				9596D98020195DCA00D5BC04 /* rounded_cube.cpp */,
+				9596D98120195DCA00D5BC04 /* rounded_cube.h */,
 				9596D96F2018145D00D5BC04 /* cylinder.cpp */,
 				9596D9702018145D00D5BC04 /* cylinder.h */,
 				9596D9712018145D00D5BC04 /* cube.cpp */,
@@ -216,6 +221,7 @@
 				9596D97B2018145D00D5BC04 /* quad.cpp in Sources */,
 				9596D967201808F500D5BC04 /* GeoFloat.cpp in Sources */,
 				9596D94F2017FD0E00D5BC04 /* main.cpp in Sources */,
+				9596D98220195DCA00D5BC04 /* rounded_cube.cpp in Sources */,
 				9596D97A2018145D00D5BC04 /* cube.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

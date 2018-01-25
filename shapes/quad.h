@@ -8,6 +8,8 @@ class Quad : public Shape
 {
 public:
     virtual ~Quad();
+    
+    
     static Quad XZQuad( GeoFloat3 a, const float width, const float length );
     static Quad XZQuadCentered( GeoFloat3 a, const float width, const float length );
     static Quad XZUnitQuad();
@@ -28,7 +30,7 @@ public:
    
     virtual std::vector<Vertex> ToVertices();
     virtual std::vector<vert3> Triangulate();
-    virtual void ReverseWinding();
+    virtual Shape& ReverseWinding();
 private:
     void ComputeNormals();
 private:

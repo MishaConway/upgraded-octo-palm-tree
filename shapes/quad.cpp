@@ -9,6 +9,7 @@ Quad::Quad(){
     vertices.resize(4);
 }
 
+
 Quad::Quad( const Vertex& a, const Vertex& b, const Vertex& c, const Vertex& d ){
     vertices.resize(4);
     vertices[0] = a;
@@ -151,11 +152,14 @@ std::vector<vert3> Quad::Triangulate()
     return tris;
 }
 
-void Quad::ReverseWinding()
+Shape& Quad::ReverseWinding()
 {
-    Vertex temp = vertices[2];
-    vertices[2] = vertices[0];
-    vertices[0] = temp;
+    Vertex temp = vertices[3];
+    vertices[3] = vertices[1];
+    vertices[1] = temp;
+    for( int i = 0; i < vertices.size(); i++ )
+        vertices[i].normal = (GeoVector( vertices[i].normal ) * -1).ToGeoFloat3();
+    return *this;
 }
 
 void Quad::ComputeNormals(){
