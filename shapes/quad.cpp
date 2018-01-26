@@ -148,7 +148,7 @@ std::vector<vert3> Quad::Triangulate()
 {
     std::vector<vert3> tris;
     tris.push_back( vert3( vertices[2], vertices[1], vertices[0]) );
-    tris.push_back( vert3( vertices[0], vertices[3], vertices[2]) );
+    tris.push_back( vert3( vertices[3], vertices[2], vertices[0]) );
     return tris;
 }
 

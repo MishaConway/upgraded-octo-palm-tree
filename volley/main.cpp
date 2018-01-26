@@ -6,11 +6,19 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <OpenGL/GLU.h>
+
+#include "../io/file_io.h"
+
 #include "../shapes/shape.h"
 #include "../shapes/triangle.h"
 #include "../shapes/quad.h"
 #include "../shapes/cube.h"
 #include "../shapes/rounded_cube.h"
+#include "../shapes/sphere.h"
+
+
+#include "../scenes/scene.h"
+#include "../scenes/shader_cache/shader_cache.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -18,16 +26,6 @@
 SDL_Window* gWindow = NULL;
 SDL_GLContext gGlContext;
 
-
-void DebugDraw( std::vector<Vertex> vertices ){
-    glBegin(GL_TRIANGLES);
-    for( int i = 0; i < vertices.size(); i+= 3 ){
-        glVertex3f( vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
-        glVertex3f( vertices[i+1].position.x, vertices[i+1].position.y, vertices[i+1].position.z);
-        glVertex3f( vertices[i+2].position.x, vertices[i+2].position.y, vertices[i+2].position.z);
-    }
-    glEnd();
-}
 
 void SetOpenGLVersion()
 {
@@ -66,53 +64,7 @@ int Display_SetViewport(int width, int height)
     return true;
 }
 
-void Display_Render()
-{
-    glLoadIdentity();
-    glTranslatef(2, 0.0f, -6.0f);
 
-    /*
-    glBegin(GL_TRIANGLES);
-    glVertex3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(-1.0f, -1.0f, 0.0f);
-    glVertex3f(1.0f, -1.0f, 0.0f);
-    glEnd();*/
-  
-    
-    /*
-    glTranslatef(3.0f, 0.0f, 0.0f);
-    
-    glBegin(GL_QUADS);
-    glVertex3f(-1.0f, 1.0f, 0.0f);
-    glVertex3f(1.0f, 1.0f, 0.0f);
-    glVertex3f(1.0f, -1.0f, 0.0f);
-    glVertex3f(-1.0f, -1.0f, 0.0f);
-    glEnd(); */
-    
-    Triangle tri( GeoFloat3(0, 1, 0),
-                  GeoFloat3(-1, -1, 0),
-                  GeoFloat3(1, -1, 0) );
-    
-    Quad quad = Quad::XYUnitQuad();
-    
-    Cube cube = Cube::UnitCube();
-    
-    RoundedCube rounded_cube = RoundedCube::UnitRoundedCube(40, 0.3f);
-    
-    //glFrontFace(GL_CCW);
-    
-    glDisable(GL_CULL_FACE);
-    
-    
-    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-    
-    //DebugDraw(tri.ToVertices());
-    DebugDraw(rounded_cube.ToVertices());
-    
-
-    
-    
-}
 
 void close()
 {
@@ -124,6 +76,8 @@ void close()
 
 int main(int argc, char *argv[])
 {
+    ShaderCache::ConfigureShaderPaths("/Users/mconway/projects/volley/shaders/vertex", "/Users/mconway/projects/volley/shaders/pixel");
+    
     // initialize sdl
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -156,11 +110,11 @@ int main(int argc, char *argv[])
     Display_SetViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
     
     
-    Triangle tri( GeoFloat3(0, 1, 0),
-                 GeoFloat3(-1, -1, 0),
-                 GeoFloat3(1, -1, 0) );
+    Scene scene;
+    scene.Initialize();
     
-
+    
+    
     
     bool quit = false;
     SDL_Event sdlEvent;
@@ -179,7 +133,7 @@ int main(int argc, char *argv[])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         // render stuff here
-        Display_Render();
+        scene.Draw();
         
         // swap window inorder to update opengl
         SDL_GL_SwapWindow(gWindow);

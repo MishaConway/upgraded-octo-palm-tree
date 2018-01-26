@@ -20,6 +20,16 @@
 		9596D97C2018145D00D5BC04 /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9752018145D00D5BC04 /* triangle.cpp */; };
 		9596D97D2018145D00D5BC04 /* shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9772018145D00D5BC04 /* shape.cpp */; };
 		9596D98220195DCA00D5BC04 /* rounded_cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D98020195DCA00D5BC04 /* rounded_cube.cpp */; };
+		9596D9852019A8D800D5BC04 /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9832019A8D800D5BC04 /* sphere.cpp */; };
+		9596D9902019D13E00D5BC04 /* file_io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D98E2019D13E00D5BC04 /* file_io.cpp */; };
+		9596D9942019D4D600D5BC04 /* string_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9922019D4D600D5BC04 /* string_utils.cpp */; };
+		9596D9AA201AB05500D5BC04 /* shader_program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9A2201AB05500D5BC04 /* shader_program.cpp */; };
+		9596D9AD201AB05500D5BC04 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9A8201AB05500D5BC04 /* shader.cpp */; };
+		9596D9B2201AE76F00D5BC04 /* IHasErrors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9AE201AE76F00D5BC04 /* IHasErrors.cpp */; };
+		9596D9B3201AE76F00D5BC04 /* IValidatable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9B0201AE76F00D5BC04 /* IValidatable.cpp */; };
+		9596D9B7201B02D300D5BC04 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9B5201B02D300D5BC04 /* scene.cpp */; };
+		9596D9BB201B041B00D5BC04 /* shader_cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9B9201B041B00D5BC04 /* shader_cache.cpp */; };
+		9596D9BF201B1D3300D5BC04 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9BD201B1D3300D5BC04 /* camera.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,6 +71,37 @@
 		9596D97F20182F2600D5BC04 /* triple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = triple.h; path = std/triple.h; sourceTree = SOURCE_ROOT; };
 		9596D98020195DCA00D5BC04 /* rounded_cube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rounded_cube.cpp; path = shapes/rounded_cube.cpp; sourceTree = SOURCE_ROOT; };
 		9596D98120195DCA00D5BC04 /* rounded_cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rounded_cube.h; path = shapes/rounded_cube.h; sourceTree = SOURCE_ROOT; };
+		9596D9832019A8D800D5BC04 /* sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sphere.cpp; path = shapes/sphere.cpp; sourceTree = SOURCE_ROOT; };
+		9596D9842019A8D800D5BC04 /* sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sphere.h; path = shapes/sphere.h; sourceTree = SOURCE_ROOT; };
+		9596D9872019C0F500D5BC04 /* ico_sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ico_sphere.h; path = shapes/shape_utilities/ico_sphere.h; sourceTree = SOURCE_ROOT; };
+		9596D98B2019D07100D5BC04 /* basic.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = basic.frag; path = shaders/pixel/basic.frag; sourceTree = SOURCE_ROOT; };
+		9596D98C2019D07C00D5BC04 /* basic.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = basic.vert; path = shaders/vertex/basic.vert; sourceTree = SOURCE_ROOT; };
+		9596D98E2019D13E00D5BC04 /* file_io.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_io.cpp; path = io/file_io.cpp; sourceTree = SOURCE_ROOT; };
+		9596D98F2019D13E00D5BC04 /* file_io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = file_io.h; path = io/file_io.h; sourceTree = SOURCE_ROOT; };
+		9596D9922019D4D600D5BC04 /* string_utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string_utils.cpp; path = string/string_utils.cpp; sourceTree = SOURCE_ROOT; };
+		9596D9932019D4D600D5BC04 /* string_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string_utils.h; path = string/string_utils.h; sourceTree = SOURCE_ROOT; };
+		9596D9962019DED300D5BC04 /* helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = helpers.h; path = shaders/includes/helpers.h; sourceTree = SOURCE_ROOT; };
+		9596D9972019DED300D5BC04 /* uniforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uniforms.h; path = shaders/includes/uniforms.h; sourceTree = SOURCE_ROOT; };
+		9596D9982019DED300D5BC04 /* varying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = varying.h; path = shaders/includes/varying.h; sourceTree = SOURCE_ROOT; };
+		9596D99A2019DEEB00D5BC04 /* fragment_shader_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fragment_shader_helpers.h; path = shaders/pixel/includes/fragment_shader_helpers.h; sourceTree = SOURCE_ROOT; };
+		9596D99B2019DEEB00D5BC04 /* textures.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = textures.glsl; path = shaders/pixel/includes/textures.glsl; sourceTree = SOURCE_ROOT; };
+		9596D99C2019DEEB00D5BC04 /* textures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = textures.h; path = shaders/pixel/includes/textures.h; sourceTree = SOURCE_ROOT; };
+		9596D99E2019DF0E00D5BC04 /* attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = attributes.h; path = shaders/vertex/includes/attributes.h; sourceTree = SOURCE_ROOT; };
+		9596D99F2019DF0E00D5BC04 /* vertex_shader_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vertex_shader_helpers.h; path = shaders/vertex/includes/vertex_shader_helpers.h; sourceTree = SOURCE_ROOT; };
+		9596D9A2201AB05500D5BC04 /* shader_program.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = shader_program.cpp; path = ogl/shaders/shader_program.cpp; sourceTree = SOURCE_ROOT; };
+		9596D9A3201AB05500D5BC04 /* shader_program.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = shader_program.h; path = ogl/shaders/shader_program.h; sourceTree = SOURCE_ROOT; };
+		9596D9A8201AB05500D5BC04 /* shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = shader.cpp; path = ogl/shaders/shader.cpp; sourceTree = SOURCE_ROOT; };
+		9596D9A9201AB05500D5BC04 /* shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = shader.h; path = ogl/shaders/shader.h; sourceTree = SOURCE_ROOT; };
+		9596D9AE201AE76F00D5BC04 /* IHasErrors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IHasErrors.cpp; path = interfaces/IHasErrors.cpp; sourceTree = SOURCE_ROOT; };
+		9596D9AF201AE76F00D5BC04 /* IHasErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IHasErrors.h; path = interfaces/IHasErrors.h; sourceTree = SOURCE_ROOT; };
+		9596D9B0201AE76F00D5BC04 /* IValidatable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IValidatable.cpp; path = interfaces/IValidatable.cpp; sourceTree = SOURCE_ROOT; };
+		9596D9B1201AE76F00D5BC04 /* IValidatable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IValidatable.h; path = interfaces/IValidatable.h; sourceTree = SOURCE_ROOT; };
+		9596D9B5201B02D300D5BC04 /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scene.cpp; path = scenes/scene.cpp; sourceTree = SOURCE_ROOT; };
+		9596D9B6201B02D300D5BC04 /* scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = scene.h; path = scenes/scene.h; sourceTree = SOURCE_ROOT; };
+		9596D9B9201B041B00D5BC04 /* shader_cache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = shader_cache.cpp; path = scenes/shader_cache/shader_cache.cpp; sourceTree = SOURCE_ROOT; };
+		9596D9BA201B041B00D5BC04 /* shader_cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = shader_cache.h; path = scenes/shader_cache/shader_cache.h; sourceTree = SOURCE_ROOT; };
+		9596D9BD201B1D3300D5BC04 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = camera.cpp; path = scenes/camera/camera.cpp; sourceTree = SOURCE_ROOT; };
+		9596D9BE201B1D3300D5BC04 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = camera.h; path = scenes/camera/camera.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +138,11 @@
 		9596D94D2017FD0E00D5BC04 /* volley */ = {
 			isa = PBXGroup;
 			children = (
+				9596D9B4201B02B000D5BC04 /* scenes */,
+				9596D9A0201AAF5F00D5BC04 /* ogl */,
+				9596D9912019D4B600D5BC04 /* string */,
+				9596D98D2019D12D00D5BC04 /* io */,
+				9596D9882019CA3500D5BC04 /* shaders */,
 				9596D97E20182F1700D5BC04 /* std */,
 				9596D96E20180EB700D5BC04 /* shapes */,
 				9596D96C20180A2D00D5BC04 /* interfaces */,
@@ -124,6 +170,10 @@
 		9596D96C20180A2D00D5BC04 /* interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				9596D9AE201AE76F00D5BC04 /* IHasErrors.cpp */,
+				9596D9AF201AE76F00D5BC04 /* IHasErrors.h */,
+				9596D9B0201AE76F00D5BC04 /* IValidatable.cpp */,
+				9596D9B1201AE76F00D5BC04 /* IValidatable.h */,
 				9596D96D20180A9F00D5BC04 /* IStringable.h */,
 			);
 			name = interfaces;
@@ -132,6 +182,9 @@
 		9596D96E20180EB700D5BC04 /* shapes */ = {
 			isa = PBXGroup;
 			children = (
+				9596D9862019C0D200D5BC04 /* shape_utilities */,
+				9596D9832019A8D800D5BC04 /* sphere.cpp */,
+				9596D9842019A8D800D5BC04 /* sphere.h */,
 				9596D98020195DCA00D5BC04 /* rounded_cube.cpp */,
 				9596D98120195DCA00D5BC04 /* rounded_cube.h */,
 				9596D96F2018145D00D5BC04 /* cylinder.cpp */,
@@ -154,6 +207,137 @@
 				9596D97F20182F2600D5BC04 /* triple.h */,
 			);
 			name = std;
+			sourceTree = "<group>";
+		};
+		9596D9862019C0D200D5BC04 /* shape_utilities */ = {
+			isa = PBXGroup;
+			children = (
+				9596D9872019C0F500D5BC04 /* ico_sphere.h */,
+			);
+			name = shape_utilities;
+			sourceTree = "<group>";
+		};
+		9596D9882019CA3500D5BC04 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				9596D9952019DEC100D5BC04 /* includes */,
+				9596D98A2019CA4800D5BC04 /* pixel */,
+				9596D9892019CA3B00D5BC04 /* vertex */,
+			);
+			name = shaders;
+			sourceTree = "<group>";
+		};
+		9596D9892019CA3B00D5BC04 /* vertex */ = {
+			isa = PBXGroup;
+			children = (
+				9596D99D2019DEF100D5BC04 /* includes */,
+				9596D98C2019D07C00D5BC04 /* basic.vert */,
+			);
+			name = vertex;
+			sourceTree = "<group>";
+		};
+		9596D98A2019CA4800D5BC04 /* pixel */ = {
+			isa = PBXGroup;
+			children = (
+				9596D9992019DEDA00D5BC04 /* includes */,
+				9596D98B2019D07100D5BC04 /* basic.frag */,
+			);
+			name = pixel;
+			sourceTree = "<group>";
+		};
+		9596D98D2019D12D00D5BC04 /* io */ = {
+			isa = PBXGroup;
+			children = (
+				9596D98E2019D13E00D5BC04 /* file_io.cpp */,
+				9596D98F2019D13E00D5BC04 /* file_io.h */,
+			);
+			name = io;
+			sourceTree = "<group>";
+		};
+		9596D9912019D4B600D5BC04 /* string */ = {
+			isa = PBXGroup;
+			children = (
+				9596D9922019D4D600D5BC04 /* string_utils.cpp */,
+				9596D9932019D4D600D5BC04 /* string_utils.h */,
+			);
+			name = string;
+			sourceTree = "<group>";
+		};
+		9596D9952019DEC100D5BC04 /* includes */ = {
+			isa = PBXGroup;
+			children = (
+				9596D9962019DED300D5BC04 /* helpers.h */,
+				9596D9972019DED300D5BC04 /* uniforms.h */,
+				9596D9982019DED300D5BC04 /* varying.h */,
+			);
+			name = includes;
+			sourceTree = "<group>";
+		};
+		9596D9992019DEDA00D5BC04 /* includes */ = {
+			isa = PBXGroup;
+			children = (
+				9596D99A2019DEEB00D5BC04 /* fragment_shader_helpers.h */,
+				9596D99B2019DEEB00D5BC04 /* textures.glsl */,
+				9596D99C2019DEEB00D5BC04 /* textures.h */,
+			);
+			name = includes;
+			sourceTree = "<group>";
+		};
+		9596D99D2019DEF100D5BC04 /* includes */ = {
+			isa = PBXGroup;
+			children = (
+				9596D99E2019DF0E00D5BC04 /* attributes.h */,
+				9596D99F2019DF0E00D5BC04 /* vertex_shader_helpers.h */,
+			);
+			name = includes;
+			sourceTree = "<group>";
+		};
+		9596D9A0201AAF5F00D5BC04 /* ogl */ = {
+			isa = PBXGroup;
+			children = (
+				9596D9A1201AAF6500D5BC04 /* shaders */,
+			);
+			name = ogl;
+			sourceTree = "<group>";
+		};
+		9596D9A1201AAF6500D5BC04 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				9596D9A2201AB05500D5BC04 /* shader_program.cpp */,
+				9596D9A3201AB05500D5BC04 /* shader_program.h */,
+				9596D9A8201AB05500D5BC04 /* shader.cpp */,
+				9596D9A9201AB05500D5BC04 /* shader.h */,
+			);
+			name = shaders;
+			sourceTree = "<group>";
+		};
+		9596D9B4201B02B000D5BC04 /* scenes */ = {
+			isa = PBXGroup;
+			children = (
+				9596D9BC201B1D2300D5BC04 /* camera */,
+				9596D9B8201B03D600D5BC04 /* shader_cache */,
+				9596D9B5201B02D300D5BC04 /* scene.cpp */,
+				9596D9B6201B02D300D5BC04 /* scene.h */,
+			);
+			name = scenes;
+			sourceTree = "<group>";
+		};
+		9596D9B8201B03D600D5BC04 /* shader_cache */ = {
+			isa = PBXGroup;
+			children = (
+				9596D9B9201B041B00D5BC04 /* shader_cache.cpp */,
+				9596D9BA201B041B00D5BC04 /* shader_cache.h */,
+			);
+			name = shader_cache;
+			sourceTree = "<group>";
+		};
+		9596D9BC201B1D2300D5BC04 /* camera */ = {
+			isa = PBXGroup;
+			children = (
+				9596D9BD201B1D3300D5BC04 /* camera.cpp */,
+				9596D9BE201B1D3300D5BC04 /* camera.h */,
+			);
+			name = camera;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,16 +397,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				9596D96B201808F500D5BC04 /* GeoVector.cpp in Sources */,
+				9596D9B2201AE76F00D5BC04 /* IHasErrors.cpp in Sources */,
 				9596D968201808F500D5BC04 /* GeoMatrix.cpp in Sources */,
+				9596D9BB201B041B00D5BC04 /* shader_cache.cpp in Sources */,
+				9596D9902019D13E00D5BC04 /* file_io.cpp in Sources */,
 				9596D96A201808F500D5BC04 /* GeoQuaternion.cpp in Sources */,
 				9596D9792018145D00D5BC04 /* cylinder.cpp in Sources */,
+				9596D9BF201B1D3300D5BC04 /* camera.cpp in Sources */,
+				9596D9B7201B02D300D5BC04 /* scene.cpp in Sources */,
 				9596D97C2018145D00D5BC04 /* triangle.cpp in Sources */,
 				9596D97D2018145D00D5BC04 /* shape.cpp in Sources */,
+				9596D9852019A8D800D5BC04 /* sphere.cpp in Sources */,
 				9596D97B2018145D00D5BC04 /* quad.cpp in Sources */,
+				9596D9AA201AB05500D5BC04 /* shader_program.cpp in Sources */,
+				9596D9AD201AB05500D5BC04 /* shader.cpp in Sources */,
 				9596D967201808F500D5BC04 /* GeoFloat.cpp in Sources */,
+				9596D9942019D4D600D5BC04 /* string_utils.cpp in Sources */,
 				9596D94F2017FD0E00D5BC04 /* main.cpp in Sources */,
 				9596D98220195DCA00D5BC04 /* rounded_cube.cpp in Sources */,
 				9596D97A2018145D00D5BC04 /* cube.cpp in Sources */,
+				9596D9B3201AE76F00D5BC04 /* IValidatable.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -55,6 +55,7 @@ struct GeoVector : public IStringable
     GeoVector InvertXY();
 
 	GeoFloat3 ToGeoFloat3();
+    GeoFloat4 ToGeoFloat4();
     
     virtual std::string ToString();
 };
