@@ -1,7 +1,4 @@
 #include "shader.h"
-#include <SDL2/SDL_opengl.h>
-
-
 
 OpenGL::Shader::Shader( const GLenum shader_type, std::string source )
 {

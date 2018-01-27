@@ -1,8 +1,8 @@
 #pragma once
 
+#include "glew.h"
 #include <map>
 #include <string>
-#include <OpenGL/GLU.h>
 #include "../../interfaces/IValidatable.h"
 #include "../../interfaces/IHasErrors.h"
 

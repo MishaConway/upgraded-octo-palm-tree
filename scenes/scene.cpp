@@ -1,16 +1,6 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-#include <OpenGL/GLU.h>
-
-
 #include "scene.h"
 
-#include "../shapes/shape.h"
-#include "../shapes/triangle.h"
-#include "../shapes/quad.h"
-#include "../shapes/cube.h"
-#include "../shapes/rounded_cube.h"
-#include "../shapes/sphere.h"
+
 
 void DebugDraw( std::vector<Vertex> vertices ){
     glBegin(GL_TRIANGLES);
@@ -25,19 +15,20 @@ void DebugDraw( std::vector<Vertex> vertices ){
 
 
 void Scene::Initialize(){
+    glewInit(); //todo: remove this once using device...
     
     shader_cache.RegisterShaderProgram( "basic" );
     
     camera = Camera( 640, 480, 45.0f, 0.1f, 100.0f, GeoVector(0, 7, 14 ), GeoVector( 0, 0, 0 ) );
     
-    
-    
+    vertex_buffer = OpenGL::VertexBuffer<Vertex>( RoundedCube::UnitRoundedCube(14, 0.15f).ToVertices() );
 }
 
 
 
 void Scene::Draw(){
     
+    vertex_buffer.Bind();
     shader_cache.ActivateShaderProgram( "basic", sizeof(Vertex) );
     
     
@@ -93,7 +84,10 @@ void Scene::Draw(){
     //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     
     //DebugDraw(tri.ToVertices());
-    DebugDraw(rounded_cube.ToVertices());
+    //DebugDraw(rounded_cube.ToVertices());
+    
+    
+    vertex_buffer.Draw();
     
     
     
