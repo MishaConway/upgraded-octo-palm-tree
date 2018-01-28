@@ -38,6 +38,7 @@
 		9596D9D7201C11CD00D5BC04 /* buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9D6201C11CD00D5BC04 /* buffer.cpp */; };
 		9596D9D9201C260500D5BC04 /* libGLEW.2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9596D9D8201C260500D5BC04 /* libGLEW.2.1.0.dylib */; };
 		9596D9DD201C27F000D5BC04 /* vertex_buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9DB201C27F000D5BC04 /* vertex_buffer.cpp */; };
+		9596D9E2201DA2DA00D5BC04 /* render_target.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D9E0201DA2DA00D5BC04 /* render_target.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -125,6 +126,9 @@
 		9596D9D8201C260500D5BC04 /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = ../../../../usr/local/Cellar/glew/2.1.0/lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
 		9596D9DB201C27F000D5BC04 /* vertex_buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vertex_buffer.cpp; path = ogl/buffers/vertex_buffers/vertex_buffer.cpp; sourceTree = SOURCE_ROOT; };
 		9596D9DC201C27F000D5BC04 /* vertex_buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vertex_buffer.h; path = ogl/buffers/vertex_buffers/vertex_buffer.h; sourceTree = SOURCE_ROOT; };
+		9596D9DE201C771600D5BC04 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = ogl/textures/stb_image.h; sourceTree = SOURCE_ROOT; };
+		9596D9E0201DA2DA00D5BC04 /* render_target.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render_target.cpp; path = ogl/render_targets/render_target.cpp; sourceTree = SOURCE_ROOT; };
+		9596D9E1201DA2DA00D5BC04 /* render_target.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = render_target.h; path = ogl/render_targets/render_target.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -321,6 +325,7 @@
 		9596D9A0201AAF5F00D5BC04 /* ogl */ = {
 			isa = PBXGroup;
 			children = (
+				9596D9DF201DA2C100D5BC04 /* render_target */,
 				9596D9D4201C119500D5BC04 /* buffers */,
 				9596D9C8201B31C900D5BC04 /* device */,
 				9596D9C0201B2DE800D5BC04 /* textures */,
@@ -372,6 +377,7 @@
 		9596D9C0201B2DE800D5BC04 /* textures */ = {
 			isa = PBXGroup;
 			children = (
+				9596D9DE201C771600D5BC04 /* stb_image.h */,
 				9596D9C1201B2DFD00D5BC04 /* texture.cpp */,
 				9596D9C2201B2DFD00D5BC04 /* texture.h */,
 			);
@@ -433,6 +439,15 @@
 				9596D9DC201C27F000D5BC04 /* vertex_buffer.h */,
 			);
 			name = vertex_buffers;
+			sourceTree = "<group>";
+		};
+		9596D9DF201DA2C100D5BC04 /* render_target */ = {
+			isa = PBXGroup;
+			children = (
+				9596D9E0201DA2DA00D5BC04 /* render_target.cpp */,
+				9596D9E1201DA2DA00D5BC04 /* render_target.h */,
+			);
+			name = render_target;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -518,6 +533,7 @@
 				9596D98220195DCA00D5BC04 /* rounded_cube.cpp in Sources */,
 				9596D97A2018145D00D5BC04 /* cube.cpp in Sources */,
 				9596D9B3201AE76F00D5BC04 /* IValidatable.cpp in Sources */,
+				9596D9E2201DA2DA00D5BC04 /* render_target.cpp in Sources */,
 				9596D9C3201B2DFD00D5BC04 /* texture.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

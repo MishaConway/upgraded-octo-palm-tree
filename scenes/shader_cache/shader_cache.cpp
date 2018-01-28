@@ -113,3 +113,9 @@ bool ShaderCache::SetMatrix( const std::string& variable_name, GeoMatrix matrix 
         return active_shader_program->SetMatrix( variable_name, matrix );
     return false;
 }
+
+bool ShaderCache::SetTexture( const std::string& variable_name, OpenGL::Texture& texture, const GLenum texture_index ){
+    if( active_shader_program )
+        return active_shader_program->SetTexture( variable_name, texture, texture_index );
+    return false;
+}

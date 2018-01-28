@@ -9,8 +9,7 @@ void main()
 {
     vec4 worldPosition, viewPosition, homogenous_screenspace_position;
     vec3 worldNormal, worldEyeVec;
-    float clip;
-    TransformPosition(  in_position, worldPosition, viewPosition, homogenous_screenspace_position, worldEyeVec, clip );
+    TransformPosition(  in_position, worldPosition, viewPosition, homogenous_screenspace_position, worldEyeVec );
     TransformNormal( in_normal, worldNormal );
-    CreateVertexShaderOut( homogenous_screenspace_position, worldPosition, worldNormal, worldEyeVec, in_color_uv, clip );
+    CreateVertexShaderOut( homogenous_screenspace_position, worldPosition, worldNormal, worldEyeVec, in_color_uv );
 }

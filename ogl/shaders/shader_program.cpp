@@ -173,4 +173,19 @@ bool OpenGL::ShaderProgram::SetMatrix( const std::string& variable_name, GeoMatr
     return false;
 }
 
+bool OpenGL::ShaderProgram::SetTexture( const std::string& variable_name, Texture& texture, const GLenum texture_index ){
+    auto uniform_location = GetUniformLocation( variable_name );
+    if( -1 != uniform_location ){
+        glActiveTexture( GL_TEXTURE0 + texture_index );
+        glEnable( GL_TEXTURE_2D );
+        glBindTexture( GL_TEXTURE_2D, texture.GetOpenGLTextureId() );
+        glActiveTexture( GL_TEXTURE0 );
+        glUniform1i( uniform_location, texture_index );
+
+        return true;
+    }
+    return false;
+}
+
+
 

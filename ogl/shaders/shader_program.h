@@ -1,4 +1,5 @@
 #include "shader.h"
+#include "../textures/texture.h"
 #include "../../geo/GeoVector.h"
 #include "../../geo/GeoMatrix.h"
 #include "../../interfaces/IValidatable.h"
@@ -44,7 +45,7 @@ namespace OpenGL{
 
         bool SetMatrix( const std::string& variable_name, GeoMatrix& matrix );
        
-        //bool SetTexture( const std::string& variable_name, OpenGLTexture& texture, const GLenum texture_index );
+        bool SetTexture( const std::string& variable_name, Texture& texture, const GLenum texture_index );
     protected:
         GLint GetUniformLocation( const std::string& variable_name );
     protected:

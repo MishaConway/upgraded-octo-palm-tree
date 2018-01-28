@@ -31,7 +31,7 @@ namespace OpenGL{
         static void SetViewport( const unsigned int width, const unsigned int height );
         
         static StateManager& GetStateManager();
-        Capabilities& GetCapabilities();
+        static Capabilities& GetCapabilities();
         
         static void Clear( Color color );
         

@@ -1,7 +1,6 @@
 uniform sampler2D lala;
 uniform sampler2D lala1;
 uniform sampler2D lala2;
-uniform sampler2D lala3;
 uniform float lala_horizontal_scale;
 uniform float lala_vertical_scale;
 uniform float lala_horizontal_offset;
@@ -27,9 +26,9 @@ uniform float reflection_vertical_offset;
 uniform float reflection_width;
 uniform float reflection_height;
 
-vec4 GetColorSample( vec2 uv, float i )
+vec4 GetColorSample( vec2 uv )
 {
-	return texture2D(lala, Scale( uv.xy, lala_horizontal_scale, lala_vertical_scale ) + vec2(lala_horizontal_offset, lala_vertical_offset));
+	return texture2D(lala, uv);
 }
 
 vec4 GetGlowSample( vec2 uv )

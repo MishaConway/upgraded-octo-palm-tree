@@ -3,6 +3,8 @@
 
 #include <map>
 #include "../../ogl/shaders/shader_program.h"
+#include "../../ogl/textures/texture.h"
+
 
 
 
@@ -32,6 +34,9 @@ public:
     bool SetFloat4( const std::string& variable_name, GeoFloat4 float4 );
     
     bool SetMatrix( const std::string& variable_name, GeoMatrix matrix );
+    
+    bool SetTexture( const std::string& variable_name, OpenGL::Texture& texture, const GLenum texture_index );
+
     
 protected:
     
