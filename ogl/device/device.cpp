@@ -24,6 +24,8 @@ bool OpenGL::GraphicsDevice::Initialize()
     glDepthFunc(GL_LEQUAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     
+    glDisable(GL_CULL_FACE);
+    
     initialized = true;
     return true;
 }

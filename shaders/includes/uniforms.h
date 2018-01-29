@@ -1,7 +1,7 @@
-uniform mat4 WorldTransform;
-uniform mat4 ViewTransform;
-uniform mat4 ProjectionTransform;
-uniform mat4 WorldInverseTranspose;
+uniform mat4 world_transform;
+uniform mat4 view_transform;
+uniform mat4 projection_transform;
+uniform mat4 world_inverse_transpose;
 
 uniform float viewport_width;
 uniform float viewport_height;

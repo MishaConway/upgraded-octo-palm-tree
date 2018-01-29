@@ -136,6 +136,16 @@ bool OpenGL::ShaderProgram::SetFloat( const std::string& variable_name, float fl
     return false;
 }
 
+bool OpenGL::ShaderProgram::SetFloat2( const std::string& variable_name, GeoFloat2 float2 ){
+    auto uniform_location = GetUniformLocation( variable_name );
+    if( -1 != uniform_location ){
+        glUniform2fv( uniform_location, 1, (float*) &float2 );
+        return true;
+    }
+    return false;
+}
+
+
 bool OpenGL::ShaderProgram::SetFloat3( const std::string& variable_name, GeoFloat3 float3 ){
     auto uniform_location = GetUniformLocation( variable_name );
     if( -1 != uniform_location ){

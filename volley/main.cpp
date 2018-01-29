@@ -24,12 +24,11 @@
 #include "../scenes/scene.h"
 #include "../scenes/shader_cache/shader_cache.h"
 #include "../scenes/texture_cache/texture_cache.h"
+#include "../scenes/camera/camera.h"
 
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
-
-
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 768
 
 
 int main(int argc, char *argv[])
@@ -82,9 +81,69 @@ int main(int argc, char *argv[])
     {
         while (SDL_PollEvent(&sdlEvent) != 0)
         {
-            if (sdlEvent.type == SDL_QUIT)
-            {
-                quit = true;
+            switch( sdlEvent.type ){
+                case SDL_QUIT:
+                    quit = true;
+                    break;
+                    
+                case SDL_KEYDOWN:
+                    switch (sdlEvent.key.keysym.sym)
+                    {
+                        case SDLK_w: {
+                            auto cam = scene.GetCamera();
+                            scene.GetCamera().SetTargetView( cam.GetEyePosition() + cam.GetEyeDirection(), cam.GetFocusPosition() + cam.GetEyeDirection() );
+                            break;
+                        }
+                            
+                        case SDLK_s: {
+                            auto cam = scene.GetCamera();
+                            scene.GetCamera().SetTargetView( cam.GetEyePosition() - cam.GetEyeDirection(), cam.GetFocusPosition() - cam.GetEyeDirection() );
+                            break;
+                        }
+                            
+                        case SDLK_a: {
+                            auto cam = scene.GetCamera();
+                            auto side = cam.GetEyeDirection().ZeroY().Normalize().Cross( GeoVector(0,1,0,0));
+                            scene.GetCamera().SetTargetView( cam.GetEyePosition() - side, cam.GetFocusPosition() - side );
+                            break;
+                        }
+                            
+                        case SDLK_d: {
+                            auto cam = scene.GetCamera();
+                            auto side = cam.GetEyeDirection().ZeroY().Normalize().Cross( GeoVector(0,1,0,0));
+                            scene.GetCamera().SetTargetView( cam.GetEyePosition() + side, cam.GetFocusPosition() + side );
+                            break;
+                        }
+                    }
+                    
+                    
+                    break;
+                    
+                case SDL_KEYUP:
+                    switch (sdlEvent.key.keysym.sym)
+                    {
+                        case SDLK_w:
+                            scene.GetCamera().Stop();
+                            break;
+                        
+                        case SDLK_s:
+                            scene.GetCamera().Stop();
+                            break;
+                        
+                        case SDLK_a:
+                            scene.GetCamera().Stop();
+                            break;
+                        
+                        case SDLK_d:
+                            scene.GetCamera().Stop();
+                            break;
+                    }
+                    
+                    
+                    break;
+                    
+                    
+                
             }
         }
         

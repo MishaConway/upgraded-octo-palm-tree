@@ -35,6 +35,9 @@ namespace OpenGL{
     public:
         bool SetInt( const std::string& variable_name, const int i );
         bool SetFloat( const std::string& variable_name, float flt );
+        
+        bool SetFloat2( const std::string& variable_name, GeoFloat2 float2 );
+
 
         bool SetFloat3( const std::string& variable_name, GeoVector float3 );
         bool SetFloat3( const std::string& variable_name, GeoFloat3 float3 );

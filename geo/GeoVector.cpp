@@ -266,6 +266,11 @@ GeoVector GeoVector::InvertXY()
     return GeoVector( y, x, z, w );
 }
 
+GeoVector GeoVector::ZeroY()
+{
+    return GeoVector( x, 0, z, w );
+}
+
 GeoFloat3 GeoVector::ToGeoFloat3()
 {
 	return GeoFloat3( x, y, z );

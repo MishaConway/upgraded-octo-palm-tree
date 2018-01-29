@@ -5,8 +5,5 @@
 
 void main(void)
 {
-    // gl_FragColor = vec4( 1, 0, 0, 1 );
-    //gl_FragColor = vec4( cc.g, cc.g, cc.g, 1 );
-    //  gl_FragColor = color;
-    gl_FragColor =  GetColorSample(out_color_uv.xy);
+    gl_FragColor =  SampleTex1(out_color_uv.xy);
 }

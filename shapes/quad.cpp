@@ -16,6 +16,7 @@ Quad::Quad( const Vertex& a, const Vertex& b, const Vertex& c, const Vertex& d )
     vertices[1] = b;
     vertices[2] = c;
     vertices[3] = d;
+    ComputeNormals();
 }
 
 Quad Quad::XZQuad( GeoFloat3 a, const float width, const float length )
@@ -40,6 +41,7 @@ Quad Quad::XZQuad( GeoFloat3 a, const float width, const float length )
     quad.vertices[3].colorUV.y = 0;
     
     quad.ComputeNormals();
+    quad.ReverseWinding();
     
     return quad;
 }

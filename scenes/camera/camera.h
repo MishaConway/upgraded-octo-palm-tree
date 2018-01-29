@@ -14,6 +14,10 @@ public:
     void SetTargetView( const GeoVector& target_eye_position, const GeoVector& target_focus_position );
     void Update( const float elapsed_seconds );
     bool IsMoving();
+    
+    void Stop();
+    
+    
     unsigned int GetWidth();
     unsigned int GetHeight();
     void SetWidthHeight( const unsigned int width, const unsigned int height );

@@ -72,6 +72,10 @@ bool Camera::IsMoving()
     return camera_is_moving;
 }
 
+void Camera::Stop(){
+    camera_is_moving = false;
+}
+
 void Camera::Update( const float elapsed_seconds )
 {
     if( camera_is_moving )

@@ -53,6 +53,7 @@ struct GeoVector : public IStringable
     static bool IntersectionWithPlane( const GeoVector& p1, const GeoVector& p2, const GeoVector& plane_normal, const GeoVector& point_on_plane, GeoVector* pOutIntersection );
     
     GeoVector InvertXY();
+    GeoVector ZeroY();
 
 	GeoFloat3 ToGeoFloat3();
     GeoFloat4 ToGeoFloat4();

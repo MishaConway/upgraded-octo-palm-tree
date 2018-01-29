@@ -98,7 +98,6 @@
 		9596D9972019DED300D5BC04 /* uniforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uniforms.h; path = shaders/includes/uniforms.h; sourceTree = SOURCE_ROOT; };
 		9596D9982019DED300D5BC04 /* varying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = varying.h; path = shaders/includes/varying.h; sourceTree = SOURCE_ROOT; };
 		9596D99A2019DEEB00D5BC04 /* fragment_shader_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fragment_shader_helpers.h; path = shaders/pixel/includes/fragment_shader_helpers.h; sourceTree = SOURCE_ROOT; };
-		9596D99B2019DEEB00D5BC04 /* textures.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = textures.glsl; path = shaders/pixel/includes/textures.glsl; sourceTree = SOURCE_ROOT; };
 		9596D99C2019DEEB00D5BC04 /* textures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = textures.h; path = shaders/pixel/includes/textures.h; sourceTree = SOURCE_ROOT; };
 		9596D99E2019DF0E00D5BC04 /* attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = attributes.h; path = shaders/vertex/includes/attributes.h; sourceTree = SOURCE_ROOT; };
 		9596D99F2019DF0E00D5BC04 /* vertex_shader_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vertex_shader_helpers.h; path = shaders/vertex/includes/vertex_shader_helpers.h; sourceTree = SOURCE_ROOT; };
@@ -144,6 +143,8 @@
 		9596D9F0201E92D500D5BC04 /* tangents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tangents.h; path = shapes/shape_utilities/tangents.h; sourceTree = SOURCE_ROOT; };
 		9596D9F2201E97AB00D5BC04 /* debug_lines.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = debug_lines.cpp; path = shapes/shape_utilities/debug_lines.cpp; sourceTree = SOURCE_ROOT; };
 		9596D9F3201E97AB00D5BC04 /* debug_lines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = debug_lines.h; path = shapes/shape_utilities/debug_lines.h; sourceTree = SOURCE_ROOT; };
+		9596D9F5201ED74300D5BC04 /* phong.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = phong.frag; path = shaders/pixel/phong.frag; sourceTree = SOURCE_ROOT; };
+		9596D9F6201EECD000D5BC04 /* phong.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = phong.vert; path = shaders/vertex/phong.vert; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -279,8 +280,9 @@
 		9596D9892019CA3B00D5BC04 /* vertex */ = {
 			isa = PBXGroup;
 			children = (
-				9596D99D2019DEF100D5BC04 /* includes */,
 				9596D98C2019D07C00D5BC04 /* basic.vert */,
+				9596D9F6201EECD000D5BC04 /* phong.vert */,
+				9596D99D2019DEF100D5BC04 /* includes */,
 			);
 			name = vertex;
 			sourceTree = "<group>";
@@ -288,8 +290,9 @@
 		9596D98A2019CA4800D5BC04 /* pixel */ = {
 			isa = PBXGroup;
 			children = (
-				9596D9992019DEDA00D5BC04 /* includes */,
 				9596D98B2019D07100D5BC04 /* basic.frag */,
+				9596D9F5201ED74300D5BC04 /* phong.frag */,
+				9596D9992019DEDA00D5BC04 /* includes */,
 			);
 			name = pixel;
 			sourceTree = "<group>";
@@ -326,7 +329,6 @@
 			isa = PBXGroup;
 			children = (
 				9596D99A2019DEEB00D5BC04 /* fragment_shader_helpers.h */,
-				9596D99B2019DEEB00D5BC04 /* textures.glsl */,
 				9596D99C2019DEEB00D5BC04 /* textures.h */,
 			);
 			name = includes;

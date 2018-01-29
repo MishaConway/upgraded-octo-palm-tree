@@ -25,6 +25,10 @@ OpenGL::Shader::Shader( const GLenum shader_type, std::string source )
                 GLchar* compiler_log = new GLchar[blen];
                 glGetShaderInfoLog(shader_id, blen, &slen, compiler_log);
                 errors = std::string( compiler_log );
+                
+                printf( "errors are %s\n", errors.c_str());
+                
+                
                 delete [] compiler_log;
 
             }

@@ -13,45 +13,86 @@ void DebugDraw( std::vector<Vertex> vertices ){
     glEnd();
 }
 
+Camera& Scene::GetCamera(){
+    return camera;
+}
+
 
 
 void Scene::Initialize( const unsigned int width, const unsigned int height ){
-    camera = Camera( width, height, 45.0f, 0.1f, 100.0f, GeoVector(0, 0, 2 ), GeoVector( 0, 0, 0 ) );
+    camera = Camera( width, height, 45.0f, 0.1f, 100.0f, GeoVector(-2, 2, 6 ), GeoVector( 0, 1, 0 ) );
 
     
     shader_cache.RegisterShaderProgram( "basic" );
+    shader_cache.RegisterShaderProgram( "phong" );
     
+    
+    
+    const float court_depth = 4;
+    const float pole_height = 1.0f;
     
     
     root = new SceneGraph::Node();
     
     SceneGraph::Geode* node = new SceneGraph::Geode();
-    node->shader_program = "basic";
-    node->vertex_buffer =OpenGL::VertexBuffer<Vertex>( Quad::XYUnitQuad().ToVertices() );
+    node->shader_program = "phong";
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>( Quad::XYUnitQuad().ToVertices() );
     node->textures["diffuse"] = "grass.jpg";
+    //root->children.push_back(node);
+    
+    
+    node = new SceneGraph::Geode();
+    node->shader_program = "phong";
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>( Quad::XZQuadCentered(GeoFloat3(), 5, court_depth).ToVertices() );
+    node->textures["diffuse"] = "grass.jpg";
+    root->children.push_back(node);
+    
+    auto verts = Quad::XZQuadCentered(GeoFloat3(), 5, court_depth).ToVertices();
+    for( int i = 0; i < verts.size(); i++ ){
+        printf( "vert normal is %f, %f, %f\n", verts[i].normal.x, verts[i].normal.y, verts[i].normal.z );
+    }
+    
+    
+    
+    node = new SceneGraph::Geode();
+    node->shader_program = "phong";
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Cylinder( 0.1f, pole_height, 0.1f ).ToVertices() );
+    node->textures["diffuse"] = "grass.jpg";
+    node->local_transform = GeoMatrix::Translation(0, pole_height / 2.0f, -court_depth / 2.0f );
+    root->children.push_back(node);
+
+    
+    node = new SceneGraph::Geode();
+    node->shader_program = "phong";
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Cylinder(  0.1f, pole_height, 0.1f ).ToVertices() );
+    node->textures["diffuse"] = "grass.jpg";
+    node->local_transform = GeoMatrix::Translation(0, pole_height / 2.0f, court_depth / 2.0f );
     root->children.push_back(node);
 }
 
 void Scene::Update( unsigned int elapsed_milliseconds ){
-    
-    
+    const float elapsed_seconds = (float) elapsed_milliseconds / 1000.0f;
+    camera.Update( elapsed_seconds );
 }
 
 
-void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode ){
+void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode, GeoMatrix transform ){
     geode->vertex_buffer.Bind();
-    shader_cache.ActivateShaderProgram( "basic", sizeof(Vertex) );
+    shader_cache.ActivateShaderProgram( geode->shader_program, sizeof(Vertex) );
     
     auto texture = texture_cache.FromFile("grass.jpg");
-    shader_cache.SetTexture("lala", texture, 0);
+    shader_cache.SetTexture("tex1", texture, 0);
+    shader_cache.SetFloat2("tex1_scale", GeoFloat2(1,1) );
     
     
-    shader_cache.SetMatrix( "ViewTransform", camera.GetViewTransform() );
-    shader_cache.SetMatrix( "ProjectionTransform", camera.GetProjectionTransform() );
-    shader_cache.SetMatrix( "WorldTransform", GeoMatrix::Identity() );
     
-    shader_cache.SetFloat( "viewport_width", 640 );
-    shader_cache.SetFloat( "viewport_height", 480 );
+    shader_cache.SetMatrix( "view_transform", camera.GetViewTransform() );
+    shader_cache.SetMatrix( "projection_transform", camera.GetProjectionTransform() );
+    shader_cache.SetMatrix( "world_transform", transform );
+    shader_cache.SetMatrix( "world_inverse_transpose", transform.Inverse(0).Transpose() );
+    
+    shader_cache.SetFloat( "viewport_width", camera.GetWidth() );
+    shader_cache.SetFloat( "viewport_height", camera.GetHeight() );
     shader_cache.SetFloat3( "eye_position", camera.GetEyePosition() );
 }
 
@@ -61,19 +102,24 @@ void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode ){
 void Scene::Draw(){
     OpenGL::GraphicsDevice::Clear( Color::DeepPink() );
    
-    TraverseNodes(GeoMatrix::Identity(), root);
+    TraverseNodes( root, GeoMatrix::Identity() );
 }
 
-void Scene::TraverseNodes( GeoMatrix transform, SceneGraph::Node* node ){
+void Scene::TraverseNodes( SceneGraph::Node* node, GeoMatrix transform ){
+    glDisable(GL_CULL_FACE);
+
+    
+    auto new_transform = transform * node->local_transform;
+    
     auto geode = dynamic_cast<SceneGraph::Geode*>(node);
     if( geode ){
-        ConfigureShaderProgram( geode );
+        ConfigureShaderProgram( geode, new_transform );
         geode->vertex_buffer.Draw();
     }
     
     
     for( int i = 0; i < node->children.size(); i++ ){
-        TraverseNodes( transform, node->children[i] );
+        TraverseNodes( node->children[i], new_transform );
     }
 }
 

@@ -13,6 +13,7 @@
 #include "../shapes/cube.h"
 #include "../shapes/rounded_cube.h"
 #include "../shapes/sphere.h"
+#include "../shapes/cylinder.h"
 
 #include "scene_graph/node.h"
 
@@ -25,10 +26,12 @@ public:
     void Draw();
     void Update( unsigned int elapsed_milliseconds );
     
-protected:
-    void ConfigureShaderProgram( SceneGraph::Geode* geode );
+    Camera& GetCamera();
     
-    void TraverseNodes( GeoMatrix transform, SceneGraph::Node* node );
+protected:
+    void ConfigureShaderProgram( SceneGraph::Geode* geode, GeoMatrix transform );
+    
+    void TraverseNodes( SceneGraph::Node* node, GeoMatrix transform );
     
     
     

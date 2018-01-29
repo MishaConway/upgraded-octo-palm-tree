@@ -29,7 +29,7 @@ Cube::Cube( const GeoFloat3& origin, const float width, const float height, cons
     
     
     Transform( GeoMatrix::Translation( origin ) );
-    //Transform( GeoMatrix::Scaling(width, height, length) );
+    Transform( GeoMatrix::Scaling(width, height, length) );
 }
 
 Cube Cube::UnitCube(){

@@ -8,8 +8,17 @@
 
 
 namespace SceneGraph{
-    //struct Texture{
-    //};
+   
+    
+    struct IDrawable {
+        OpenGL::VertexBuffer<Vertex> vertex_buffer;
+        std::map< std::string, std::string> textures;
+        std::string shader_program;
+    };
+    
+    
+    
+    
     
     struct Node {
         Node();
@@ -18,10 +27,13 @@ namespace SceneGraph{
         GeoMatrix local_transform;
     };
     
-    struct Geode : public Node {
+    struct LightNode{
+        bool directional;
+        GeoVector direction;
+    };
+    
+    
+    struct Geode : public Node, IDrawable {
         virtual ~Geode();
-        OpenGL::VertexBuffer<Vertex> vertex_buffer;
-        std::map< std::string, std::string> textures;
-        std::string shader_program;
     };
 }

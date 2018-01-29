@@ -78,6 +78,12 @@ bool ShaderCache::SetFloat( const std::string& variable_name, float flt ){
     return false;
 }
 
+bool ShaderCache::SetFloat2( const std::string& variable_name, GeoFloat2 float2){
+    if( active_shader_program )
+        return active_shader_program->SetFloat2( variable_name, float2 );
+    return false;
+}
+
 bool ShaderCache::SetFloat3( const std::string& variable_name, GeoVector float3 ){
     if( active_shader_program )
         return active_shader_program->SetFloat3( variable_name, float3 );
