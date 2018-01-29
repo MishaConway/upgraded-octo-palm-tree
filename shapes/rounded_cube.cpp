@@ -95,7 +95,7 @@ RoundedCube::~RoundedCube(){
 }
 
 RoundedCube RoundedCube::UnitRoundedCube(){
-    return RoundedCube::UnitRoundedCube(64, 1);
+    return RoundedCube::UnitRoundedCube(64, 0.25f);
 }
 
 RoundedCube RoundedCube::UnitRoundedCube(const int meshResolution, const double cornerStrength ){

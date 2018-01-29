@@ -89,6 +89,11 @@ int main(int argc, char *argv[])
                 case SDL_KEYDOWN:
                     switch (sdlEvent.key.keysym.sym)
                     {
+                        case SDLK_ESCAPE: {
+                            quit = true;
+                            break;
+                        }
+                        
                         case SDLK_w: {
                             auto cam = scene.GetCamera();
                             scene.GetCamera().SetTargetView( cam.GetEyePosition() + cam.GetEyeDirection(), cam.GetFocusPosition() + cam.GetEyeDirection() );
@@ -114,6 +119,21 @@ int main(int argc, char *argv[])
                             scene.GetCamera().SetTargetView( cam.GetEyePosition() + side, cam.GetFocusPosition() + side );
                             break;
                         }
+                            
+                        case SDLK_z: {
+                            auto cam = scene.GetCamera();
+                            scene.GetCamera().SetTargetView( cam.GetEyePosition() - GeoVector(0,1,0), cam.GetFocusPosition() - GeoVector( 0,1,0) );
+                            break;
+                        }
+                            
+                        case SDLK_x: {
+                            auto cam = scene.GetCamera();
+                            scene.GetCamera().SetTargetView( cam.GetEyePosition() + GeoVector(0,1,0), cam.GetFocusPosition() + GeoVector( 0,1,0) );
+                            break;
+                        }
+                            
+                            
+
                     }
                     
                     
@@ -135,6 +155,8 @@ int main(int argc, char *argv[])
                             break;
                         
                         case SDLK_d:
+                        case SDLK_z:
+                        case SDLK_x:
                             scene.GetCamera().Stop();
                             break;
                     }

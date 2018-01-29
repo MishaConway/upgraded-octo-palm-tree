@@ -15,9 +15,25 @@ Vertex::Vertex( GeoFloat3 position, GeoFloat2 uv ){
     this->colorUV.z = 0;
 }
 
+Vertex::Vertex( GeoFloat3 position, GeoFloat2 uv, GeoFloat3 normal ){
+    this->position = position;
+    this->colorUV.x = uv.x;
+    this->colorUV.y = uv.y;
+    this->colorUV.z = 0;
+    this->normal = normal;
+}
+
 Vertex::Vertex( GeoVector vector ){
     position = vector.ToGeoFloat3();
 }
+
+Vertex Vertex::Average( const Vertex& a, const Vertex& b ){
+    Vertex average;
+    average.position = ((GeoVector( a.position ) + GeoVector(b.position)) / 2.0f).ToGeoFloat3();
+    average.colorUV = ((GeoVector( a.colorUV ) + GeoVector(b.colorUV)) / 2.0f).ToGeoFloat3();
+    return average;
+}
+
 
 Shape::~Shape(){
     

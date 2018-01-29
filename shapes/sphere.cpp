@@ -7,7 +7,7 @@ Sphere::~Sphere(){
 
 Sphere::Sphere(){
     ShapeUtilities::IcoSphere icoSphere;
-    icoSphere.Create(2);
+    icoSphere.Create(3);
     
     std::vector<Vertex> verts;
     for( int i = 0; i < icoSphere.indices.size(); i++ ){
@@ -53,6 +53,26 @@ std::vector<vert3> Sphere::Triangulate(){
 }
 
 Shape& Sphere::ReverseWinding(){
+    for( int i = 0; i < triangles.size(); i++ ){
+        triangles[i].ReverseWinding();
+    }
+    
+    return *this;
+}
+
+Shape& Sphere::Transform( const GeoMatrix& matrix ){
+    for( int i = 0; i < triangles.size(); i++ ){
+        triangles[i].Transform(matrix);
+    }
+    
+    return *this;
+}
+
+Shape& Sphere::TranslateAlongNormal( const float distance ){
+    for( int i = 0; i < triangles.size(); i++ ){
+        triangles[i].TranslateAlongNormal( distance );
+    }
+  
     return *this;
 }
 

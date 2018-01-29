@@ -43,7 +43,12 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
-    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>( Quad::XZQuadCentered(GeoFloat3(), 5, court_depth).ToVertices() );
+    auto quad = Quad::XZQuadCentered(GeoFloat3(), 5, court_depth);
+    quad.SquareTesselate();
+    quad.SquareTesselate();
+    quad.SquareTesselate();
+    quad.SquareTesselate();
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>( quad.ToVertices() );
     node->textures["diffuse"] = "grass.jpg";
     root->children.push_back(node);
     
@@ -56,7 +61,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
-    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Cylinder( 0.1f, pole_height, 0.1f ).ToVertices() );
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Cylinder( 0.2f, pole_height, 0.2f ).ToVertices() );
     node->textures["diffuse"] = "grass.jpg";
     node->local_transform = GeoMatrix::Translation(0, pole_height / 2.0f, -court_depth / 2.0f );
     root->children.push_back(node);
@@ -64,10 +69,29 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
-    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Cylinder(  0.1f, pole_height, 0.1f ).ToVertices() );
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Cylinder(  0.2f, pole_height, 0.2f ).ToVertices() );
     node->textures["diffuse"] = "grass.jpg";
     node->local_transform = GeoMatrix::Translation(0, pole_height / 2.0f, court_depth / 2.0f );
     root->children.push_back(node);
+    
+    
+    
+    node = new SceneGraph::Geode();
+    node->shader_program = "phong";
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Sphere( ).Transform( GeoMatrix::Scaling(0.45f) ).ToVertices() );
+    node->textures["diffuse"] = "grass.jpg";
+    node->local_transform = GeoMatrix::Translation(0, 1, 0 );
+    root->children.push_back(node);
+    
+    
+    node = new SceneGraph::Geode();
+    node->shader_program = "phong";
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  RoundedCube::UnitRoundedCube().Transform( GeoMatrix::Scaling(0.3f)).ToVertices() );
+    node->textures["diffuse"] = "grass.jpg";
+    node->local_transform = GeoMatrix::Translation(-1, 1, 0 );
+    root->children.push_back(node);
+    
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 }
 
 void Scene::Update( unsigned int elapsed_milliseconds ){

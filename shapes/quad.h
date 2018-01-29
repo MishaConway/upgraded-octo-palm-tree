@@ -24,6 +24,8 @@ public:
     static Quad ZYUnitQuad();
     
     
+    void SquareTesselate();
+    
     
     Quad();
     Quad( const Vertex& a, const Vertex& b, const Vertex& c, const Vertex& d );
@@ -34,5 +36,6 @@ public:
 private:
     void ComputeNormals();
 private:
+    std::vector<Quad> quads;
    
 };

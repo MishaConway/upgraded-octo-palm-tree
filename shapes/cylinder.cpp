@@ -7,7 +7,7 @@ Cylinder::~Cylinder(){
 
 
 Cylinder::Cylinder( const float width, const float height, const float length ){
-    const unsigned int num_wedges = 260;
+    const unsigned int num_wedges = 64;
     
     const float half_width = width / 2.0f;
     const float half_length = length / 2.0f;
@@ -20,7 +20,7 @@ Cylinder::Cylinder( const float width, const float height, const float length ){
         Vertex a( GeoFloat3( half_width * cos(left_angle),
                             -height / 2.0f,
                             half_length * sin(left_angle) ),
-                 GeoFloat2( 50*left_angle / GEO_2PI, 0 ) );
+                 GeoFloat2( 50*left_angle / GEO_2PI, 0 ));
         
         Vertex b( GeoFloat3( half_width * cos(right_angle),
                             -height / 2.0f,
@@ -36,6 +36,16 @@ Cylinder::Cylinder( const float width, const float height, const float length ){
                             height / 2.0f,
                             half_length * sin(left_angle) ),
                  GeoFloat2( 50*left_angle / GEO_2PI, 1 ) );
+        
+        
+        a.normal = GeoVector( a.position.x, 0.0f, a.position.z ).Normalize().ToGeoFloat3();
+        b.normal = GeoVector( b.position.x, 0.0f, b.position.z ).Normalize().ToGeoFloat3();
+        c.normal = GeoVector( c.position.x, 0.0f, c.position.z ).Normalize().ToGeoFloat3();
+        d.normal = GeoVector( d.position.x, 0.0f, d.position.z ).Normalize().ToGeoFloat3();
+
+        
+
+        
         
         quads.push_back( Quad( d, c, b, a ) );
     }

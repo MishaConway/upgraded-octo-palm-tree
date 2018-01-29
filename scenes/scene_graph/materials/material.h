@@ -1,10 +1,12 @@
-#inclue "../../geo/GeoFloat.h"
+#include "../../../geo/GeoFloat.h"
 
 
 
 namespace SceneGraph{
     
-    class Material{
+    struct Material{
+        Material();
+        
         GeoFloat3 ambient;
         GeoFloat3 diffuse;
         GeoFloat3 specular;

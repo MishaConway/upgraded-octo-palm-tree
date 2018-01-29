@@ -12,6 +12,8 @@ public:
     virtual std::vector<Vertex> ToVertices();
     virtual std::vector<vert3> Triangulate();
     virtual Shape& ReverseWinding();
+    virtual Shape& Transform( const GeoMatrix& matrix );
+    virtual Shape& TranslateAlongNormal( const float distance );
 private:
     std::vector<Triangle> triangles;
 };

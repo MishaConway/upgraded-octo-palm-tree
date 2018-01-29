@@ -16,7 +16,6 @@ Quad::Quad( const Vertex& a, const Vertex& b, const Vertex& c, const Vertex& d )
     vertices[1] = b;
     vertices[2] = c;
     vertices[3] = d;
-    ComputeNormals();
 }
 
 Quad Quad::XZQuad( GeoFloat3 a, const float width, const float length )
@@ -135,6 +134,45 @@ Quad Quad::ZYUnitQuad(){
     return Quad::ZYQuadCentered(GeoFloat3(0, 0, 0), 1, 1);
 }
 
+void Quad::SquareTesselate(){
+    if( quads.size() ){
+        for( int i = 0; i < quads.size(); i++ )
+            quads[i].SquareTesselate();
+        return;
+    }
+    
+    GeoVector middle_vertex;
+    
+    for( int i = 0; i < vertices.size(); i++ ){
+        middle_vertex += vertices[i].position;
+    }
+    middle_vertex /= 4.0f;
+    
+    
+    auto a = vertices[0];
+    auto b = vertices[1];
+    auto c = vertices[2];
+    auto d = vertices[3];
+    
+    
+    auto ab = Vertex::Average( a, b );
+    auto bc = Vertex::Average( b, c );
+    auto cd = Vertex::Average( c, d );
+    auto da = Vertex::Average( d, a );
+    
+    
+    //quads.push_back( Quad( a, ab, middle_vertex, da ) );
+    //quads.push_back( Quad( ab, b, bc, middle_vertex ) );
+    //quads.push_back( Quad( middle_vertex, bc, c, cd ) );
+    //quads.push_back( Quad( da, middle_vertex, cd, d ) );
+    
+    quads.push_back( Quad( da, middle_vertex, ab, a ) );
+    quads.push_back( Quad( middle_vertex, bc, b, ab ) );
+    quads.push_back( Quad( cd, c, bc, middle_vertex ) );
+    quads.push_back( Quad( d, cd, middle_vertex, da ) );
+}
+
+
 std::vector<Vertex> Quad::ToVertices(){
     auto tris = Triangulate();
     std::vector<Vertex> verts;
@@ -149,13 +187,32 @@ std::vector<Vertex> Quad::ToVertices(){
 std::vector<vert3> Quad::Triangulate()
 {
     std::vector<vert3> tris;
-    tris.push_back( vert3( vertices[2], vertices[1], vertices[0]) );
-    tris.push_back( vert3( vertices[3], vertices[2], vertices[0]) );
+    
+    if( quads.size() ){
+        for( int i = 0; i < quads.size(); i++ ){
+            auto quad_tris = quads[i].Triangulate();
+            for( int j = 0; j < quad_tris.size(); j++ )
+                tris.push_back( quad_tris[j]);
+        }
+        
+    } else {
+        tris.push_back( vert3( vertices[2], vertices[1], vertices[0]) );
+        tris.push_back( vert3( vertices[3], vertices[2], vertices[0]) );
+    }
+    
+    
+    
     return tris;
 }
 
 Shape& Quad::ReverseWinding()
 {
+    if( quads.size() ) {
+        for( int i = 0; i < quads.size(); i++ )
+            quads[i].ReverseWinding();
+        return *this;
+    }
+    
     Vertex temp = vertices[3];
     vertices[3] = vertices[1];
     vertices[1] = temp;
