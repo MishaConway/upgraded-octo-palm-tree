@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 #include <math.h>
-#include <OpenGL/GLU.h>
+#include "glew.h"
 #include "../std/triple.h"
 
 
@@ -24,6 +24,7 @@ struct Vertex
     Vertex( GeoVector vector );
 };
 
+typedef std::pair<Vertex, Vertex> vert2;
 typedef std::triple<Vertex, Vertex, Vertex> vert3;
 
 
@@ -35,6 +36,7 @@ public:
     virtual Shape& ReverseWinding() = 0;
     virtual Shape& Transform( const GeoMatrix& matrix );
     virtual Shape& TranslateAlongNormal( const float distance );
+    
 
 protected:
     std::vector<Vertex> vertices;

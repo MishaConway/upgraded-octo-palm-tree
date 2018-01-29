@@ -21,7 +21,7 @@ namespace OpenGL{
     class GraphicsDevice
     {
     public:
-        static bool Initialize( const unsigned int width, const unsigned int height );
+        static bool Initialize();
         
         static std::string GetOpenGLVersion();
         

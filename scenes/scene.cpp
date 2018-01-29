@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "../ogl/device/device.h"
 
 
 
@@ -14,35 +15,35 @@ void DebugDraw( std::vector<Vertex> vertices ){
 
 
 
-void Scene::Initialize(){
-    glewInit(); //todo: remove this once using device...
-    
+void Scene::Initialize( const unsigned int width, const unsigned int height ){
+    camera = Camera( width, height, 45.0f, 0.1f, 100.0f, GeoVector(0, 0, 2 ), GeoVector( 0, 0, 0 ) );
+
     
     shader_cache.RegisterShaderProgram( "basic" );
     
-    texture = OpenGL::Texture( "/Users/mconway/projects/volley/images/grass.jpg" );
-
     
-    camera = Camera( 640, 480, 45.0f, 0.1f, 100.0f, GeoVector(0, 0, 2 ), GeoVector( 0, 0, 0 ) );
     
-    Triangle tri( GeoFloat3(0, 1, 0),
-                 GeoFloat3(-1, -1, 0),
-                 GeoFloat3(1, -1, 0) );
+    root = new SceneGraph::Node();
     
-    Quad quad = Quad::XYUnitQuad();
-    
-    Cube cube = Cube::UnitCube();
-    
-    RoundedCube rounded_cube = RoundedCube::UnitRoundedCube(14, 0.15f);
-    
-    Sphere sphere;
-    
-    vertex_buffer = OpenGL::VertexBuffer<Vertex>( quad.ToVertices() );
+    SceneGraph::Geode* node = new SceneGraph::Geode();
+    node->shader_program = "basic";
+    node->vertex_buffer =OpenGL::VertexBuffer<Vertex>( Quad::XYUnitQuad().ToVertices() );
+    node->textures["diffuse"] = "grass.jpg";
+    root->children.push_back(node);
 }
 
-void Scene::ConfigureShaderProgram( OpenGL::VertexBuffer<Vertex>& vertex_buffer ){
-    vertex_buffer.Bind();
+void Scene::Update( unsigned int elapsed_milliseconds ){
+    
+    
+}
+
+
+void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode ){
+    geode->vertex_buffer.Bind();
     shader_cache.ActivateShaderProgram( "basic", sizeof(Vertex) );
+    
+    auto texture = texture_cache.FromFile("grass.jpg");
+    shader_cache.SetTexture("lala", texture, 0);
     
     
     shader_cache.SetMatrix( "ViewTransform", camera.GetViewTransform() );
@@ -52,16 +53,28 @@ void Scene::ConfigureShaderProgram( OpenGL::VertexBuffer<Vertex>& vertex_buffer 
     shader_cache.SetFloat( "viewport_width", 640 );
     shader_cache.SetFloat( "viewport_height", 480 );
     shader_cache.SetFloat3( "eye_position", camera.GetEyePosition() );
-    
-    shader_cache.SetTexture("lala", texture, 0);
 }
 
 
 
 
 void Scene::Draw(){
-    ConfigureShaderProgram(vertex_buffer);
-    vertex_buffer.Draw();
+    OpenGL::GraphicsDevice::Clear( Color::DeepPink() );
+   
+    TraverseNodes(GeoMatrix::Identity(), root);
+}
+
+void Scene::TraverseNodes( GeoMatrix transform, SceneGraph::Node* node ){
+    auto geode = dynamic_cast<SceneGraph::Geode*>(node);
+    if( geode ){
+        ConfigureShaderProgram( geode );
+        geode->vertex_buffer.Draw();
+    }
+    
+    
+    for( int i = 0; i < node->children.size(); i++ ){
+        TraverseNodes( transform, node->children[i] );
+    }
 }
 
 

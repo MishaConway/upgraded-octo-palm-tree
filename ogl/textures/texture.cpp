@@ -27,6 +27,7 @@ OpenGL::Texture::Texture( const std::string& image_filename )
     printf( "image_width is %i\n", image_width);
     printf( "image_height is %i\n", image_height);
     printf( "image_bpp is %i\n", image_bpp);
+    printf( "image filename is %s\n", image_filename.c_str() );
 
 
 

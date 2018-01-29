@@ -77,7 +77,7 @@ namespace OpenGL{
     protected:
         void InitializeVertexBuffer( const std::vector<T>& vertices, const PRIMITIVE_TYPE primitive_type, const GLenum usage ){
             this->primitive_type = primitive_type;
-            num_vertices = vertices.size();
+            num_vertices = (unsigned int) vertices.size();
             if( !vertices.empty() ){
                 void* pInitialData = (void*) &vertices[0];
                 buffer = Buffer( pInitialData, num_vertices * sizeof(T), GL_ARRAY_BUFFER, usage );

@@ -9,7 +9,7 @@ bool OpenGL::GraphicsDevice::initialized = false;
 
 
 
-bool OpenGL::GraphicsDevice::Initialize( const unsigned int width, const unsigned int height )
+bool OpenGL::GraphicsDevice::Initialize()
 {
     if( initialized )
         return true;
@@ -17,10 +17,12 @@ bool OpenGL::GraphicsDevice::Initialize( const unsigned int width, const unsigne
     if( GLEW_OK != glewInit() )
         return false;
     
-    //capabilities.ForceDisablePixelBufferObject();
-        
-    SetViewport( width, height );
-    //pBoundVertexBuffer = nullptr;
+    glShadeModel(GL_SMOOTH);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearDepth(1.0f);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     
     initialized = true;
     return true;
@@ -39,6 +41,7 @@ void OpenGL::GraphicsDevice::SetViewport( const unsigned int width, const unsign
     viewport.MaxDepth = 1;
     viewport.TopLeftX = 0;
     viewport.TopLeftY = 0;
+    glViewport(0, 0, GLsizei(width), GLsizei(height));
 }
 
 OpenGL::Viewport OpenGL::GraphicsDevice::GetViewport()
