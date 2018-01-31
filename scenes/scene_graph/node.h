@@ -36,4 +36,15 @@ namespace SceneGraph{
     struct Geode : public Node, IDrawable {
         virtual ~Geode();
     };
+    
+    struct Sprite : public Geode {
+        virtual ~Sprite();
+        Sprite();
+    };
+    
+    struct BillboardSprite : public Sprite {
+        virtual ~BillboardSprite();
+    };
+    
+    
 }

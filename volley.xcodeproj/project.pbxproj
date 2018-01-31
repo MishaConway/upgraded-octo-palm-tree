@@ -145,6 +145,7 @@
 		9596D9F3201E97AB00D5BC04 /* debug_lines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = debug_lines.h; path = shapes/shape_utilities/debug_lines.h; sourceTree = SOURCE_ROOT; };
 		9596D9F5201ED74300D5BC04 /* phong.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = phong.frag; path = shaders/pixel/phong.frag; sourceTree = SOURCE_ROOT; };
 		9596D9F6201EECD000D5BC04 /* phong.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = phong.vert; path = shaders/vertex/phong.vert; sourceTree = SOURCE_ROOT; };
+		9596D9F7202112F400D5BC04 /* GeoDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeoDefines.h; path = geo/GeoDefines.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +202,7 @@
 		9596D9592017FEF500D5BC04 /* geo */ = {
 			isa = PBXGroup;
 			children = (
+				9596D9F7202112F400D5BC04 /* GeoDefines.h */,
 				9596D95D201808F500D5BC04 /* GeoFloat.cpp */,
 				9596D95E201808F500D5BC04 /* GeoFloat.h */,
 				9596D95F201808F500D5BC04 /* GeoMatrix.cpp */,

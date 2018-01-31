@@ -6,6 +6,7 @@
 #include "glew.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#include <SDL2/SDL_gamecontroller.h>
 #include <OpenGL/GLU.h>
 
 
@@ -39,12 +40,41 @@ int main(int argc, char *argv[])
     SDL_Window* gWindow = NULL;
     SDL_GLContext gGlContext;
     
+    SDL_version linked_sdl_version;
+    SDL_GetVersion( &linked_sdl_version );
+    printf( "linked sdl version is %i.%i.%i\n", linked_sdl_version.major, linked_sdl_version.minor, linked_sdl_version.patch );
+    
     // initialize sdl
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
     {
         std::cout << "SDL cannot init with error " << SDL_GetError() << std::endl;
         return -1;
     }
+    
+    
+    // initialize controllers
+    SDL_GameControllerAddMappingsFromFile("/Users/mconway/projects/volley/gamecontrollerdb.txt");
+    
+    auto num_available_joysticks = SDL_NumJoysticks();
+    
+    printf( "number of available joysticks is %i", num_available_joysticks );
+    SDL_Joystick* joy = nullptr;
+    
+    if( num_available_joysticks ){
+        joy = SDL_JoystickOpen(0);
+        
+        if (joy) {
+            printf("Opened Joystick 0\n");
+            printf("Name: %s\n", SDL_JoystickNameForIndex(0));
+            printf("Number of Axes: %d\n", SDL_JoystickNumAxes(joy));
+            printf("Number of Buttons: %d\n", SDL_JoystickNumButtons(joy));
+            printf("Number of Balls: %d\n", SDL_JoystickNumBalls(joy));
+        } else {
+            printf("Couldn't open Joystick 0\n");
+        }
+    }
+    
+    
     
     // set opengl version to use in this program
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
@@ -75,16 +105,75 @@ int main(int argc, char *argv[])
     Uint32 time = 0;
     
     
+    
+    
     bool quit = false;
     SDL_Event sdlEvent;
     while (!quit)
     {
+        
+        auto x_move = SDL_JoystickGetAxis(joy, 0);
+        auto y_move = SDL_JoystickGetAxis(joy, 1);
+        
+        
+        auto x_move2 = SDL_JoystickGetAxis(joy, 2);
+        auto y_move2 = SDL_JoystickGetAxis(joy, 5);
+        
+        float x_factor = 0, y2_factor = 0;
+        if( abs(x_move) > 2000 )
+            x_factor = (float) x_move / 32767.0f;
+       
+        
+        if( abs(y_move) > 2000 )
+            y2_factor = (float) -y_move2 / 32767.0f * 2.0f;
+        
+        auto cam = scene.GetCamera();
+        auto side = cam.GetEyeDirection().ZeroY().Normalize().Cross( GeoVector(0,1,0,0));
+        
+        
+        // handle rotation
+        if( abs(x_move2) > 2000 ){
+            auto x2_factor = -(float) x_move2 / 32767.0f;
+            scene.GetCamera().Turn(GeoVector(0,1,0), x2_factor);
+            
+            
+        }
+        
+        // handle movement
+        if( abs(y_move) > 2000 ){
+            auto y_factor = (float) -y_move / 32767.0f * 2.0f;
+            scene.GetCamera().SetTargetView( cam.GetEyePosition() + cam.GetEyeDirection().ZeroY(), cam.GetFocusPosition() + cam.GetEyeDirection().ZeroY()  );
+            scene.GetCamera().SetCameraSpeed( y_factor );
+        } else {
+            scene.GetCamera().Stop();
+        }
+        
+        //printf( "xmove2 is %i and y move2 is %i\n", x_move2, y_move2 );
+        
         while (SDL_PollEvent(&sdlEvent) != 0)
         {
             switch( sdlEvent.type ){
                 case SDL_QUIT:
                     quit = true;
                     break;
+                    
+                case SDL_JOYAXISMOTION: {
+                    break;
+                }
+                    
+                case SDL_JOYBUTTONDOWN: {
+                    printf( "joy button pressed..\n");
+                    printf( "button pressed is %i\n", sdlEvent.jbutton.button );
+
+                    break;
+                }
+                    
+                case SDL_JOYBUTTONUP: {
+                    printf( "joy button released..\n");
+                    printf( "button released is %i\n", sdlEvent.jbutton.button );
+
+                    break;
+                }
                     
                 case SDL_KEYDOWN:
                     switch (sdlEvent.key.keysym.sym)
@@ -189,6 +278,10 @@ int main(int argc, char *argv[])
     // clear resource
     SDL_DestroyWindow(gWindow);
     gWindow = NULL;
+    
+    if (joy && SDL_JoystickGetAttached(joy)) {
+        SDL_JoystickClose(joy);
+    }
     
     SDL_Quit();
     

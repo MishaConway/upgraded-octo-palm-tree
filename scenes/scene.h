@@ -19,6 +19,18 @@
 
 
 
+//  1) render to back buffer
+//  2) render to render target
+
+// options...   enforce global shader
+
+struct RenderPass{
+    
+    
+    
+};
+
+
 
 class Scene{
 public:

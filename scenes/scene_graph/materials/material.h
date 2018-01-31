@@ -1,6 +1,7 @@
 #include "../../../geo/GeoFloat.h"
 
-
+// http://devernay.free.fr/cours/opengl/materials.html
+// http://kylehalladay.com/blog/tutorial/2014/02/18/Fresnel-Shaders-From-The-Ground-Up.html
 
 namespace SceneGraph{
     

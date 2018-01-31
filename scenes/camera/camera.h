@@ -25,11 +25,14 @@ public:
     void SetEyePosition( const GeoVector& eye_position );
     void SetFocusPosition( const GeoVector& focus_position );
     
-    void Rotate( const GeoVector& axis, const float degrees );
+    void Turn( const GeoVector& axis, const float degrees );
     
     GeoMatrix GetProjectionTransform();
     GeoMatrix GetViewTransform();
     GeoMatrix GetReflectedViewTransform( const GeoVector& reflection_plane );
+    
+    GeoMatrix GetCylindricalBillboardTransform();
+    
     GeoVector GetEyePosition();
     GeoVector GetFocusPosition();
     GeoVector GetEyeDirection();
@@ -59,5 +62,7 @@ private:
     float interpolation_factor;
     
     float camera_speed;
+    float rotational_velocity;
     bool camera_is_moving;
+    bool camera_is_rotating;
 };

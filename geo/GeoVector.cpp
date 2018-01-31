@@ -271,6 +271,11 @@ GeoVector GeoVector::ZeroY()
     return GeoVector( x, 0, z, w );
 }
 
+GeoVector GeoVector::ZeroW()
+{
+    return GeoVector( x, y, z, 0 );
+}
+
 GeoFloat3 GeoVector::ToGeoFloat3()
 {
 	return GeoFloat3( x, y, z );
@@ -280,21 +285,4 @@ GeoFloat4 GeoVector::ToGeoFloat4(){
     return GeoFloat4( x, y, z, w );
 }
 
-#ifdef _WIN32	
-XMVECTOR GeoVector::ToXMVec3()
-{
-	XMFLOAT3 v( x, y, z );
-	return XMLoadFloat3( &v );
-}
 
-XMVECTOR GeoVector::ToXMVec4()
-{
-	XMFLOAT4 v( x, y, z, w );
-	return XMLoadFloat4( &v );
-}
-
-XMFLOAT3 GeoVector::ToXMFloat3()
-{
-	return XMFLOAT3( x, y, z );
-}
-#endif

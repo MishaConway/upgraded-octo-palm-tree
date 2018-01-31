@@ -57,21 +57,49 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
         printf( "vert normal is %f, %f, %f\n", verts[i].normal.x, verts[i].normal.y, verts[i].normal.z );
     }
     
+    /* todo:  css/haml like system for defining scene graph... */
+    /* todo:  normal mapping */
+    /* todo:  bill boarding */
+
+
+
     
-    
-    node = new SceneGraph::Geode();
+   /* node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Cylinder( 0.2f, pole_height, 0.2f ).ToVertices() );
     node->textures["diffuse"] = "grass.jpg";
     node->local_transform = GeoMatrix::Translation(0, pole_height / 2.0f, -court_depth / 2.0f );
+    root->children.push_back(node); */
+    
+    auto cylinder_vertex_buffer =  OpenGL::VertexBuffer<Vertex>(  Cylinder(1,1,1).ToVertices() );
+    
+    node = new SceneGraph::Geode();
+    node->shader_program = "phong";
+    node->vertex_buffer = cylinder_vertex_buffer;
+    node->textures["diffuse"] = "grass.jpg";
+    node->local_transform = GeoMatrix::Scaling(0.2f, pole_height, 0.2f ) *
+                            GeoMatrix::Translation(0, pole_height / 2.0f, -court_depth / 2.0f );
     root->children.push_back(node);
+    
+    
+    node = new SceneGraph::Geode();
+    node->shader_program = "phong";
+    node->vertex_buffer = cylinder_vertex_buffer;
+    node->textures["diffuse"] = "grass.jpg";
+    node->local_transform = GeoMatrix::Scaling(0.1f, pole_height/2, 0.1f ) *
+    GeoMatrix::Translation(0, pole_height, -court_depth / 2.0f );
+    root->children.push_back(node);
+    
+    
+    
 
     
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
-    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Cylinder(  0.2f, pole_height, 0.2f ).ToVertices() );
+    node->vertex_buffer = cylinder_vertex_buffer;
     node->textures["diffuse"] = "grass.jpg";
-    node->local_transform = GeoMatrix::Translation(0, pole_height / 2.0f, court_depth / 2.0f );
+    node->local_transform = GeoMatrix::Scaling(0.2f, pole_height, 0.2f ) *
+                            GeoMatrix::Translation(0, pole_height / 2.0f, court_depth / 2.0f );
     root->children.push_back(node);
     
     
@@ -91,7 +119,20 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->local_transform = GeoMatrix::Translation(-1, 1, 0 );
     root->children.push_back(node);
     
+    
+    
+    node = new SceneGraph::BillboardSprite();
+    node->shader_program = "phong";
+    node->textures["diffuse"] = "grass.jpg";
+    node->local_transform = GeoMatrix::Scaling(0.25f) * GeoMatrix::Translation(1, 1, 0 );
+    root->children.push_back(node);
+    
     //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    
+    glHint(GL_POLYGON_SMOOTH, GL_NICEST);
+    
+    
+    //glEnable(GL_POLYGON_SMOOTH);
 }
 
 void Scene::Update( unsigned int elapsed_milliseconds ){
@@ -137,7 +178,13 @@ void Scene::TraverseNodes( SceneGraph::Node* node, GeoMatrix transform ){
     
     auto geode = dynamic_cast<SceneGraph::Geode*>(node);
     if( geode ){
-        ConfigureShaderProgram( geode, new_transform );
+        auto configured_transform = new_transform;
+        
+        auto billboard = dynamic_cast<SceneGraph::BillboardSprite*>( geode );
+        if( billboard )
+            configured_transform = GeoMatrix::CreateConstrainedBillboard(GeoVector(transform.GetTranslationComponent()), camera.GetEyePosition(), GeoVector(0,1,0), camera.GetEyeDirectionNormalized(), GeoVector( 0, 0, -1) );
+        
+        ConfigureShaderProgram( geode, configured_transform );
         geode->vertex_buffer.Draw();
     }
     

@@ -15,7 +15,9 @@ Camera::Camera( const unsigned int width, const unsigned int height, const float
     current_eye_position = eye_position;
     current_focus_position = focus_position;
     camera_speed = 1;
+    rotational_velocity = 1;
     camera_is_moving = false;
+    camera_is_rotating = false;
     view_transform = GeoMatrix::LookAtRH( current_eye_position, current_focus_position, GeoVector( 0, 1, 0 ) );
 }
 
@@ -161,10 +163,22 @@ GeoVector Camera::GetEyeDirectionNormalized()
     return GetEyeDirection().Normalize();
 }
 
-void Camera::Rotate( const GeoVector& axis, const float degrees )
+void Camera::Turn( const GeoVector& axis, const float degrees )
 {
     GeoMatrix rotation_transform = GeoQuaternion( axis, degrees ).ToMatrix();
     
+    current_focus_position = rotation_transform * (current_focus_position - current_eye_position) + current_eye_position;
+    
+    SetTargetView( current_eye_position, current_focus_position );
+    
+    
+    //Update(0.1f);
+    
+    
+    
+    
+    
+    /*
     
     GeoVector new_eye = rotation_transform * current_eye_position;
     
@@ -196,6 +210,7 @@ void Camera::Rotate( const GeoVector& axis, const float degrees )
     
     
     // view_transform = GeoMatrix::LookAtRH( current_eye_position, current_focus_position, up );
+     */
     
     
     

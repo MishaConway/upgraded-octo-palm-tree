@@ -22,9 +22,14 @@ void main(void)
     float specularCoefficient = pow(cosAngle, 64.0);
     
     
+    vec3 tex1_sample = SampleTex1(out_color_uv.xy).rgb;
+    
+    
     vec4 linearColor =  vec4( saturate((diffuse_factor + specularCoefficient) * vec3(1,1,1)), 1 );
 
     gl_FragColor = linearColor;
+    
+    //gl_FragColor = vec4( world_normal, 1.0);
 
     //gl_FragColor = gamma_correct( linearColor );
 }

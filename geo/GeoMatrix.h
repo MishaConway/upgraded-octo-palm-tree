@@ -1,6 +1,8 @@
 #pragma once
 
+#include "GeoDefines.h"
 #include "GeoVector.h"
+
 
 /* 4x4 Matrix */
 struct GeoMatrix
@@ -63,6 +65,11 @@ struct GeoMatrix
 
 	GeoMatrix Inverse( float* pOutDeterminant );
 	GeoMatrix Transpose();
+    
+    
+    
+    GeoFloat3 GetTranslationComponent();
+    GeoMatrix SetTranslationComponent( GeoFloat3 translation );
 
 	/* IDENTITY CONSTRUCTOR */
 	static GeoMatrix Identity();
@@ -88,6 +95,8 @@ struct GeoMatrix
 
 	/* ROTATION CONSTRUCTORS */
 	static GeoMatrix RotationYRH( const float angle );
+    
+    static GeoMatrix CreateConstrainedBillboard(GeoVector objectPosition, GeoVector cameraPosition, GeoVector rotateAxis, GeoVector cameraForwardVector, GeoVector objectForwardVector);
 
 	GeoVector TransformCoord( const GeoVector& vec );
 	GeoVector Transform( const GeoVector& vec );

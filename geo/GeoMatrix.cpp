@@ -623,6 +623,18 @@ GeoMatrix GeoMatrix::Transpose()
 	return transposed_matrix;
 }
 
+GeoFloat3 GeoMatrix::GetTranslationComponent(){
+    return GeoFloat3( _41, _42, _43 );
+}
+
+GeoMatrix GeoMatrix::SetTranslationComponent(GeoFloat3 translation){
+    GeoMatrix matrix = *this;
+    matrix._41 = translation.x;
+    matrix._42 = translation.y;
+    matrix._43 = translation.z;
+    return matrix;
+}
+
 	/* PROJECTION MATRIX CONSTRUCTORS */
 GeoMatrix GeoMatrix::MatrixPerspectiveFovRH( const float fovy, const float Aspect, const float zn, const float zf )
 {
@@ -817,3 +829,85 @@ GeoMatrix GeoMatrix::RotationYRH( const float angle )
 	rotation_matrix._41 = rotation_matrix._42 = rotation_matrix._43 = 0; rotation_matrix._44 = 1;
 	return rotation_matrix;
 }
+
+
+
+// https://github.com/dotnet/corefx/blob/master/src/System.Numerics.Vectors/src/System/Numerics/Matrix4x4.cs
+GeoMatrix GeoMatrix::CreateConstrainedBillboard(GeoVector objectPosition, GeoVector cameraPosition, GeoVector rotateAxis, GeoVector cameraForwardVector, GeoVector objectForwardVector)
+{
+    const float epsilon = 1e-4f;
+    const float minAngle = 1.0f - (0.1f * (GEO_PI / 180.0f)); // 0.1 degrees
+    
+    objectPosition = objectPosition.ZeroW();
+    cameraPosition = cameraPosition.ZeroW();
+    
+
+    // Treat the case when object and camera positions are too close.
+    GeoVector faceDir = objectPosition - cameraPosition;
+    
+   
+    
+    float norm = faceDir.LengthSquared();
+    
+    if (norm < epsilon)
+        faceDir = -cameraForwardVector;
+    else
+        faceDir *= 1.0f / sqrtf(norm);
+    
+    
+    GeoVector yaxis = rotateAxis;
+    GeoVector xaxis;
+    GeoVector zaxis;
+    
+    // Treat the case when angle between faceDir and rotateAxis is too close to 0.
+    float dot = rotateAxis.Dot(faceDir);
+    
+    if (fabs(dot) > minAngle)
+    {
+        zaxis = objectForwardVector;
+        
+        // Make sure passed values are useful for compute.
+        dot = rotateAxis.Dot(zaxis);
+        
+        if (fabs(dot) > minAngle)
+        {
+            zaxis = (fabs(rotateAxis.z) > minAngle) ? GeoVector(1, 0, 0) : GeoVector(0, 0, -1);
+        }
+        
+        xaxis = rotateAxis.Cross( zaxis ).Normalize();
+        zaxis = xaxis.Cross( rotateAxis ).Normalize();
+
+        //xaxis = Vector3.Normalize(Vector3.Cross(rotateAxis, zaxis));
+        //zaxis = Vector3.Normalize(Vector3.Cross(xaxis, rotateAxis));
+    }
+    else
+    {
+        xaxis = rotateAxis.Cross( faceDir ).Normalize();
+        zaxis = xaxis.Cross(yaxis).Normalize();
+        
+        //xaxis = Vector3.Normalize(Vector3.Cross(rotateAxis, faceDir));
+        //zaxis = Vector3.Normalize(Vector3.Cross(xaxis, yaxis));
+    }
+    
+    GeoMatrix result;
+    
+    result._11 = xaxis.x;
+    result._12 = xaxis.y;
+    result._13 = xaxis.z;
+    result._14 = 0.0f;
+    result._21 = yaxis.x;
+    result._22 = yaxis.y;
+    result._23 = yaxis.z;
+    result._24 = 0.0f;
+    result._31 = zaxis.x;
+    result._32 = zaxis.y;
+    result._33 = zaxis.z;
+    result._34 = 0.0f;
+    
+    result._41 = objectPosition.x;
+    result._42 = objectPosition.y;
+    result._43 = objectPosition.z;
+    result._44 = 1.0f;
+    
+    return result;
+} 

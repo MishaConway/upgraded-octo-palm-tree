@@ -31,6 +31,8 @@ Vertex Vertex::Average( const Vertex& a, const Vertex& b ){
     Vertex average;
     average.position = ((GeoVector( a.position ) + GeoVector(b.position)) / 2.0f).ToGeoFloat3();
     average.colorUV = ((GeoVector( a.colorUV ) + GeoVector(b.colorUV)) / 2.0f).ToGeoFloat3();
+    average.normal = ((GeoVector( a.normal ) + GeoVector(b.normal)) / 2.0f).ToGeoFloat3();
+
     return average;
 }
 
