@@ -37,6 +37,26 @@ Vertex Vertex::Average( const Vertex& a, const Vertex& b ){
 }
 
 
+Vertex Vertex::Average( const std::vector<Vertex>& vertices ){
+    GeoVector average_position;
+    GeoVector average_color_uv;
+    GeoVector average_normal;
+    for( int i = 0; i < vertices.size(); i++ ){
+        average_position += GeoVector( vertices[i].position );
+        average_color_uv += GeoVector( vertices[i].colorUV );
+        average_normal += GeoVector( vertices[i].normal );
+    }
+    
+    average_position /= vertices.size();
+    average_color_uv /= vertices.size();
+    average_normal /= vertices.size();
+    
+    return Vertex( average_position.ToGeoFloat3(), average_color_uv.ToGeoFloat2(), average_normal.ToGeoFloat3());
+}
+
+
+
+
 Shape::~Shape(){
     
 }

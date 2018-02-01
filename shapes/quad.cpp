@@ -141,14 +141,9 @@ void Quad::SquareTesselate(){
         return;
     }
     
-    GeoVector middle_vertex;
+    auto middle_vertex = Vertex::Average( vertices );
     
-    for( int i = 0; i < vertices.size(); i++ ){
-        middle_vertex += vertices[i].position;
-    }
-    middle_vertex /= 4.0f;
-    
-    
+   
     auto a = vertices[0];
     auto b = vertices[1];
     auto c = vertices[2];

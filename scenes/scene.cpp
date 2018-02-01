@@ -91,15 +91,20 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     root->children.push_back(node);
     
     
-    
-
-    
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = cylinder_vertex_buffer;
     node->textures["diffuse"] = "grass.jpg";
     node->local_transform = GeoMatrix::Scaling(0.2f, pole_height, 0.2f ) *
                             GeoMatrix::Translation(0, pole_height / 2.0f, court_depth / 2.0f );
+    root->children.push_back(node);
+    
+    node = new SceneGraph::Geode();
+    node->shader_program = "phong";
+    node->vertex_buffer = cylinder_vertex_buffer;
+    node->textures["diffuse"] = "grass.jpg";
+    node->local_transform = GeoMatrix::Scaling(0.1f, pole_height/2, 0.1f ) *
+    GeoMatrix::Translation(0, pole_height, court_depth / 2.0f );
     root->children.push_back(node);
     
     
@@ -165,7 +170,7 @@ void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode, GeoMatrix transfor
 
 
 void Scene::Draw(){
-    OpenGL::GraphicsDevice::Clear( Color::DeepPink() );
+    OpenGL::GraphicsDevice::Clear( Color::Beige() );
    
     TraverseNodes( root, GeoMatrix::Identity() );
 }

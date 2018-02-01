@@ -3,6 +3,8 @@
 // http://devernay.free.fr/cours/opengl/materials.html
 // http://kylehalladay.com/blog/tutorial/2014/02/18/Fresnel-Shaders-From-The-Ground-Up.html
 
+// http://in2gpu.com/2014/06/19/lighting-vertex-fragment-shader/
+
 namespace SceneGraph{
     
     struct Material{

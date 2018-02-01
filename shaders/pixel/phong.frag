@@ -4,6 +4,8 @@
 #include "includes/fragment_shader_helpers.h"
 #include "includes/textures.h"
 
+// https://github.com/stackgl/glsl-lighting-walkthrough
+
 void main(void)
 {
     vec3 world_normal = normalize(out_world_normal);
@@ -24,10 +26,19 @@ void main(void)
     
     vec3 tex1_sample = SampleTex1(out_color_uv.xy).rgb;
     
+    vec3 diffuse_color = diffuse_factor * tex1_sample;
+    vec3 specular_color = specularCoefficient * vec3(1,1,1);
     
-    vec4 linearColor =  vec4( saturate((diffuse_factor + specularCoefficient) * vec3(1,1,1)), 1 );
-
+    
+    vec4 linearColor =  vec4( saturate(diffuse_color + specular_color), 1 );
+    
     gl_FragColor = linearColor;
+    
+    //gl_FragColor = vec4( tex1_sample, 1 );
+
+    //gl_FragColor = vec4( out_color_uv.y, out_color_uv.y, out_color_uv.y, 1 );//linearColor;
+    
+    //gl_FragColor = vec4( world_normal, 1);
     
     //gl_FragColor = vec4( world_normal, 1.0);
 

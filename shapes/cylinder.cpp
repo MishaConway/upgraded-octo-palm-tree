@@ -20,30 +20,35 @@ Cylinder::Cylinder( const float width, const float height, const float length ){
         const float right_angle = GeoConvertToRadians( (i+1) * 360.0f / (float) num_wedges );
         
         const float slice_height = height / num_slices;
+        const float slice_uv_height = 1.0f / num_slices;
         
         const float bottom_y = -height / 2.0f + slice_height * slice;
         const float top_y = -height / 2.0f + slice_height * (slice+1);
+        
+        const float bottom_uv = slice * slice_uv_height;
+        const float top_uv = bottom_uv + slice_uv_height;
+        
         
         
         Vertex a( GeoFloat3( half_width * cos(left_angle),
                             bottom_y,
                             half_length * sin(left_angle) ),
-                 GeoFloat2( 50*left_angle / GEO_2PI, 0 ));
+                 GeoFloat2( left_angle / GEO_2PI, bottom_uv ));
         
         Vertex b( GeoFloat3( half_width * cos(right_angle),
                             bottom_y,
                             half_length * sin(right_angle) ),
-                 GeoFloat2( 50*right_angle / GEO_2PI, 0 ) );
+                 GeoFloat2( right_angle / GEO_2PI, bottom_uv ) );
         
         Vertex c( GeoFloat3( half_width * cos(right_angle),
                             top_y,
                             half_length * sin(right_angle) ),
-                 GeoFloat2( 50*right_angle / GEO_2PI, 1 ) );
+                 GeoFloat2( right_angle / GEO_2PI, top_uv ) );
         
         Vertex d( GeoFloat3( half_width * cos(left_angle),
                             top_y,
                             half_length * sin(left_angle) ),
-                 GeoFloat2( 50*left_angle / GEO_2PI, 1 ) );
+                 GeoFloat2( left_angle / GEO_2PI, top_uv ) );
         
         
         a.normal = GeoVector( a.position.x, 0.0f, a.position.z ).Normalize().ToGeoFloat3();

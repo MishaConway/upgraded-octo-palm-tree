@@ -56,7 +56,8 @@ struct GeoVector : public IStringable
     GeoVector ZeroY();
     GeoVector ZeroW();
 
-	GeoFloat3 ToGeoFloat3();
+    GeoFloat2 ToGeoFloat2();
+    GeoFloat3 ToGeoFloat3();
     GeoFloat4 ToGeoFloat4();
     
     virtual std::string ToString();

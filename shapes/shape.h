@@ -24,6 +24,7 @@ struct Vertex
     Vertex( GeoFloat3 position, GeoFloat2 uv, GeoFloat3 normal );
     Vertex( GeoVector vector );
     static Vertex Average( const Vertex& a, const Vertex& b );
+    static Vertex Average( const std::vector<Vertex>& vertices );
 };
 
 typedef std::pair<Vertex, Vertex> vert2;

@@ -276,6 +276,11 @@ GeoVector GeoVector::ZeroW()
     return GeoVector( x, y, z, 0 );
 }
 
+GeoFloat2 GeoVector::ToGeoFloat2()
+{
+    return GeoFloat2( x, y );
+}
+
 GeoFloat3 GeoVector::ToGeoFloat3()
 {
 	return GeoFloat3( x, y, z );
