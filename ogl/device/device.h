@@ -5,9 +5,8 @@
 #include "state_manager/state_manager.h"
 #include "capabilities/capabilities.h"
 #include "../buffers/vertex_buffers/vertex_buffer.h"
-//#include "OpenGLDynamicVertexBuffer.h"
 #include "../textures/texture.h"
-//#include "OpenGLRenderTarget.h"
+#include "../render_targets/render_target.h"
 
 
 
@@ -38,9 +37,9 @@ namespace OpenGL{
         //void    SetVertexBuffer( OpenGLVertexBuffer& pVertexBuffer );
         //void    SetVertexBuffer( OpenGLDynamicVertexBuffer& pVertexBuffer );
         
-        //void SetDefaultRenderTarget();
-        //void SetRenderTarget( OpenGLRenderTarget& render_target );
-        //void SetRenderTarget(OpenGLRenderTarget& render_target, const Color& clear_color );
+        void SetDefaultRenderTarget();
+        void SetRenderTarget( RenderTarget& render_target );
+        void SetRenderTarget( RenderTarget& render_target, const Color& clear_color );
     private:
         static StateManager state_manager;
         static Capabilities capabilities;

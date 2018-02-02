@@ -54,3 +54,11 @@ OpenGL::Texture& OpenGL::RenderTarget::GetTexture()
 {
     return tex;
 }
+
+GLuint OpenGL::RenderTarget::GetOpenGLFrameBufferId(){
+    return fbo_id;
+}
+
+GLuint OpenGL::RenderTarget::GetOpenGLDepthBufferId(){
+    return depth_buffer_id;
+}

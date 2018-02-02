@@ -63,3 +63,21 @@ void OpenGL::GraphicsDevice::Clear( Color c )
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 }
 
+void OpenGL::GraphicsDevice::SetDefaultRenderTarget()
+{
+    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    glBindRenderbuffer(GL_RENDERBUFFER, 0 );
+}
+
+void OpenGL::GraphicsDevice::SetRenderTarget( RenderTarget& render_target )
+{
+    glBindFramebuffer( GL_FRAMEBUFFER, render_target.GetOpenGLFrameBufferId() );
+    glBindRenderbuffer(GL_RENDERBUFFER, render_target.GetOpenGLDepthBufferId() );
+}
+
+void OpenGL::GraphicsDevice::SetRenderTarget( RenderTarget& render_target, const Color& clear_color )
+{
+    SetRenderTarget( render_target );
+    Clear( clear_color );
+}
+

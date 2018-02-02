@@ -16,6 +16,12 @@ namespace OpenGL{
     public:
         RenderTarget();
         RenderTarget( const unsigned int width, const unsigned int height );
+        
+        GLuint GetOpenGLFrameBufferId();
+        GLuint GetOpenGLDepthBufferId();
+        
+        void Bind();
+        
         Texture& GetTexture();
         void Free();
     private:

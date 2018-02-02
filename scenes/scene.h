@@ -6,6 +6,7 @@
 
 #include "camera/camera.h"
 #include "../ogl/buffers/vertex_buffers/vertex_buffer.h"
+#include "../ogl/render_targets/render_target.h"
 
 #include "../shapes/shape.h"
 #include "../shapes/triangle.h"
@@ -51,6 +52,8 @@ protected:
 protected:
     TextureCache texture_cache;
     ShaderCache shader_cache;
+    
+    OpenGL::RenderTarget render_target;
     
     
     

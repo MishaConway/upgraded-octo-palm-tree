@@ -26,6 +26,8 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     shader_cache.RegisterShaderProgram( "basic" );
     shader_cache.RegisterShaderProgram( "phong" );
     
+    render_target = OpenGL::RenderTarget( 512, 512 );
+    
     
     
     const float court_depth = 4;
