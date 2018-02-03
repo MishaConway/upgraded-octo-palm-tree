@@ -33,6 +33,22 @@
 
 
 
+struct JoystickAxisDirection{
+    bool horizontal;
+    bool vertical;
+    float horizontal_scale;
+    float vertical_scale;
+    
+    JoystickAxisDirection(){
+        horizontal = false;
+        vertical = false;
+        horizontal_scale = 1;
+        vertical_scale = 1;
+    }
+};
+
+
+
 struct Direction{
     bool left;
     bool right;
@@ -45,6 +61,7 @@ struct Direction{
     bool looking_up;
     bool looking_down;
     
+
     Direction(){
         left = false;
         right = false;
@@ -89,6 +106,13 @@ struct Direction{
     }
 };
 
+
+void MarkDirectionFromJoystickAccess( JoystickAxisDirection&  direction, int threshold, int horizontal, int vertical ){
+    direction.horizontal = abs(horizontal) > threshold;
+    direction.horizontal_scale = (float) horizontal / 32767.0f;
+    direction.vertical = abs(vertical) > threshold;
+    direction.vertical_scale = (float) -vertical / 32767.0f;
+}
 
 
 
@@ -235,6 +259,7 @@ int main(int argc, char *argv[])
     Direction direction;
     
     
+    
     while (!quit)
     {
         /* CALCULATE ELAPSED TIME */
@@ -248,58 +273,6 @@ int main(int argc, char *argv[])
             elapsed_milliseconds = time - old_time;
             elapsed_seconds = elapsed_milliseconds / 1000.0f;
         }
-        
-        
-        
-        
- 
-        
-        /* HANDLE JOYSTICK INPUTS */
-        
-        
-        
-        
-        auto x_move = SDL_JoystickGetAxis(joy, 0);
-        auto y_move = SDL_JoystickGetAxis(joy, 1);
-        
-        
-        auto x_move2 = SDL_JoystickGetAxis(joy, 2);
-        auto y_move2 = SDL_JoystickGetAxis(joy, 5);
-        
-        float x_factor = 0, y2_factor = 0;
-        if( abs(x_move) > 2000 )
-            x_factor = (float) x_move / 32767.0f;
-       
-        
-        if( abs(y_move) > 2000 )
-            y2_factor = (float) -y_move2 / 32767.0f * 2.0f;
-        
-        
-        /*
-        auto cam = scene.GetCamera();
-        auto side = cam.GetEyeDirection().ZeroY().Normalize().Cross( GeoVector(0,1,0,0));
-        
-        
-        // handle rotation
-        if( abs(x_move2) > 2000 ){
-            auto x2_factor = -(float) x_move2 / 32767.0f;
-            scene.GetCamera().Turn(GeoVector(0,1,0), x2_factor);
-            
-            
-        }
-        
-        // handle movement
-        if( abs(y_move) > 2000 ){
-            auto y_factor = (float) -y_move / 32767.0f * 2.0f;
-            scene.GetCamera().SetTargetView( cam.GetEyePosition() + cam.GetEyeDirection().ZeroY(), cam.GetFocusPosition() + cam.GetEyeDirection().ZeroY()  );
-            scene.GetCamera().SetCameraSpeed( y_factor );
-        } else {
-            scene.GetCamera().Stop();
-        }
-        
-        //printf( "xmove2 is %i and y move2 is %i\n", x_move2, y_move2 ); */
-        
-        
         
         while (SDL_PollEvent(&sdlEvent) != 0)
         {
@@ -377,9 +350,12 @@ int main(int argc, char *argv[])
             }
         }
         
+        
+        
         auto cam = scene.GetCamera();
         auto fps_cam = dynamic_cast<FirstPersonCamera*>(cam);
         if( fps_cam ){
+            /* process inputs from keyboard */
             if( direction.IsMoving() )
                 fps_cam->Move( direction.ToVector().FlipZ() * elapsed_seconds );
             
@@ -396,6 +372,29 @@ int main(int argc, char *argv[])
                 else if( direction.looking_up )
                     fps_cam->LookUp( elapsed_seconds * 72 );
             }
+            
+            /* process inputs from joystick */
+            if( joy ){
+                const int controller_sensitivity_threshold = 10000;
+                auto x_move = SDL_JoystickGetAxis(joy, 0);
+                auto y_move = SDL_JoystickGetAxis(joy, 1);
+                auto x_move2 = SDL_JoystickGetAxis(joy, 2);
+                auto y_move2 = SDL_JoystickGetAxis(joy, 5);
+                JoystickAxisDirection axis1, axis2;
+                MarkDirectionFromJoystickAccess( axis1, controller_sensitivity_threshold, x_move, y_move );
+                MarkDirectionFromJoystickAccess( axis2, controller_sensitivity_threshold, x_move2, y_move2);
+                
+                
+                if( axis1.vertical )
+                    fps_cam->MoveForward( axis1.vertical_scale * elapsed_seconds );
+                if( axis1.horizontal )
+                    fps_cam->StrafeRight( axis1.horizontal_scale * elapsed_seconds );
+                if( axis2.horizontal )
+                    fps_cam->TurnRight( axis2.horizontal_scale  );
+                if( axis2.vertical )
+                    fps_cam->LookUp( axis2.vertical_scale  );
+            }
+            
         }
         
       

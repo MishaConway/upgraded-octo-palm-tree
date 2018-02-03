@@ -54,7 +54,7 @@ void FirstPersonCamera::StrafeLeft( const float distance ){
 }
 
 void FirstPersonCamera::StrafeRight( const float distance ){
-    Move( GetWorldRightVector() * distance );
+    Move( forward.Cross(up) * distance );
 }
 
 void FirstPersonCamera::MoveForward( const float distance ){
