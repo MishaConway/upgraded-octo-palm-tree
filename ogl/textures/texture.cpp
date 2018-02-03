@@ -2,6 +2,8 @@
 #include "../device/device.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 
 
 OpenGL::Texture::Texture(){
@@ -17,13 +19,6 @@ OpenGL::Texture::Texture( const std::string& image_filename )
     int image_width, image_height, image_bpp;
     unsigned char* image_data = stbi_load(image_filename.c_str(), &image_width, &image_height, &image_bpp, STBI_rgb);
     
-    texture_id = 3;//SOIL_load_OGL_texture( image_filename.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID,  SOIL_FLAG_MIPMAPS );
-    if( !texture_id )
-    {
-        //printf( "soil failed to load %s\n", image_filename.c_str() );
-        //printf( "SOIL loading error: '%s'\n", SOIL_last_result() );
-    }
-    
     printf( "image_width is %i\n", image_width);
     printf( "image_height is %i\n", image_height);
     printf( "image_bpp is %i\n", image_bpp);
@@ -31,7 +26,7 @@ OpenGL::Texture::Texture( const std::string& image_filename )
 
 
 
-    Setup(image_width, image_width, TEXTURE_USAGE::SHADER_RESOURCE );
+    Setup(image_width, image_height, TEXTURE_USAGE::SHADER_RESOURCE );
     
     unsigned char* pMappedBytes = Map(0);
     memcpy( pMappedBytes, image_data, width * height * 3);
@@ -72,6 +67,9 @@ void OpenGL::Texture::Setup( const unsigned int width, const unsigned int height
     
     this->width = width;
     this->height = height;
+    
+    printf( "in setup and height is %i\n", height);
+    
     format = GL_RGB;
     
     glEnable( GL_TEXTURE_2D );
@@ -186,6 +184,36 @@ bool OpenGL::Texture::ClearColor( Color color, const bool preserve_alpha )
     float green = color.GetNormalizedGreen();
     float blue = color.GetNormalizedBlue();
     float alpha = color.GetNormalizedAlpha();
+    
+    return true;
+}
+
+bool OpenGL::Texture::SaveToFile( const std::string& filename )
+{
+    std::string extension = filename.substr(filename.find_last_of(".")+1);
+    std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+    
+    GLint is_compressed = GL_FALSE;
+    GLint compressed_size = 0;
+    GLint compressed_format = 0;
+    glBindTexture( GL_TEXTURE_2D, texture_id  );
+    glGetTexLevelParameteriv( GL_TEXTURE_2D, 0, GL_TEXTURE_COMPRESSED, &is_compressed );
+    if( is_compressed )
+    {
+        glGetTexLevelParameteriv( GL_TEXTURE_2D, 0, GL_TEXTURE_COMPRESSED_IMAGE_SIZE, &compressed_size );
+        glGetTexLevelParameteriv( GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &compressed_format );
+        printf( "sorry can't save compressed textures yet...\n" );
+        return false;
+    }
+    else
+    {
+        unsigned char* pixels = new unsigned char[ width*height*bpp ];
+        glGetTexImage( GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels );
+        printf( "saving and width is %i and height is %i\n", width, height);
+        stbi_write_jpg("/Users/mconway/projects/volley/test.jpg", width, height, bpp, pixels, 0);
+        
+        delete [] pixels;
+    }
     
     return true;
 }

@@ -30,7 +30,7 @@ namespace OpenGL{
         GLint GetOpenGLTextureId();
         GLenum GetFormat();
         bool IsFloatTexture();
-        //bool SaveToFile( const std::string& filename, const bool save_only_once = false );
+        bool SaveToFile( const std::string& filename );
         bool ClearColor( Color color, const bool preserve_alpha );
         unsigned char* Map( unsigned int* pPitch );
         void Unmap();
@@ -42,7 +42,6 @@ namespace OpenGL{
         GLenum format;
         GLenum internal_format, external_format;
         GLenum component_type;
-        
         unsigned char* pMappedData;
     };
 }

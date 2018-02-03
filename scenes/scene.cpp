@@ -118,7 +118,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Sphere( ).Transform( GeoMatrix::Scaling(0.45f) ).ToVertices() );
-    node->textures["diffuse"] = "grass.jpg";
+    node->textures["diffuse"] = "volleyball.png";
     node->local_transform = GeoMatrix::Translation(0, 1, 0 );
     root->children.push_back(node);
     
@@ -155,7 +155,13 @@ void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode, GeoMatrix transfor
     geode->vertex_buffer.Bind();
     shader_cache.ActivateShaderProgram( geode->shader_program, sizeof(Vertex) );
     
-    auto texture = texture_cache.FromFile("grass.jpg");
+    auto texture = texture_cache.FromFile("volleyball.png");
+    
+    static bool saved = false;
+    if( !saved )
+        texture.SaveToFile("blah.jpg");
+    saved = true;
+    
     shader_cache.SetTexture("tex1", texture, 0);
     shader_cache.SetFloat2("tex1_scale", GeoFloat2(1,1) );
     
