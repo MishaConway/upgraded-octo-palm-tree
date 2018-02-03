@@ -12,7 +12,7 @@ void main(void)
     vec3 worldposition_to_eye_position = normalize(out_worldposition_to_eye_position);
     
     
-    vec3 light_dir = normalize( vec3( 0, 1, 1) );
+    vec3 light_dir = normalize( vec3( 0, 0.01, 1) );
     
     float diffuse_factor = dot( light_dir, world_normal );
     
@@ -30,7 +30,7 @@ void main(void)
     vec3 specular_color = specularCoefficient * vec3(1,1,1);
     
     
-    vec4 linearColor =  vec4( saturate(diffuse_color + specular_color), 1 );
+    vec4 linearColor =  vec4( saturate( diffuse_color + specular_color), 1 );
     
     gl_FragColor = linearColor;
     

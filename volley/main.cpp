@@ -32,6 +32,125 @@
 #define SCREEN_HEIGHT 768
 
 
+
+struct Direction{
+    bool left;
+    bool right;
+    bool up;
+    bool down;
+    bool forward;
+    bool backward;
+    bool turning_left;
+    bool turning_right;
+    bool looking_up;
+    bool looking_down;
+    
+    Direction(){
+        left = false;
+        right = false;
+        up = false;
+        down = false;
+        forward = false;
+        backward = false;
+        turning_left = false;
+        turning_right = false;
+        looking_up = false;
+        looking_down = false;
+    }
+    
+    bool IsMoving(){
+        return left || right || up || down || forward || backward;
+    }
+    
+    bool IsTurning(){
+        return (turning_left && !turning_right) || (!turning_left && turning_right);
+    }
+    
+    bool IsLooking(){
+        return (looking_down && !looking_up) || (!looking_down && looking_up);
+    }
+    
+    GeoVector ToVector(){
+        
+        int x = 0, y = 0, z = 0;
+        if( left )
+            x--;
+        if( right )
+            x++;
+        if( up )
+            y++;
+        if( down )
+            y--;
+        if( forward )
+            z++;
+        if( backward )
+            z--;
+        return GeoVector( x, y, z ).Normalize();
+    }
+};
+
+
+
+
+void MarkDirection( Direction& direction, const char key, const bool enabled ){
+    switch ( key ){
+        case SDLK_w: {
+            direction.forward = enabled;
+            break;
+        }
+            
+        case SDLK_s: {
+            direction.backward = enabled;
+            break;
+        }
+            
+        case SDLK_a: {
+            direction.left = enabled;
+            break;
+        }
+            
+        case SDLK_d: {
+            direction.right = enabled;
+            break;
+        }
+            
+        case SDLK_z: {
+            direction.down = enabled;
+            break;
+        }
+            
+        case SDLK_x: {
+            direction.up = enabled;
+            break;
+        }
+            
+        case SDLK_o: {
+            direction.turning_left = enabled;
+            break;
+        }
+            
+        case SDLK_p: {
+            direction.turning_right = enabled;
+            break;
+        }
+            
+        case SDLK_n: {
+            direction.looking_down = enabled;
+            break;
+        }
+            
+        case SDLK_m: {
+            direction.looking_up = enabled;
+            break;
+        }
+            
+            
+    }
+}
+
+
+
+
 int main(int argc, char *argv[])
 {
     TextureCache::ConfigureTexturePaths("/Users/mconway/projects/volley/images");
@@ -102,6 +221,8 @@ int main(int argc, char *argv[])
     Scene scene;
     scene.Initialize( SCREEN_WIDTH, SCREEN_HEIGHT);
     
+    
+    
     Uint32 time = 0;
     
     
@@ -109,8 +230,34 @@ int main(int argc, char *argv[])
     
     bool quit = false;
     SDL_Event sdlEvent;
+    
+    
+    Direction direction;
+    
+    
     while (!quit)
     {
+        /* CALCULATE ELAPSED TIME */
+        
+        auto old_time = time;
+        time = SDL_GetTicks();
+        
+        Uint32 elapsed_milliseconds = 0;
+        float elapsed_seconds = 0;
+        if( old_time > 0 ){
+            elapsed_milliseconds = time - old_time;
+            elapsed_seconds = elapsed_milliseconds / 1000.0f;
+        }
+        
+        
+        
+        
+ 
+        
+        /* HANDLE JOYSTICK INPUTS */
+        
+        
+        
         
         auto x_move = SDL_JoystickGetAxis(joy, 0);
         auto y_move = SDL_JoystickGetAxis(joy, 1);
@@ -127,6 +274,8 @@ int main(int argc, char *argv[])
         if( abs(y_move) > 2000 )
             y2_factor = (float) -y_move2 / 32767.0f * 2.0f;
         
+        
+        /*
         auto cam = scene.GetCamera();
         auto side = cam.GetEyeDirection().ZeroY().Normalize().Cross( GeoVector(0,1,0,0));
         
@@ -148,7 +297,9 @@ int main(int argc, char *argv[])
             scene.GetCamera().Stop();
         }
         
-        //printf( "xmove2 is %i and y move2 is %i\n", x_move2, y_move2 );
+        //printf( "xmove2 is %i and y move2 is %i\n", x_move2, y_move2 ); */
+        
+        
         
         while (SDL_PollEvent(&sdlEvent) != 0)
         {
@@ -182,47 +333,19 @@ int main(int argc, char *argv[])
                             quit = true;
                             break;
                         }
-                        
-                        case SDLK_w: {
-                            auto cam = scene.GetCamera();
-                            scene.GetCamera().SetTargetView( cam.GetEyePosition() + cam.GetEyeDirection(), cam.GetFocusPosition() + cam.GetEyeDirection() );
+                        case SDLK_w:
+                        case SDLK_s:
+                        case SDLK_a:
+                        case SDLK_d:
+                        case SDLK_z:
+                        case SDLK_x:
+                        case SDLK_o:
+                        case SDLK_p:
+                        case SDLK_n:
+                        case SDLK_m:{
+                            MarkDirection(direction, sdlEvent.key.keysym.sym, true);
                             break;
                         }
-                            
-                        case SDLK_s: {
-                            auto cam = scene.GetCamera();
-                            scene.GetCamera().SetTargetView( cam.GetEyePosition() - cam.GetEyeDirection(), cam.GetFocusPosition() - cam.GetEyeDirection() );
-                            break;
-                        }
-                            
-                        case SDLK_a: {
-                            auto cam = scene.GetCamera();
-                            auto side = cam.GetEyeDirection().ZeroY().Normalize().Cross( GeoVector(0,1,0,0));
-                            scene.GetCamera().SetTargetView( cam.GetEyePosition() - side, cam.GetFocusPosition() - side );
-                            break;
-                        }
-                            
-                        case SDLK_d: {
-                            auto cam = scene.GetCamera();
-                            auto side = cam.GetEyeDirection().ZeroY().Normalize().Cross( GeoVector(0,1,0,0));
-                            scene.GetCamera().SetTargetView( cam.GetEyePosition() + side, cam.GetFocusPosition() + side );
-                            break;
-                        }
-                            
-                        case SDLK_z: {
-                            auto cam = scene.GetCamera();
-                            scene.GetCamera().SetTargetView( cam.GetEyePosition() - GeoVector(0,1,0), cam.GetFocusPosition() - GeoVector( 0,1,0) );
-                            break;
-                        }
-                            
-                        case SDLK_x: {
-                            auto cam = scene.GetCamera();
-                            scene.GetCamera().SetTargetView( cam.GetEyePosition() + GeoVector(0,1,0), cam.GetFocusPosition() + GeoVector( 0,1,0) );
-                            break;
-                        }
-                            
-                            
-
                     }
                     
                     
@@ -232,22 +355,18 @@ int main(int argc, char *argv[])
                     switch (sdlEvent.key.keysym.sym)
                     {
                         case SDLK_w:
-                            scene.GetCamera().Stop();
-                            break;
-                        
                         case SDLK_s:
-                            scene.GetCamera().Stop();
-                            break;
-                        
                         case SDLK_a:
-                            scene.GetCamera().Stop();
-                            break;
-                        
                         case SDLK_d:
                         case SDLK_z:
                         case SDLK_x:
-                            scene.GetCamera().Stop();
+                        case SDLK_o:
+                        case SDLK_p:
+                        case SDLK_n:
+                        case SDLK_m:{
+                            MarkDirection(direction, sdlEvent.key.keysym.sym, false);
                             break;
+                        }
                     }
                     
                     
@@ -258,15 +377,30 @@ int main(int argc, char *argv[])
             }
         }
         
-        auto old_time = time;
-        time = SDL_GetTicks();
-        
-        Uint32 elapsed_time = 0;
-        if( old_time > 0 ){
-            elapsed_time = time - old_time;
+        auto cam = scene.GetCamera();
+        auto fps_cam = dynamic_cast<FirstPersonCamera*>(cam);
+        if( fps_cam ){
+            if( direction.IsMoving() )
+                fps_cam->Move( direction.ToVector().FlipZ() * elapsed_seconds );
+            
+            if( direction.IsTurning() ){
+                if( direction.turning_left )
+                    fps_cam->TurnLeft( elapsed_seconds * 100 );
+                else if( direction.turning_right )
+                    fps_cam->TurnRight( elapsed_seconds * 100 );
+            }
+            
+            if( direction.IsLooking() ){
+                if( direction.looking_down )
+                    fps_cam->LookDown( elapsed_seconds * 72 );
+                else if( direction.looking_up )
+                    fps_cam->LookUp( elapsed_seconds * 72 );
+            }
         }
         
-        scene.Update( elapsed_time );
+      
+        
+        scene.Update( elapsed_seconds );
         
         // render stuff here
         scene.Draw();

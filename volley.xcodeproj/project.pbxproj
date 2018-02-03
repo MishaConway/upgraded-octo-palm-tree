@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		956A320A20252C5800857BC7 /* first_person_camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A320820252C5800857BC7 /* first_person_camera.cpp */; };
 		9596D94F2017FD0E00D5BC04 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D94E2017FD0E00D5BC04 /* main.cpp */; };
 		9596D9562017FD7800D5BC04 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9596D9552017FD7800D5BC04 /* OpenGL.framework */; };
 		9596D9582017FD9100D5BC04 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9596D9572017FD9100D5BC04 /* SDL2.framework */; };
@@ -59,6 +60,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		956A320820252C5800857BC7 /* first_person_camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = first_person_camera.cpp; path = scenes/camera/first_person_camera.cpp; sourceTree = SOURCE_ROOT; };
+		956A320920252C5800857BC7 /* first_person_camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = first_person_camera.h; path = scenes/camera/first_person_camera.h; sourceTree = SOURCE_ROOT; };
 		9596D94B2017FD0E00D5BC04 /* volley */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = volley; sourceTree = BUILT_PRODUCTS_DIR; };
 		9596D94E2017FD0E00D5BC04 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		9596D9552017FD7800D5BC04 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -393,6 +396,8 @@
 		9596D9BC201B1D2300D5BC04 /* camera */ = {
 			isa = PBXGroup;
 			children = (
+				956A320820252C5800857BC7 /* first_person_camera.cpp */,
+				956A320920252C5800857BC7 /* first_person_camera.h */,
 				9596D9BD201B1D3300D5BC04 /* camera.cpp */,
 				9596D9BE201B1D3300D5BC04 /* camera.h */,
 			);
@@ -573,6 +578,7 @@
 				9596D9BF201B1D3300D5BC04 /* camera.cpp in Sources */,
 				9596D9D3201B347700D5BC04 /* state_manager.cpp in Sources */,
 				9596D9EE201E7F2800D5BC04 /* material.cpp in Sources */,
+				956A320A20252C5800857BC7 /* first_person_camera.cpp in Sources */,
 				9596D9B7201B02D300D5BC04 /* scene.cpp in Sources */,
 				9596D9EA201DD33C00D5BC04 /* node.cpp in Sources */,
 				9596D97C2018145D00D5BC04 /* triangle.cpp in Sources */,
@@ -729,6 +735,7 @@
 				9596D9542017FD0E00D5BC04 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

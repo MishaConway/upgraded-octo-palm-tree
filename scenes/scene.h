@@ -5,6 +5,7 @@
 #include "texture_cache/texture_cache.h"
 
 #include "camera/camera.h"
+#include "camera/first_person_camera.h"
 #include "../ogl/buffers/vertex_buffers/vertex_buffer.h"
 #include "../ogl/render_targets/render_target.h"
 
@@ -37,9 +38,9 @@ class Scene{
 public:
     void Initialize( const unsigned int width, const unsigned int height );
     void Draw();
-    void Update( unsigned int elapsed_milliseconds );
+    void Update( const float elapsed_seconds );
     
-    Camera& GetCamera();
+    Camera* GetCamera();
     
 protected:
     void ConfigureShaderProgram( SceneGraph::Geode* geode, GeoMatrix transform );
@@ -57,7 +58,7 @@ protected:
     
     
     
-    Camera camera;
+    Camera* camera;
     
     SceneGraph::Node* root;
 };

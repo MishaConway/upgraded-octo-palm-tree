@@ -13,14 +13,18 @@ void DebugDraw( std::vector<Vertex> vertices ){
     glEnd();
 }
 
-Camera& Scene::GetCamera(){
+Camera* Scene::GetCamera(){
     return camera;
 }
 
 
 
 void Scene::Initialize( const unsigned int width, const unsigned int height ){
-    camera = Camera( width, height, 45.0f, 0.1f, 100.0f, GeoVector(-2, 2, 6 ), GeoVector( 0, 1, 0 ) );
+    camera = new FirstPersonCamera();
+    camera->SetProjection( width, height, 45.0f, 0.1f, 100.0f );
+    camera->SetEyePosition(GeoVector(-1, 0.5f, 4 ));
+    
+    //camera->SetFocusPosition(GeoVector( 0, 1, 0 ));
 
     
     shader_cache.RegisterShaderProgram( "basic" );
@@ -142,9 +146,8 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     //glEnable(GL_POLYGON_SMOOTH);
 }
 
-void Scene::Update( unsigned int elapsed_milliseconds ){
-    const float elapsed_seconds = (float) elapsed_milliseconds / 1000.0f;
-    camera.Update( elapsed_seconds );
+void Scene::Update( const float elapsed_seconds ){
+    //camera.Update( elapsed_seconds );
 }
 
 
@@ -158,14 +161,14 @@ void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode, GeoMatrix transfor
     
     
     
-    shader_cache.SetMatrix( "view_transform", camera.GetViewTransform() );
-    shader_cache.SetMatrix( "projection_transform", camera.GetProjectionTransform() );
+    shader_cache.SetMatrix( "view_transform", camera->GetViewTransform() );
+    shader_cache.SetMatrix( "projection_transform", camera->GetProjectionTransform() );
     shader_cache.SetMatrix( "world_transform", transform );
     shader_cache.SetMatrix( "world_inverse_transpose", transform.Inverse(0).Transpose() );
     
-    shader_cache.SetFloat( "viewport_width", camera.GetWidth() );
-    shader_cache.SetFloat( "viewport_height", camera.GetHeight() );
-    shader_cache.SetFloat3( "eye_position", camera.GetEyePosition() );
+    shader_cache.SetFloat( "viewport_width", camera->GetWidth() );
+    shader_cache.SetFloat( "viewport_height", camera->GetHeight() );
+    shader_cache.SetFloat3( "eye_position", camera->GetEyePosition() );
 }
 
 
@@ -189,7 +192,7 @@ void Scene::TraverseNodes( SceneGraph::Node* node, GeoMatrix transform ){
         
         auto billboard = dynamic_cast<SceneGraph::BillboardSprite*>( geode );
         if( billboard )
-            configured_transform = GeoMatrix::CreateConstrainedBillboard(GeoVector(transform.GetTranslationComponent()), camera.GetEyePosition(), GeoVector(0,1,0), camera.GetEyeDirectionNormalized(), GeoVector( 0, 0, -1) );
+            configured_transform = camera->GetConstrainedBillboardTransform( transform.GetTranslationComponent() );
         
         ConfigureShaderProgram( geode, configured_transform );
         geode->vertex_buffer.Draw();

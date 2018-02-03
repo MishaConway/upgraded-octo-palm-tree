@@ -10,6 +10,8 @@ public:
 	GeoQuaternion();
 	GeoQuaternion( const GeoVector& rotation_axis, const float degrees );
 	GeoQuaternion operator * ( const GeoQuaternion& ) const;
+    GeoQuaternion& operator *= ( const GeoQuaternion& );
+
 	GeoMatrix ToMatrix();
     GeoVector GetAxis();
     float     GetAngle();

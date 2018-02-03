@@ -55,6 +55,7 @@ struct GeoVector : public IStringable
     GeoVector InvertXY();
     GeoVector ZeroY();
     GeoVector ZeroW();
+    GeoVector FlipZ();
 
     GeoFloat2 ToGeoFloat2();
     GeoFloat3 ToGeoFloat3();

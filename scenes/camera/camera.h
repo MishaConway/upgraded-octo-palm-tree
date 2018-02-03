@@ -7,31 +7,22 @@ class Camera
 {
 public:
     Camera();
-    Camera( const unsigned int width, const unsigned int height, const float fovy, const float near_z, const float far_z, const GeoVector& default_eye_position, const GeoVector& default_focus_position );
-    void Translate( const GeoVector& translation );
-    void SetCameraSpeed( const float camera_speed );
-    void SetTargetView( const GeoVector& target_eye_position, const GeoVector& target_direction, const float distance_from_target );
-    void SetTargetView( const GeoVector& target_eye_position, const GeoVector& target_focus_position );
-    void Update( const float elapsed_seconds );
-    bool IsMoving();
+    virtual ~Camera();
     
-    void Stop();
-    
+    void SetProjection( const unsigned int width, const unsigned int height, const float fovy, const float near_z, const float far_z );
     
     unsigned int GetWidth();
     unsigned int GetHeight();
     void SetWidthHeight( const unsigned int width, const unsigned int height );
     
-    void SetEyePosition( const GeoVector& eye_position );
-    void SetFocusPosition( const GeoVector& focus_position );
-    
-    void Turn( const GeoVector& axis, const float degrees );
+    virtual void SetEyePosition( const GeoVector& eye_position );
+    virtual void SetFocusPosition( const GeoVector& focus_position );
     
     GeoMatrix GetProjectionTransform();
     GeoMatrix GetViewTransform();
     GeoMatrix GetReflectedViewTransform( const GeoVector& reflection_plane );
+    GeoMatrix GetConstrainedBillboardTransform( const GeoVector& world_position );
     
-    GeoMatrix GetCylindricalBillboardTransform();
     
     GeoVector GetEyePosition();
     GeoVector GetFocusPosition();
@@ -44,7 +35,10 @@ public:
     
     float DistanceFromEye( const GeoVector& point );
     
-private:
+protected:
+    void SyncViewTransform();
+    
+protected:
     GeoMatrix projection_transform;
     unsigned int width;
     unsigned int height;
@@ -53,16 +47,5 @@ private:
     float far_z;
     
     GeoMatrix view_transform;
-    
-    GeoVector target_eye_position, target_focus_position;
-    GeoVector start_eye_position, start_focus_position;
-    GeoVector current_eye_position, current_focus_position;
-    GeoVector eye_to_target, focus_to_target;
-    float eye_position_distance_to_move, focus_position_distance_to_move;
-    float interpolation_factor;
-    
-    float camera_speed;
-    float rotational_velocity;
-    bool camera_is_moving;
-    bool camera_is_rotating;
+    GeoVector eye_position, focus_position, up, forward;
 };

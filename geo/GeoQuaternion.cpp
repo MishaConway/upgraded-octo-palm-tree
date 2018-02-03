@@ -36,6 +36,15 @@ GeoQuaternion GeoQuaternion::operator * ( const GeoQuaternion& quat ) const
     return out;
 }
 
+GeoQuaternion& GeoQuaternion::operator *= ( const GeoQuaternion& quat ){
+    w = w * quat.w - x * quat.x - y * quat.y - z * quat.z;
+    x = w * quat.x + x * quat.w + y * quat.z - z * quat.y;
+    y = w * quat.y - x * quat.z + y * quat.w + z * quat.x;
+    z = w * quat.z + x * quat.y - y * quat.x + z * quat.w;
+    return *this;
+}
+
+
 GeoMatrix GeoQuaternion::ToMatrix()
 {
 	GeoVector v = GeoVector( x, y, z, w ); //Normalize();
