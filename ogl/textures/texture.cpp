@@ -17,7 +17,7 @@ OpenGL::Texture::Texture( const std::string& image_filename )
     glEnable(GL_TEXTURE_2D);
     
     int image_width, image_height, image_bpp;
-    unsigned char* image_data = stbi_load(image_filename.c_str(), &image_width, &image_height, &image_bpp, STBI_rgb);
+    unsigned char* image_data = stbi_load(image_filename.c_str(), &image_width, &image_height, &image_bpp, STBI_rgb_alpha);
     
     printf( "image_width is %i\n", image_width);
     printf( "image_height is %i\n", image_height);
@@ -28,8 +28,19 @@ OpenGL::Texture::Texture( const std::string& image_filename )
 
     Setup(image_width, image_height, TEXTURE_USAGE::SHADER_RESOURCE );
     
+    
+    
     unsigned char* pMappedBytes = Map(0);
-    memcpy( pMappedBytes, image_data, width * height * 3);
+    if( 4 == bpp){
+        memcpy( pMappedBytes, image_data, width * height * bpp);
+    } else if( 3 == bpp ){
+        for( int i = 0; i < width * height; i++ ){
+            *pMappedBytes++ = *image_data++; //red
+            *pMappedBytes++ = *image_data++; //green
+            *pMappedBytes++ = *image_data++; //blue
+            *pMappedBytes++ = 255;           //alpha
+        }
+    }
     Unmap();
     
     stbi_image_free( image_data );
@@ -49,42 +60,28 @@ bool OpenGL::Texture::IsFloatTexture()
     return component_type == GL_FLOAT;
 }
 
+
 void OpenGL::Texture::Setup( const unsigned int width, const unsigned int height, const TEXTURE_USAGE usage  )
 {
-    external_format = GL_RGB;
-    component_type = GL_FLOAT;
-    
-    if( GL_FLOAT == component_type ){
-        internal_format = external_format;
-        //internal_format = GL_RGBA32F;
-
-        bpp = 3;//sizeof(float)*4;
-    }
-    else{
-        internal_format = GL_RGB;
-        bpp = 3;
-    }
-    
     this->width = width;
     this->height = height;
-    
-    printf( "in setup and height is %i\n", height);
-    
-    format = GL_RGB;
-    
+    this->bpp = 4;
+    component_type = GL_UNSIGNED_BYTE;
+    internal_format = GL_RGBA8;
+    format = GL_RGBA;
+
     glEnable( GL_TEXTURE_2D );
     glGenTextures(1, &texture_id );
     
     if( GraphicsDevice::GetCapabilities().SupportsPixelBufferObject() )
         glGenBuffers( 1, &pbo_id  );
     
-    printf( "texture id is %i\n", texture_id);
     
     //bind our created opengl texture object so we may define its parameters
     glBindTexture( GL_TEXTURE_2D, texture_id  );
     
     if( TEXTURE_USAGE::RENDER_TARGET == usage  ){
-        internal_format = external_format = GL_RGBA;
+        internal_format = format = GL_RGBA;
         component_type = GL_UNSIGNED_BYTE;
 
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
@@ -101,18 +98,7 @@ void OpenGL::Texture::Setup( const unsigned int width, const unsigned int height
         
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glGenerateMipmap( GL_TEXTURE_2D );
-    }
-    
-    //Upload the textel buffer using Pixel Buffer Objects
-    if( GraphicsDevice::GetCapabilities().SupportsPixelBufferObject()  ){
-        glBindBuffer( GL_PIXEL_UNPACK_BUFFER, pbo_id );
-        glBufferData( GL_PIXEL_UNPACK_BUFFER, width*height*bpp, 0, GL_STREAM_DRAW );
-        glTexImage2D( GL_TEXTURE_2D, 0, internal_format, width, height, 0, external_format, component_type, (const GLubyte*) 0 );
-        glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
-    }
-    else{
-        glTexImage2D( GL_TEXTURE_2D, 0, internal_format, width, height, 0, external_format, component_type, (const GLubyte*) 0 );
+        //glGenerateMipmap( GL_TEXTURE_2D );
     }
     
     valid = true;
@@ -168,16 +154,14 @@ void OpenGL::Texture::Unmap()
     {
         glBindBuffer( GL_PIXEL_UNPACK_BUFFER, pbo_id );
         glUnmapBuffer( GL_PIXEL_UNPACK_BUFFER );
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, external_format, component_type, 0 );
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, component_type, 0 );
         
         //Unbind our Pixel Buffer Object
         glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
     }
     else
     {
-        //glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, external_format, component_type, pMappedData );
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pMappedData);
-
+        glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0, format, component_type, pMappedData);
         delete [] pMappedData;
         pMappedData = nullptr;
     }

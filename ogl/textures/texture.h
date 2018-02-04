@@ -36,11 +36,11 @@ namespace OpenGL{
         void Unmap();
     protected:
         void Setup( const unsigned int width, const unsigned int height, const TEXTURE_USAGE usage );
+
     private:
         GLuint texture_id, pbo_id;
         unsigned int width, height, bpp;
-        GLenum format;
-        GLenum internal_format, external_format;
+        GLenum internal_format, format;
         GLenum component_type;
         unsigned char* pMappedData;
     };
