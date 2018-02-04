@@ -91,8 +91,14 @@ void OpenGL::Texture::Setup( const unsigned int width, const unsigned int height
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
     else{
+        //trilinear min filtering
         glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        
+        float aniso = 0.0f;
+        glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &aniso);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
+        
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glGenerateMipmap( GL_TEXTURE_2D );
@@ -106,7 +112,7 @@ void OpenGL::Texture::Setup( const unsigned int width, const unsigned int height
         glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
     }
     else{
-       // glTexImage2D( GL_TEXTURE_2D, 0, internal_format, width, height, 0, external_format, component_type, (const GLubyte*) 0 );
+        glTexImage2D( GL_TEXTURE_2D, 0, internal_format, width, height, 0, external_format, component_type, (const GLubyte*) 0 );
     }
     
     valid = true;
@@ -184,6 +190,14 @@ bool OpenGL::Texture::ClearColor( Color color, const bool preserve_alpha )
     float green = color.GetNormalizedGreen();
     float blue = color.GetNormalizedBlue();
     float alpha = color.GetNormalizedAlpha();
+    
+    unsigned char* pMappedBytes = Map(0);
+    for( int y = 0; y < height; y++ )
+        for( int x = 0; x < width; x++ ){
+            
+        }
+    
+    Unmap();
     
     return true;
 }
