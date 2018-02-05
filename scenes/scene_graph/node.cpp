@@ -1,6 +1,14 @@
 #include "node.h"
 #include "../../shapes/quad.h"
 
+SceneGraph::ILightDetails::ILightDetails(){
+    directional = false;
+}
+
+SceneGraph::IDrawable::~IDrawable(){
+    
+}
+
 SceneGraph::Node::Node(){
     local_transform = GeoMatrix::Identity();
     
@@ -11,7 +19,15 @@ SceneGraph::Node::~Node(){
     
 }
 
+SceneGraph::LightNode::~LightNode(){
+    
+}
+
 SceneGraph::Geode::~Geode(){
+    
+}
+
+SceneGraph::LightGeode::~LightGeode(){
     
 }
 

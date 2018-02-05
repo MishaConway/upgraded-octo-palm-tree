@@ -3,6 +3,7 @@
 #include "../includes/helpers.h"
 #include "includes/fragment_shader_helpers.h"
 #include "includes/textures.h"
+#include "includes/lights.h"
 
 // https://github.com/stackgl/glsl-lighting-walkthrough
 
@@ -12,7 +13,9 @@ void main(void)
     vec3 worldposition_to_eye_position = normalize(out_worldposition_to_eye_position);
     
     
-    vec3 light_dir = normalize( vec3( 0, 0.01, 1) );
+    //vec3 light_dir = normalize( vec3( 0, 0.01 + lights[0].position.x, 1) );
+    
+    vec3 light_dir = light_direction( lights[0], out_worldspace_position );
     
     float diffuse_factor = dot( light_dir, world_normal );
     

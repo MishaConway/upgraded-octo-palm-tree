@@ -3,22 +3,6 @@
 
 
 
-void DebugDraw( std::vector<Vertex> vertices ){
-    glBegin(GL_TRIANGLES);
-    for( int i = 0; i < vertices.size(); i+= 3 ){
-        glVertex3f( vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
-        glVertex3f( vertices[i+1].position.x, vertices[i+1].position.y, vertices[i+1].position.z);
-        glVertex3f( vertices[i+2].position.x, vertices[i+2].position.y, vertices[i+2].position.z);
-    }
-    glEnd();
-}
-
-Camera* Scene::GetCamera(){
-    return camera;
-}
-
-
-
 void Scene::Initialize( const unsigned int width, const unsigned int height ){
     camera = new FirstPersonCamera();
     camera->SetProjection( width, height, 45.0f, 0.1f, 100.0f );
@@ -138,12 +122,23 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->local_transform = GeoMatrix::Scaling(0.25f) * GeoMatrix::Translation(1, 1, 0 );
     root->children.push_back(node);
     
-    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     
-    glHint(GL_POLYGON_SMOOTH, GL_NICEST);
+    // https://www.tomdalling.com/blog/modern-opengl/08-even-more-lighting-directional-lights-spotlights-multiple-lights/
+    auto light = new SceneGraph::LightGeode();
+    //light->position = GeoVector( 0, 0.01f, 1 );
+    light->directional = false;
+    light->local_transform = GeoMatrix::Translation( 2, 1, 0 );
+    light->shader_program = "phong";
+    light->vertex_buffer = OpenGL::VertexBuffer<Vertex>( Cube::UnitCube().Transform( GeoMatrix::Scaling(0.1f)).ToVertices() );
+    root->children.push_back(light);
     
     
-    //glEnable(GL_POLYGON_SMOOTH);
+    
+    
+}
+
+Camera* Scene::GetCamera(){
+    return camera;
 }
 
 void Scene::Update( const float elapsed_seconds ){
@@ -151,7 +146,9 @@ void Scene::Update( const float elapsed_seconds ){
 }
 
 
-void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode, GeoMatrix transform ){
+void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode ){
+    auto transform = geode->cached_world_transform;
+    
     geode->vertex_buffer.Bind();
     shader_cache.ActivateShaderProgram( geode->shader_program, sizeof(Vertex) );
     
@@ -162,10 +159,11 @@ void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode, GeoMatrix transfor
         texture.SaveToFile("blah.jpg");
     saved = true;
     
-    shader_cache.SetTexture("tex1", texture, 0);
+    auto tex = texture_cache.FromFile(geode->textures["diffuse"]);
+    shader_cache.SetTexture("tex1", tex, 0);
     shader_cache.SetFloat2("tex1_scale", GeoFloat2(1,1) );
     
-    
+    //todo: research uniform buffer objects to set all uniforms in one call
     
     shader_cache.SetMatrix( "view_transform", camera->GetViewTransform() );
     shader_cache.SetMatrix( "projection_transform", camera->GetProjectionTransform() );
@@ -175,6 +173,15 @@ void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode, GeoMatrix transfor
     shader_cache.SetFloat( "viewport_width", camera->GetWidth() );
     shader_cache.SetFloat( "viewport_height", camera->GetHeight() );
     shader_cache.SetFloat3( "eye_position", camera->GetEyePosition() );
+    
+    for( int i = 0; i < light_nodes.size(); i++ ){
+        auto light = light_nodes[i];
+        
+        GeoVector light_position = light->cached_world_transform.GetTranslationComponent();
+        light_position.w = light->directional ? 0 : 1;
+        shader_cache.SetFloat4( "lights[0].position", light_position );
+        
+    }
 }
 
 
@@ -182,31 +189,47 @@ void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode, GeoMatrix transfor
 
 void Scene::Draw(){
     OpenGL::GraphicsDevice::Clear( Color::Beige() );
-   
-    TraverseNodes( root, GeoMatrix::Identity() );
+    
+    light_nodes.clear();
+    AnalyzeNodes( root, GeoMatrix::Identity() );
+    
+    
+    
+    TraverseNodes( root );
 }
 
-void Scene::TraverseNodes( SceneGraph::Node* node, GeoMatrix transform ){
-    glDisable(GL_CULL_FACE);
-
-    
+void Scene::AnalyzeNodes( SceneGraph::Node* node, GeoMatrix transform ){
     auto new_transform = transform * node->local_transform;
+    auto configured_transform = new_transform;
+    
+    if( dynamic_cast<SceneGraph::LightNode*>(node) || dynamic_cast<SceneGraph::LightGeode*>(node) )
+        light_nodes.push_back( static_cast<SceneGraph::LightNode*>(node) );
+    
     
     auto geode = dynamic_cast<SceneGraph::Geode*>(node);
     if( geode ){
-        auto configured_transform = new_transform;
-        
         auto billboard = dynamic_cast<SceneGraph::BillboardSprite*>( geode );
         if( billboard )
             configured_transform = camera->GetConstrainedBillboardTransform( transform.GetTranslationComponent() );
-        
-        ConfigureShaderProgram( geode, configured_transform );
+    }
+    
+    node->cached_world_transform = configured_transform;
+    
+    for( int i = 0; i < node->children.size(); i++ ){
+        AnalyzeNodes( node->children[i], new_transform );
+    }
+}
+
+
+void Scene::TraverseNodes( SceneGraph::Node* node ){
+    auto geode = dynamic_cast<SceneGraph::Geode*>(node);
+    if( geode ){
+        ConfigureShaderProgram( geode );
         geode->vertex_buffer.Draw();
     }
     
-    
     for( int i = 0; i < node->children.size(); i++ ){
-        TraverseNodes( node->children[i], new_transform );
+        TraverseNodes( node->children[i] );
     }
 }
 

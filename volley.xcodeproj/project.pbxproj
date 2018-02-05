@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		956A320A20252C5800857BC7 /* first_person_camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A320820252C5800857BC7 /* first_person_camera.cpp */; };
+		956A32122027932500857BC7 /* forward_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A320E2027932500857BC7 /* forward_renderer.cpp */; };
+		956A32132027932500857BC7 /* pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A32102027932500857BC7 /* pass.cpp */; };
 		9596D94F2017FD0E00D5BC04 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D94E2017FD0E00D5BC04 /* main.cpp */; };
 		9596D9562017FD7800D5BC04 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9596D9552017FD7800D5BC04 /* OpenGL.framework */; };
 		9596D9582017FD9100D5BC04 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9596D9572017FD9100D5BC04 /* SDL2.framework */; };
@@ -63,6 +65,11 @@
 		956A320820252C5800857BC7 /* first_person_camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = first_person_camera.cpp; path = scenes/camera/first_person_camera.cpp; sourceTree = SOURCE_ROOT; };
 		956A320920252C5800857BC7 /* first_person_camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = first_person_camera.h; path = scenes/camera/first_person_camera.h; sourceTree = SOURCE_ROOT; };
 		956A320B2025C6B800857BC7 /* stb_image_write.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_image_write.h; path = ogl/textures/stb_image_write.h; sourceTree = SOURCE_ROOT; };
+		956A320C20270D9400857BC7 /* lights.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lights.h; path = shaders/pixel/includes/lights.h; sourceTree = SOURCE_ROOT; };
+		956A320E2027932500857BC7 /* forward_renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = forward_renderer.cpp; path = scenes/scene_graph/renderers/forward_renderer.cpp; sourceTree = SOURCE_ROOT; };
+		956A320F2027932500857BC7 /* forward_renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = forward_renderer.h; path = scenes/scene_graph/renderers/forward_renderer.h; sourceTree = SOURCE_ROOT; };
+		956A32102027932500857BC7 /* pass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pass.cpp; path = scenes/scene_graph/renderers/pass.cpp; sourceTree = SOURCE_ROOT; };
+		956A32112027932500857BC7 /* pass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pass.h; path = scenes/scene_graph/renderers/pass.h; sourceTree = SOURCE_ROOT; };
 		9596D94B2017FD0E00D5BC04 /* volley */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = volley; sourceTree = BUILT_PRODUCTS_DIR; };
 		9596D94E2017FD0E00D5BC04 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		9596D9552017FD7800D5BC04 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -166,6 +173,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		956A320D2027930D00857BC7 /* renderers */ = {
+			isa = PBXGroup;
+			children = (
+				956A320E2027932500857BC7 /* forward_renderer.cpp */,
+				956A320F2027932500857BC7 /* forward_renderer.h */,
+				956A32102027932500857BC7 /* pass.cpp */,
+				956A32112027932500857BC7 /* pass.h */,
+			);
+			name = renderers;
+			sourceTree = "<group>";
+		};
 		9596D9422017FD0E00D5BC04 = {
 			isa = PBXGroup;
 			children = (
@@ -334,6 +352,7 @@
 		9596D9992019DEDA00D5BC04 /* includes */ = {
 			isa = PBXGroup;
 			children = (
+				956A320C20270D9400857BC7 /* lights.h */,
 				9596D99A2019DEEB00D5BC04 /* fragment_shader_helpers.h */,
 				9596D99C2019DEEB00D5BC04 /* textures.h */,
 			);
@@ -494,6 +513,7 @@
 		9596D9E7201DD32400D5BC04 /* scene_graph */ = {
 			isa = PBXGroup;
 			children = (
+				956A320D2027930D00857BC7 /* renderers */,
 				9596D9EB201E7F0600D5BC04 /* materials */,
 				9596D9E8201DD33C00D5BC04 /* node.cpp */,
 				9596D9E9201DD33C00D5BC04 /* node.h */,
@@ -578,6 +598,7 @@
 				9596D9F4201E97AB00D5BC04 /* debug_lines.cpp in Sources */,
 				9596D9792018145D00D5BC04 /* cylinder.cpp in Sources */,
 				9596D9BF201B1D3300D5BC04 /* camera.cpp in Sources */,
+				956A32122027932500857BC7 /* forward_renderer.cpp in Sources */,
 				9596D9D3201B347700D5BC04 /* state_manager.cpp in Sources */,
 				9596D9EE201E7F2800D5BC04 /* material.cpp in Sources */,
 				956A320A20252C5800857BC7 /* first_person_camera.cpp in Sources */,
@@ -600,6 +621,7 @@
 				9596D9E6201DAB1400D5BC04 /* texture_cache.cpp in Sources */,
 				9596D9B3201AE76F00D5BC04 /* IValidatable.cpp in Sources */,
 				9596D9E2201DA2DA00D5BC04 /* render_target.cpp in Sources */,
+				956A32132027932500857BC7 /* pass.cpp in Sources */,
 				9596D9C3201B2DFD00D5BC04 /* texture.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

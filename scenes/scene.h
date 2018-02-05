@@ -43,9 +43,11 @@ public:
     Camera* GetCamera();
     
 protected:
-    void ConfigureShaderProgram( SceneGraph::Geode* geode, GeoMatrix transform );
+    void ConfigureShaderProgram( SceneGraph::Geode* geode );
     
-    void TraverseNodes( SceneGraph::Node* node, GeoMatrix transform );
+    
+    void AnalyzeNodes( SceneGraph::Node* node, GeoMatrix transform );
+    void TraverseNodes( SceneGraph::Node* node );
     
     
     
@@ -55,6 +57,8 @@ protected:
     ShaderCache shader_cache;
     
     OpenGL::RenderTarget render_target;
+    
+    std::vector<SceneGraph::LightNode*> light_nodes;
     
     
     
