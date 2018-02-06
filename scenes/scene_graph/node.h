@@ -25,25 +25,35 @@ namespace SceneGraph{
         ILightDetails();
     };
     
-    struct IRotatating {
-        GeoVector local_rotation_axis;
-        float local_rotation_degrees;
-        float local_rotation_speed;
-    };
+ 
+    
+
     
     //struct ITranslating
     
     struct Node {
         Node();
         virtual ~Node();
+        virtual bool Update( const float elapsed_seconds );
+        virtual GeoMatrix GetUpdatedLocalTransform();
         std::vector<Node*> children;
-        GeoMatrix local_transform, cached_world_transform;
+        GeoMatrix cached_world_transform;
+        GeoMatrix local_transform;
+    protected:
+    };
+    
+    struct Rotor : public Node {
+        virtual ~Rotor();
+        GeoVector local_rotation_axis;
+        float local_rotation_degrees;
+        float local_rotation_speed;
+        virtual bool Update( const float elapsed_seconds );
+        virtual GeoMatrix GetUpdatedLocalTransform();
     };
     
     struct LightNode : public Node, ILightDetails {
         virtual ~LightNode();
     };
-    
     
     struct Geode : public Node, IDrawable {
         virtual ~Geode();

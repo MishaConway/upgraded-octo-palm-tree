@@ -43,11 +43,11 @@ public:
     Camera* GetCamera();
     
 protected:
-    void ConfigureShaderProgram( SceneGraph::Geode* geode );
+    void ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable  );
     
     
-    void AnalyzeNodes( SceneGraph::Node* node, GeoMatrix transform );
-    void TraverseNodes( SceneGraph::Node* node );
+    void UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const float elapsed_seconds );
+    void DrawNodes( SceneGraph::Node* node );
     
     
     

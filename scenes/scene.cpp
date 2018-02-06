@@ -123,14 +123,25 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     root->children.push_back(node);
     
     
+    auto rotor = new SceneGraph::Rotor;
+    rotor->local_transform = GeoMatrix::Translation(2, 1, 0);
+    rotor->local_rotation_axis = GeoVector( 0, 1, 0 );
+    rotor->local_rotation_speed = 10;
+    root->children.push_back(rotor);
+    
+    
+    
+    
+    
     // https://www.tomdalling.com/blog/modern-opengl/08-even-more-lighting-directional-lights-spotlights-multiple-lights/
     auto light = new SceneGraph::LightGeode();
     //light->position = GeoVector( 0, 0.01f, 1 );
     light->directional = false;
-    light->local_transform = GeoMatrix::Translation( 2, 1, 0 );
+    //light->local_transform = GeoMatrix::Translation( 2, 1, 0 );
     light->shader_program = "phong";
+    light->textures["diffuse"] = "grass.jpg";
     light->vertex_buffer = OpenGL::VertexBuffer<Vertex>( Cube::UnitCube().Transform( GeoMatrix::Scaling(0.1f)).ToVertices() );
-    root->children.push_back(light);
+    rotor->children.push_back(light);
     
     
     
@@ -141,16 +152,14 @@ Camera* Scene::GetCamera(){
     return camera;
 }
 
-void Scene::Update( const float elapsed_seconds ){
-    //camera.Update( elapsed_seconds );
-}
 
 
-void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode ){
-    auto transform = geode->cached_world_transform;
+
+void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable  ){
+    auto transform = node->cached_world_transform;
     
-    geode->vertex_buffer.Bind();
-    shader_cache.ActivateShaderProgram( geode->shader_program, sizeof(Vertex) );
+    drawable->vertex_buffer.Bind();
+    shader_cache.ActivateShaderProgram( drawable->shader_program, sizeof(Vertex) );
     
     auto texture = texture_cache.FromFile("volleyball.png");
     
@@ -159,7 +168,7 @@ void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode ){
         texture.SaveToFile("blah.jpg");
     saved = true;
     
-    auto tex = texture_cache.FromFile(geode->textures["diffuse"]);
+    auto tex = texture_cache.FromFile(drawable->textures["diffuse"]);
     shader_cache.SetTexture("tex1", tex, 0);
     shader_cache.SetFloat2("tex1_scale", GeoFloat2(1,1) );
     
@@ -185,21 +194,21 @@ void Scene::ConfigureShaderProgram( SceneGraph::Geode* geode ){
 }
 
 
-
+void Scene::Update( const float elapsed_seconds ){
+    light_nodes.clear();
+    UpdateNodes( root, GeoMatrix::Identity(), elapsed_seconds );
+}
 
 void Scene::Draw(){
     OpenGL::GraphicsDevice::Clear( Color::Beige() );
-    
-    light_nodes.clear();
-    AnalyzeNodes( root, GeoMatrix::Identity() );
-    
-    
-    
-    TraverseNodes( root );
+    DrawNodes( root );
 }
 
-void Scene::AnalyzeNodes( SceneGraph::Node* node, GeoMatrix transform ){
-    auto new_transform = transform * node->local_transform;
+void Scene::UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const float elapsed_seconds ){
+    node->Update( elapsed_seconds );
+    
+    
+    auto new_transform = transform * node->GetUpdatedLocalTransform();
     auto configured_transform = new_transform;
     
     if( dynamic_cast<SceneGraph::LightNode*>(node) || dynamic_cast<SceneGraph::LightGeode*>(node) )
@@ -216,20 +225,21 @@ void Scene::AnalyzeNodes( SceneGraph::Node* node, GeoMatrix transform ){
     node->cached_world_transform = configured_transform;
     
     for( int i = 0; i < node->children.size(); i++ ){
-        AnalyzeNodes( node->children[i], new_transform );
+        UpdateNodes( node->children[i], new_transform, elapsed_seconds );
     }
 }
 
 
-void Scene::TraverseNodes( SceneGraph::Node* node ){
-    auto geode = dynamic_cast<SceneGraph::Geode*>(node);
-    if( geode ){
-        ConfigureShaderProgram( geode );
-        geode->vertex_buffer.Draw();
+void Scene::DrawNodes( SceneGraph::Node* node ){
+    auto drawable = dynamic_cast<SceneGraph::IDrawable*>(node);
+    
+    if( drawable ){
+        ConfigureShaderProgram( node, drawable );
+        drawable->vertex_buffer.Draw();
     }
     
     for( int i = 0; i < node->children.size(); i++ ){
-        TraverseNodes( node->children[i] );
+        DrawNodes( node->children[i] );
     }
 }
 

@@ -17,33 +17,39 @@ OpenGL::Texture::Texture( const std::string& image_filename )
     glEnable(GL_TEXTURE_2D);
     
     int image_width, image_height, image_bpp;
-    unsigned char* image_data = stbi_load(image_filename.c_str(), &image_width, &image_height, &image_bpp, STBI_rgb_alpha);
+    unsigned char* start_image_data = stbi_load(image_filename.c_str(), &image_width, &image_height, &image_bpp, STBI_rgb_alpha);
     
+    printf( "image filename is %s\n", image_filename.c_str() );
     printf( "image_width is %i\n", image_width);
     printf( "image_height is %i\n", image_height);
     printf( "image_bpp is %i\n", image_bpp);
-    printf( "image filename is %s\n", image_filename.c_str() );
 
 
 
     Setup(image_width, image_height, TEXTURE_USAGE::SHADER_RESOURCE );
     
     
-    
     unsigned char* pMappedBytes = Map(0);
-    if( 4 == bpp){
-        memcpy( pMappedBytes, image_data, width * height * bpp);
-    } else if( 3 == bpp ){
+    
+    // it seems like stbi load with STBI_rgb_alpha fills in alpha channel?
+    memcpy( pMappedBytes, start_image_data, width * height * bpp);
+
+    /*
+    
+    if( 4 == image_bpp){
+        memcpy( pMappedBytes, start_image_data, width * height * 4);
+    } else if( 3 == image_bpp ){
+        auto image_data = start_image_data;
         for( int i = 0; i < width * height; i++ ){
             *pMappedBytes++ = *image_data++; //red
             *pMappedBytes++ = *image_data++; //green
             *pMappedBytes++ = *image_data++; //blue
             *pMappedBytes++ = 255;           //alpha
         }
-    }
+    } */
     Unmap();
     
-    stbi_image_free( image_data );
+    stbi_image_free( start_image_data );
 }
 
 OpenGL::Texture::Texture( const unsigned int width, const unsigned int height,  const TEXTURE_USAGE usage ){
