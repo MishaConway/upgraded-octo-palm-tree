@@ -1,5 +1,12 @@
 #define MAX_LIGHTS 10
 
+uniform struct Material {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+};
+
 uniform struct Light {
     vec4 position;
     
@@ -11,10 +18,10 @@ uniform struct Light {
     vec3 attenuation;
     
     float cone_angle;
-    vec3 cone_direction;
 };
 
 uniform Light lights[MAX_LIGHTS];
+uniform Material material;
 
 
 vec3 light_direction( vec4 light, vec3 position ){

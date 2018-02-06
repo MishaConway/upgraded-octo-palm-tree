@@ -161,6 +161,13 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     drawable->vertex_buffer.Bind();
     shader_cache.ActivateShaderProgram( drawable->shader_program, sizeof(Vertex) );
     
+    // set material
+    shader_cache.SetFloat3( "material.ambient", drawable->material.ambient );
+    shader_cache.SetFloat3( "material.diffuse", drawable->material.diffuse );
+    shader_cache.SetFloat3( "material.specular", drawable->material.specular );
+    shader_cache.SetFloat( "material.shininess", drawable->material.shininess );
+    
+    
     auto texture = texture_cache.FromFile("volleyball.png");
     
     static bool saved = false;
@@ -185,21 +192,16 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     
     for( int i = 0; i < light_nodes.size(); i++ ){
         auto light = light_nodes[i];
-        
         shader_cache.SetFloat3( "lights[0].ambient", light->IBaseLightDetails::ambient );
         shader_cache.SetFloat3( "lights[0].diffuse", light->IBaseLightDetails::diffuse );
         shader_cache.SetFloat3( "lights[0].specular", light->IBaseLightDetails::specular );
-
-        
-        
-        
         if( light->IDirectionalLight::directional ){
             shader_cache.SetFloat4( "lights[0].position", GeoVector(light->IDirectionalLight::direction, 0) );
         }
         else{
             shader_cache.SetFloat4( "lights[0].position", GeoVector(light->cached_world_transform.GetTranslationComponent(), 1));
             if( light->spotlight ){
-                
+                shader_cache.SetFloat( "lights[0].cone_angle", light->ISpotlightDetails::cone_angle );
             }
         }
     }
