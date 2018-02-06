@@ -15,5 +15,30 @@ namespace SceneGraph{
         GeoFloat3 specular;
         GeoFloat3 emissive;
         float shininess;
+        
+        static Material Emerald();
+        static Material Jade();
+        static Material Obsidian();
+        static Material Pearl();
+        static Material Ruby();
+        static Material Turquoise();
+        static Material Brass();
+        static Material Bronze();
+        static Material Chrome();
+        static Material Copper();
+        static Material Gold();
+        static Material Silver();
+        static Material BlackPlastic();
+        static Material CyanPlastic();
+        static Material GreenPlastic();
+        static Material RedPlastic();
+        static Material WhitePlastic();
+        static Material YellowPlastic();
+        static Material BlackRubber();
+        static Material CyanRubber();
+        static Material GreenRubber();
+        static Material RedRubber();
+        static Material WhiteRubber();
+        static Material YellowRubber();
     };
 }

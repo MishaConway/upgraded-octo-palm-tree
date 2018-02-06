@@ -17,7 +17,7 @@
 #include "../shapes/sphere.h"
 #include "../shapes/cylinder.h"
 
-#include "scene_graph/node.h"
+#include "scene_graph/nodes/node.h"
 
 
 

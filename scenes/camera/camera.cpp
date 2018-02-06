@@ -67,7 +67,7 @@ GeoMatrix Camera::GetReflectedViewTransform( const GeoVector& reflection_plane )
 }
 
 GeoMatrix Camera::GetConstrainedBillboardTransform( const GeoVector& world_position ){
-    return GeoMatrix::CreateConstrainedBillboard( world_position, GetEyePosition(), up, GetEyeDirectionNormalized(), forward );
+    return GeoMatrix::CreateConstrainedBillboard( world_position, GetEyePosition(), up, GetEyeDirectionNormalized(), -forward );
 }
 
 

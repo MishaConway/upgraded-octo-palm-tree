@@ -1,13 +1,8 @@
 #include "node.h"
-#include "../../shapes/quad.h"
+#include "../../../shapes/quad.h"
 
-SceneGraph::ILightDetails::ILightDetails(){
-    directional = false;
-}
 
-SceneGraph::IDrawable::~IDrawable(){
-    
-}
+
 
 
 SceneGraph::Node::Node(){
@@ -69,5 +64,3 @@ SceneGraph::BillboardSprite::~BillboardSprite(){
 SceneGraph::Sprite::Sprite(){
     vertex_buffer = OpenGL::VertexBuffer<Vertex>( Quad::XYUnitQuad().ToVertices() );
 }
-
-

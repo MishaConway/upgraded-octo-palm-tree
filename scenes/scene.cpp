@@ -124,7 +124,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     
     auto rotor = new SceneGraph::Rotor;
-    rotor->local_transform = GeoMatrix::Translation(2, 1, 0);
+    rotor->local_transform = GeoMatrix::Translation(1, 1, 0);
     rotor->local_rotation_axis = GeoVector( 0, 1, 0 );
     rotor->local_rotation_speed = 10;
     root->children.push_back(rotor);
@@ -186,10 +186,22 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     for( int i = 0; i < light_nodes.size(); i++ ){
         auto light = light_nodes[i];
         
-        GeoVector light_position = light->cached_world_transform.GetTranslationComponent();
-        light_position.w = light->directional ? 0 : 1;
-        shader_cache.SetFloat4( "lights[0].position", light_position );
+        shader_cache.SetFloat3( "lights[0].ambient", light->IBaseLightDetails::ambient );
+        shader_cache.SetFloat3( "lights[0].diffuse", light->IBaseLightDetails::diffuse );
+        shader_cache.SetFloat3( "lights[0].specular", light->IBaseLightDetails::specular );
+
         
+        
+        
+        if( light->IDirectionalLight::directional ){
+            shader_cache.SetFloat4( "lights[0].position", GeoVector(light->IDirectionalLight::direction, 0) );
+        }
+        else{
+            shader_cache.SetFloat4( "lights[0].position", GeoVector(light->cached_world_transform.GetTranslationComponent(), 1));
+            if( light->spotlight ){
+                
+            }
+        }
     }
 }
 

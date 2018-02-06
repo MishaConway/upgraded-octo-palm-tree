@@ -2,8 +2,16 @@
 
 uniform struct Light {
     vec4 position;
-    float attenuation;
-    float ambientCoefficient;
+    
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    
+    
+    vec3 attenuation;
+    
+    float cone_angle;
+    vec3 cone_direction;
 };
 
 uniform Light lights[MAX_LIGHTS];

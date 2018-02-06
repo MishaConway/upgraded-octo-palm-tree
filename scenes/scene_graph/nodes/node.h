@@ -1,36 +1,10 @@
-#include <vector>
-#include <map>
+#pragma once
 
-#include "../../shapes/shape.h"
-#include "../../geo/GeoMatrix.h"
-#include "../../ogl/buffers/vertex_buffers/vertex_buffer.h"
-
+#include "lights.h"
+#include "drawable.h"
 
 
 namespace SceneGraph{
-   
-    
-    struct IDrawable {
-        virtual ~IDrawable();
-        OpenGL::VertexBuffer<Vertex> vertex_buffer;
-        std::map< std::string, std::string> textures;
-        std::string shader_program;
-    };
-    
-    struct ILightDetails{
-        bool directional;
-        GeoFloat3 attenuation;
-        //vec3 Direction;
-        GeoFloat3 color;
-        ILightDetails();
-    };
-    
- 
-    
-
-    
-    //struct ITranslating
-    
     struct Node {
         Node();
         virtual ~Node();
@@ -51,10 +25,11 @@ namespace SceneGraph{
         virtual GeoMatrix GetUpdatedLocalTransform();
     };
     
-    struct LightNode : public Node, ILightDetails {
+    struct LightNode : public Node, IFullLightDetails {
         virtual ~LightNode();
     };
     
+
     struct Geode : public Node, IDrawable {
         virtual ~Geode();
     };
@@ -63,6 +38,8 @@ namespace SceneGraph{
     struct LightGeode : public LightNode, IDrawable {
         virtual ~LightGeode();
     };
+    
+    
     
     
     struct Sprite : public Geode {
