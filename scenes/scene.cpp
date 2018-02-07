@@ -3,7 +3,7 @@
 #include "../string/string_utils.h"
 #include "../shapes/shape_utilities/debug_lines.h"
 
-
+//https://www.keithlantz.net/2011/10/tangent-space-normal-mapping-with-glsl/
 
 void Scene::Initialize( const unsigned int width, const unsigned int height ){
     camera = new FirstPersonCamera();
@@ -26,14 +26,8 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     root = new SceneGraph::Node();
     
-    SceneGraph::Geode* node = new SceneGraph::Geode();
-    node->shader_program = "phong";
-    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>( Quad::XYUnitQuad().ToVertices() );
-    node->textures["diffuse"] = "grass.jpg";
-    //root->children.push_back(node);
-    
-    
-    node = new SceneGraph::Geode();
+
+    auto node = new SceneGraph::Geode();
     node->shader_program = "phong";
     auto quad = Quad::XZQuadCentered(GeoFloat3(), 5, court_depth);
     quad.SquareTesselate();
@@ -41,14 +35,14 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     quad.SquareTesselate();
     quad.SquareTesselate();
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>( quad.ToVertices() );
-    node->textures["diffuse"] = "grass.jpg";
+    node->textures["diffuse"] = SceneGraph::TextureDetails("stones.png", GeoFloat2(6,6));
     node->material.specular = GeoFloat3(0,0,0);
     root->children.push_back(node);
     
     
     auto floor_lines = new SceneGraph::Geode;
     floor_lines->vertex_buffer = OpenGL::VertexBuffer<Vertex>( CalculateDebugBiTangentLines( quad.ToVertices(), 0.05f ), OpenGL::PRIMITIVE_TYPE::LINELIST );
-    floor_lines->textures["diffuse"] = "grass.jpg";
+    floor_lines->textures["diffuse"] = SceneGraph::TextureDetails("grass.jpg");
     floor_lines->shader_program = "phong";
     floor_lines->material = SceneGraph::Material::Zero();
     floor_lines->material.emissive = GeoFloat3( 1, 0, 0 );
@@ -56,25 +50,10 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     root->children.push_back(floor_lines);
     
     
-    auto verts = Quad::XZQuadCentered(GeoFloat3(), 5, court_depth).ToVertices();
-    for( int i = 0; i < verts.size(); i++ ){
-        printf( "vert normal is %f, %f, %f\n", verts[i].normal.x, verts[i].normal.y, verts[i].normal.z );
-    }
-    
     /* todo:  css/haml like system for defining scene graph... */
     /* todo:  normal mapping */
-    /* todo:  bill boarding */
 
 
-
-    
-   /* node = new SceneGraph::Geode();
-    node->shader_program = "phong";
-    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Cylinder( 0.2f, pole_height, 0.2f ).ToVertices() );
-    node->textures["diffuse"] = "grass.jpg";
-    node->local_transform = GeoMatrix::Translation(0, pole_height / 2.0f, -court_depth / 2.0f );
-    root->children.push_back(node); */
-    
     auto cylinder_vertex_buffer =  OpenGL::VertexBuffer<Vertex>(  Cylinder(1,1,1).ToVertices() );
     const float large_cylinder_diameter = 0.1f;
     const float small_cylinder_diameter = 0.06f;
@@ -82,7 +61,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = cylinder_vertex_buffer;
-    node->textures["diffuse"] = "metal1.jpg";
+    node->textures["diffuse"] = SceneGraph::TextureDetails("metal1.jpg");
     node->local_transform = GeoMatrix::Scaling(large_cylinder_diameter, pole_height, large_cylinder_diameter ) *
                             GeoMatrix::Translation(0, pole_height / 2.0f, -court_depth / 2.0f );
     root->children.push_back(node);
@@ -91,7 +70,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = cylinder_vertex_buffer;
-    node->textures["diffuse"] = "metal1.jpg";
+    node->textures["diffuse"] = SceneGraph::TextureDetails("metal1.jpg");
     node->local_transform = GeoMatrix::Scaling(small_cylinder_diameter, pole_height/2, small_cylinder_diameter ) *
     GeoMatrix::Translation(0, pole_height, -court_depth / 2.0f );
     root->children.push_back(node);
@@ -100,7 +79,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = cylinder_vertex_buffer;
-    node->textures["diffuse"] = "metal1.jpg";
+    node->textures["diffuse"] = SceneGraph::TextureDetails("metal1.jpg");
     node->local_transform = GeoMatrix::Scaling(large_cylinder_diameter, pole_height, large_cylinder_diameter ) *
                             GeoMatrix::Translation(0, pole_height / 2.0f, court_depth / 2.0f );
     root->children.push_back(node);
@@ -108,7 +87,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = cylinder_vertex_buffer;
-    node->textures["diffuse"] = "metal1.jpg";
+    node->textures["diffuse"] = SceneGraph::TextureDetails("metal1.jpg");
     node->local_transform = GeoMatrix::Scaling(small_cylinder_diameter, pole_height/2, small_cylinder_diameter ) *
     GeoMatrix::Translation(0, pole_height, court_depth / 2.0f );
     root->children.push_back(node);
@@ -118,7 +97,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Sphere( ).Transform( GeoMatrix::Scaling(0.45f) ).ToVertices() );
-    node->textures["diffuse"] = "volleyball.png";
+    node->textures["diffuse"] = SceneGraph::TextureDetails("volleyball.png");
     node->local_transform = GeoMatrix::Translation(0, 1, 0 );
     //node->material = SceneGraph::Material::Silver();
     node->material.shininess = 64;
@@ -128,7 +107,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  RoundedCube::UnitRoundedCube().Transform( GeoMatrix::Scaling(0.3f)).ToVertices() );
-    node->textures["diffuse"] = "roundcube0.jpg";
+    node->textures["diffuse"] = SceneGraph::TextureDetails("roundcube0.jpg");
     node->local_transform = GeoMatrix::Translation(-1, 1, 0 );
     root->children.push_back(node);
     
@@ -136,7 +115,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     node = new SceneGraph::BillboardSprite();
     node->shader_program = "phong";
-    node->textures["diffuse"] = "grass.jpg";
+    node->textures["diffuse"] = SceneGraph::TextureDetails("grass.jpg");
     node->local_transform = GeoMatrix::Scaling(0.25f) * GeoMatrix::Translation(1, 1, 0 );
     root->children.push_back(node);
     
@@ -167,7 +146,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     // https://www.tomdalling.com/blog/modern-opengl/08-even-more-lighting-directional-lights-spotlights-multiple-lights/
     auto light = new SceneGraph::LightGeode();
     light->shader_program = "phong";
-    light->textures["diffuse"] = "grass.jpg";
+    light->textures["diffuse"] = SceneGraph::TextureDetails("grass.jpg");
     light->IBaseLightDetails::diffuse = GeoFloat3( 0.55f, 0.55f, 0.55f );
     light->IBaseLightDetails::specular = GeoFloat3( 0.63f, 0.63f, 0.64f );
     light->material.emissive = GeoFloat3( 1, 1, 1 );
@@ -207,9 +186,10 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
         texture.SaveToFile("blah.jpg");
     saved = true;
     
-    auto tex = texture_cache.FromFile(drawable->textures["diffuse"]);
+    auto tex_details = drawable->textures["diffuse"];
+    auto tex = texture_cache.FromFile(tex_details.texture_name);
     shader_cache.SetTexture("tex1", tex, 0);
-    shader_cache.SetFloat2("tex1_scale", GeoFloat2(1,1) );
+    shader_cache.SetFloat2("tex1_scale", tex_details.scale );
     
     //todo: research uniform buffer objects to set all uniforms in one call
     auto transform = node->cached_world_transform;
