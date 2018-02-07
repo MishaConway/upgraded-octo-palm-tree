@@ -9,6 +9,7 @@ namespace SceneGraph{
         float linear;
         float quadratic;
         Attenuation();
+        GeoFloat3 ToGeoFloat3();
     };
     
     struct IBaseLightDetails{

@@ -41,6 +41,15 @@ GLuint OpenGL::Shader::GetOpenGLShaderId()
     return shader_id;
 }
 
+bool OpenGL::Shader::Free(){
+    if( valid ){
+        glDeleteShader( GetOpenGLShaderId() );
+        valid = false;
+        return true;
+    }
+    return false;
+}
+
 
 OpenGL::VertexShader::VertexShader( std::string source  ) : OpenGL::Shader( GL_VERTEX_SHADER, source ){}
 OpenGL::PixelShader::PixelShader( std::string source  ) : OpenGL::Shader( GL_FRAGMENT_SHADER, source ){}

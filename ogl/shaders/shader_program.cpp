@@ -72,7 +72,10 @@ OpenGL::ShaderProgram::ShaderProgram(  const std::string& vertex_shader_source, 
                 errors = std::string( link_log );
                 delete [] link_log;
             }
-        } 
+        }
+        
+        vertex_shader.Free();
+        pixel_shader.Free();
     }    
 }
 

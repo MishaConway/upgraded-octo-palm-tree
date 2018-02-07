@@ -12,6 +12,7 @@ namespace OpenGL{
     {
     public:
         GLuint GetOpenGLShaderId();
+        bool Free();
     protected:
         Shader( GLenum shader_type, std::string source );
     protected:

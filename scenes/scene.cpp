@@ -62,12 +62,14 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     root->children.push_back(node); */
     
     auto cylinder_vertex_buffer =  OpenGL::VertexBuffer<Vertex>(  Cylinder(1,1,1).ToVertices() );
+    const float large_cylinder_diameter = 0.1f;
+    const float small_cylinder_diameter = 0.06f;
     
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = cylinder_vertex_buffer;
-    node->textures["diffuse"] = "grass.jpg";
-    node->local_transform = GeoMatrix::Scaling(0.2f, pole_height, 0.2f ) *
+    node->textures["diffuse"] = "metal1.jpg";
+    node->local_transform = GeoMatrix::Scaling(large_cylinder_diameter, pole_height, large_cylinder_diameter ) *
                             GeoMatrix::Translation(0, pole_height / 2.0f, -court_depth / 2.0f );
     root->children.push_back(node);
     
@@ -75,8 +77,8 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = cylinder_vertex_buffer;
-    node->textures["diffuse"] = "grass.jpg";
-    node->local_transform = GeoMatrix::Scaling(0.1f, pole_height/2, 0.1f ) *
+    node->textures["diffuse"] = "metal1.jpg";
+    node->local_transform = GeoMatrix::Scaling(small_cylinder_diameter, pole_height/2, small_cylinder_diameter ) *
     GeoMatrix::Translation(0, pole_height, -court_depth / 2.0f );
     root->children.push_back(node);
     
@@ -84,16 +86,16 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = cylinder_vertex_buffer;
-    node->textures["diffuse"] = "grass.jpg";
-    node->local_transform = GeoMatrix::Scaling(0.2f, pole_height, 0.2f ) *
+    node->textures["diffuse"] = "metal1.jpg";
+    node->local_transform = GeoMatrix::Scaling(large_cylinder_diameter, pole_height, large_cylinder_diameter ) *
                             GeoMatrix::Translation(0, pole_height / 2.0f, court_depth / 2.0f );
     root->children.push_back(node);
     
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = cylinder_vertex_buffer;
-    node->textures["diffuse"] = "grass.jpg";
-    node->local_transform = GeoMatrix::Scaling(0.1f, pole_height/2, 0.1f ) *
+    node->textures["diffuse"] = "metal1.jpg";
+    node->local_transform = GeoMatrix::Scaling(small_cylinder_diameter, pole_height/2, small_cylinder_diameter ) *
     GeoMatrix::Translation(0, pole_height, court_depth / 2.0f );
     root->children.push_back(node);
     
@@ -104,13 +106,15 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Sphere( ).Transform( GeoMatrix::Scaling(0.45f) ).ToVertices() );
     node->textures["diffuse"] = "volleyball.png";
     node->local_transform = GeoMatrix::Translation(0, 1, 0 );
+    //node->material = SceneGraph::Material::Silver();
+    node->material.shininess = 64;
     root->children.push_back(node);
     
     
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  RoundedCube::UnitRoundedCube().Transform( GeoMatrix::Scaling(0.3f)).ToVertices() );
-    node->textures["diffuse"] = "grass.jpg";
+    node->textures["diffuse"] = "roundcube0.jpg";
     node->local_transform = GeoMatrix::Translation(-1, 1, 0 );
     root->children.push_back(node);
     
@@ -124,22 +128,17 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     
     auto rotor = new SceneGraph::Rotor;
-    rotor->local_transform = GeoMatrix::Translation(1, 1, 0);
+    rotor->local_transform = GeoMatrix::Translation(-3, 1, 0);
     rotor->local_rotation_axis = GeoVector( 0, 1, 0 );
     rotor->local_rotation_speed = 10;
     root->children.push_back(rotor);
     
     
-    
-    
-    
     // https://www.tomdalling.com/blog/modern-opengl/08-even-more-lighting-directional-lights-spotlights-multiple-lights/
     auto light = new SceneGraph::LightGeode();
-    //light->position = GeoVector( 0, 0.01f, 1 );
-    light->directional = false;
-    //light->local_transform = GeoMatrix::Translation( 2, 1, 0 );
     light->shader_program = "phong";
     light->textures["diffuse"] = "grass.jpg";
+    light->material.emissive = GeoFloat3( 1, 1, 1 );
     light->vertex_buffer = OpenGL::VertexBuffer<Vertex>( Cube::UnitCube().Transform( GeoMatrix::Scaling(0.1f)).ToVertices() );
     rotor->children.push_back(light);
     
@@ -165,6 +164,7 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     shader_cache.SetFloat3( "material.ambient", drawable->material.ambient );
     shader_cache.SetFloat3( "material.diffuse", drawable->material.diffuse );
     shader_cache.SetFloat3( "material.specular", drawable->material.specular );
+    shader_cache.SetFloat3( "material.emissive", drawable->material.emissive );
     shader_cache.SetFloat( "material.shininess", drawable->material.shininess );
     
     
@@ -200,6 +200,7 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
         }
         else{
             shader_cache.SetFloat4( "lights[0].position", GeoVector(light->cached_world_transform.GetTranslationComponent(), 1));
+            shader_cache.SetFloat3( "lights[0].attenuation", light->IPositionalLight::attenuation.ToGeoFloat3() );
             if( light->spotlight ){
                 shader_cache.SetFloat( "lights[0].cone_angle", light->ISpotlightDetails::cone_angle );
             }

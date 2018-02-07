@@ -9,8 +9,16 @@
 
 void main(void)
 {
+    vec3 tex1_sample = SampleTex1(out_color_uv.xy).rgb;
     vec3 world_normal = normalize(out_world_normal);
-    vec3 worldposition_to_eye_position = normalize(out_worldposition_to_eye_position);
+    vec3 world_position = out_worldspace_position.xyz;
+    vec3 world_position_to_eye_position = normalize(out_worldposition_to_eye_position);
+    
+    
+    
+    vec3 light_color = apply_light(lights[0], tex1_sample, world_normal, world_position, world_position_to_eye_position);
+    
+    
     
     
     //vec3 light_dir = normalize( vec3( 0, 0.01 + lights[0].position.x, 1) );
@@ -23,11 +31,11 @@ void main(void)
     
     
     
-    float cosAngle = max(0.0, dot(-worldposition_to_eye_position, incident_reflection));
+    float cosAngle = max(0.0, dot(-world_position_to_eye_position, incident_reflection));
     float specularCoefficient = pow(cosAngle, 64.0);
     
     
-    vec3 tex1_sample = SampleTex1(out_color_uv.xy).rgb;
+    
     
     vec3 diffuse_color = diffuse_factor * tex1_sample;
     vec3 specular_color = specularCoefficient * vec3(1,1,1);
@@ -35,7 +43,9 @@ void main(void)
     
     vec4 linearColor =  vec4( saturate( diffuse_color + specular_color), 1 );
     
-    gl_FragColor = linearColor;
+    gl_FragColor = vec4( light_color, 1);
+    
+    //gl_FragColor = linearColor;
     
     //gl_FragColor = vec4( tex1_sample, 1 );
 
