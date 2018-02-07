@@ -125,3 +125,5 @@ bool ShaderCache::SetTexture( const std::string& variable_name, OpenGL::Texture&
         return active_shader_program->SetTexture( variable_name, texture, texture_index );
     return false;
 }
+
+

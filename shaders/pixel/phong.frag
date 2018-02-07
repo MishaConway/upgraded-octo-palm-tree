@@ -16,13 +16,20 @@ void main(void)
     
     
     
-    vec3 light_color = apply_light(lights[0], tex1_sample, world_normal, world_position, world_position_to_eye_position);
+    
+    vec3 linear_color = vec3(0);
+    for(int i = 0; i < num_lights; ++i){
+        linear_color += apply_light(lights[i], tex1_sample, world_normal, world_position, world_position_to_eye_position);
+    }
+    linear_color = saturate( linear_color );
+    
+    gl_FragColor = gamma_correct( vec4( linear_color, 1) );
+
     
     
     
     
-    //vec3 light_dir = normalize( vec3( 0, 0.01 + lights[0].position.x, 1) );
-    
+/*
     vec3 light_dir = light_direction( lights[0], out_worldspace_position );
     
     float diffuse_factor = dot( light_dir, world_normal );
@@ -41,9 +48,8 @@ void main(void)
     vec3 specular_color = specularCoefficient * vec3(1,1,1);
     
     
-    vec4 linearColor =  vec4( saturate( diffuse_color + specular_color), 1 );
+    vec4 linearColor =  vec4( saturate( diffuse_color + specular_color), 1 ); */
     
-    gl_FragColor = vec4( light_color, 1);
     
     //gl_FragColor = linearColor;
     

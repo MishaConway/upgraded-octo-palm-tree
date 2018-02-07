@@ -28,7 +28,6 @@ public:
     
     bool SetFloat2( const std::string& variable_name, GeoFloat2 float2 );
 
-    
     bool SetFloat3( const std::string& variable_name, GeoVector float3 );
     bool SetFloat3( const std::string& variable_name, GeoFloat3 float3 );
     bool SetFloat3( const std::string& variable_name, GeoFloat4 float_array );
@@ -39,8 +38,8 @@ public:
     bool SetMatrix( const std::string& variable_name, GeoMatrix matrix );
     
     bool SetTexture( const std::string& variable_name, OpenGL::Texture& texture, const GLenum texture_index );
-
     
+
 protected:
     
     std::string ResolveShaderFilepath( const std::string& shader_path, const std::string& name, const std::string& ext );

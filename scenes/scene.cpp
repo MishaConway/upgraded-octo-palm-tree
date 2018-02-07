@@ -1,5 +1,6 @@
 #include "scene.h"
 #include "../ogl/device/device.h"
+#include "../string/string_utils.h"
 
 
 
@@ -40,6 +41,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     quad.SquareTesselate();
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>( quad.ToVertices() );
     node->textures["diffuse"] = "grass.jpg";
+    node->material.specular = GeoFloat3(0,0,0);
     root->children.push_back(node);
     
     auto verts = Quad::XZQuadCentered(GeoFloat3(), 5, court_depth).ToVertices();
@@ -127,6 +129,22 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     root->children.push_back(node);
     
     
+    // https://www.tomdalling.com/blog/modern-opengl/08-even-more-lighting-directional-lights-spotlights-multiple-lights/
+    auto directional_light = new SceneGraph::LightNode;
+    directional_light->IDirectionalLight::directional = true;
+    directional_light->IDirectionalLight::direction = GeoFloat3( 0, 0, 1 );
+    directional_light->IBaseLightDetails::diffuse = GeoFloat3( 0.25f, 0.25f, 0.25f );
+    directional_light->IBaseLightDetails::specular = GeoFloat3( 0.13f, 0.13f, 0.14f );
+    root->children.push_back(directional_light);
+    
+    auto directional_light2 = new SceneGraph::LightNode;
+    directional_light2->IDirectionalLight::directional = true;
+    directional_light2->IDirectionalLight::direction = GeoFloat3( 0, 0, -1 );
+    directional_light2->IBaseLightDetails::diffuse = GeoFloat3( 0.25f, 0.25f, 0.25f );
+    directional_light2->IBaseLightDetails::specular = GeoFloat3( 0.13f, 0.13f, 0.14f );
+    root->children.push_back(directional_light2);
+    
+    
     auto rotor = new SceneGraph::Rotor;
     rotor->local_transform = GeoMatrix::Translation(-3, 1, 0);
     rotor->local_rotation_axis = GeoVector( 0, 1, 0 );
@@ -138,6 +156,8 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     auto light = new SceneGraph::LightGeode();
     light->shader_program = "phong";
     light->textures["diffuse"] = "grass.jpg";
+    light->IBaseLightDetails::diffuse = GeoFloat3( 0.55f, 0.55f, 0.55f );
+    light->IBaseLightDetails::specular = GeoFloat3( 0.63f, 0.63f, 0.64f );
     light->material.emissive = GeoFloat3( 1, 1, 1 );
     light->vertex_buffer = OpenGL::VertexBuffer<Vertex>( Cube::UnitCube().Transform( GeoMatrix::Scaling(0.1f)).ToVertices() );
     rotor->children.push_back(light);
@@ -190,19 +210,25 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     shader_cache.SetFloat( "viewport_height", camera->GetHeight() );
     shader_cache.SetFloat3( "eye_position", camera->GetEyePosition() );
     
+    shader_cache.SetInt("num_lights", (int) light_nodes.size() );
+    
+   // printf( "num lights is %i\n", (int) light_nodes.size() );
+    
     for( int i = 0; i < light_nodes.size(); i++ ){
         auto light = light_nodes[i];
-        shader_cache.SetFloat3( "lights[0].ambient", light->IBaseLightDetails::ambient );
-        shader_cache.SetFloat3( "lights[0].diffuse", light->IBaseLightDetails::diffuse );
-        shader_cache.SetFloat3( "lights[0].specular", light->IBaseLightDetails::specular );
+        auto prefix = StringSubstituteNumber( "lights[%i].", i);
+        
+        shader_cache.SetFloat3( prefix + "ambient", light->IBaseLightDetails::ambient );
+        shader_cache.SetFloat3( prefix + "diffuse", light->IBaseLightDetails::diffuse );
+        shader_cache.SetFloat3( prefix + "specular", light->IBaseLightDetails::specular );
         if( light->IDirectionalLight::directional ){
-            shader_cache.SetFloat4( "lights[0].position", GeoVector(light->IDirectionalLight::direction, 0) );
+            shader_cache.SetFloat4( prefix + "position", GeoVector(light->IDirectionalLight::direction, 0) );
         }
         else{
-            shader_cache.SetFloat4( "lights[0].position", GeoVector(light->cached_world_transform.GetTranslationComponent(), 1));
-            shader_cache.SetFloat3( "lights[0].attenuation", light->IPositionalLight::attenuation.ToGeoFloat3() );
+            shader_cache.SetFloat4( prefix + "position", GeoVector(light->cached_world_transform.GetTranslationComponent(), 1));
+            shader_cache.SetFloat3( prefix + "attenuation", light->IPositionalLight::attenuation.ToGeoFloat3() );
             if( light->spotlight ){
-                shader_cache.SetFloat( "lights[0].cone_angle", light->ISpotlightDetails::cone_angle );
+                shader_cache.SetFloat( prefix + "cone_angle", light->ISpotlightDetails::cone_angle );
             }
         }
     }

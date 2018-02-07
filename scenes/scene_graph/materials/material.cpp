@@ -6,7 +6,7 @@ SceneGraph::Material::Material(){
     diffuse = GeoFloat3( 1, 1, 1 );
     specular = GeoFloat3( 1, 1, 1 );
     emissive = GeoFloat3( 0, 0, 0 );
-    shininess = 64;
+    shininess = 128;
 }
 
 SceneGraph::Material SceneGraph::Material::Emerald(){

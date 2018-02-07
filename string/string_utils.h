@@ -12,6 +12,7 @@ std::string StringReplace( std::string result, const std::string& replaceWhat, c
 
 std::string IntToString( const int i );
 std::string CharToString( const char ch );
+std::string StringSubstituteNumber( std::string str, const unsigned int number );
 
 template<typename T>
 T StringToNumber(const std::string& numberAsString)

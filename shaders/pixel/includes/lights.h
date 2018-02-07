@@ -22,6 +22,7 @@ uniform struct Light {
 };
 
 uniform Light lights[MAX_LIGHTS];
+uniform int num_lights;
 uniform Material material;
 
 float attenuation_factor( vec3 coefficients, float distance ){
