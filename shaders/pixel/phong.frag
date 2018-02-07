@@ -22,8 +22,9 @@ void main(void)
         linear_color += apply_light(lights[i], tex1_sample, world_normal, world_position, world_position_to_eye_position);
     }
     linear_color = saturate( linear_color );
+    linear_color = gamma_correct( linear_color );
     
-    gl_FragColor = gamma_correct( vec4( linear_color, 1) );
+    gl_FragColor = vec4( linear_color, 1);
 
     
     

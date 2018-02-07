@@ -1,6 +1,7 @@
 #include "scene.h"
 #include "../ogl/device/device.h"
 #include "../string/string_utils.h"
+#include "../shapes/shape_utilities/debug_lines.h"
 
 
 
@@ -43,6 +44,17 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->textures["diffuse"] = "grass.jpg";
     node->material.specular = GeoFloat3(0,0,0);
     root->children.push_back(node);
+    
+    
+    auto floor_lines = new SceneGraph::Geode;
+    floor_lines->vertex_buffer = OpenGL::VertexBuffer<Vertex>( CalculateDebugBiTangentLines( quad.ToVertices(), 0.05f ), OpenGL::PRIMITIVE_TYPE::LINELIST );
+    floor_lines->textures["diffuse"] = "grass.jpg";
+    floor_lines->shader_program = "phong";
+    floor_lines->material = SceneGraph::Material::Zero();
+    floor_lines->material.emissive = GeoFloat3( 1, 0, 0 );
+    
+    root->children.push_back(floor_lines);
+    
     
     auto verts = Quad::XZQuadCentered(GeoFloat3(), 5, court_depth).ToVertices();
     for( int i = 0; i < verts.size(); i++ ){
@@ -175,10 +187,10 @@ Camera* Scene::GetCamera(){
 
 
 void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable  ){
-    auto transform = node->cached_world_transform;
+    auto shader_program = drawable->shader_program;
     
     drawable->vertex_buffer.Bind();
-    shader_cache.ActivateShaderProgram( drawable->shader_program, sizeof(Vertex) );
+    shader_cache.ActivateShaderProgram( shader_program, sizeof(Vertex) );
     
     // set material
     shader_cache.SetFloat3( "material.ambient", drawable->material.ambient );
@@ -200,7 +212,7 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     shader_cache.SetFloat2("tex1_scale", GeoFloat2(1,1) );
     
     //todo: research uniform buffer objects to set all uniforms in one call
-    
+    auto transform = node->cached_world_transform;
     shader_cache.SetMatrix( "view_transform", camera->GetViewTransform() );
     shader_cache.SetMatrix( "projection_transform", camera->GetProjectionTransform() );
     shader_cache.SetMatrix( "world_transform", transform );

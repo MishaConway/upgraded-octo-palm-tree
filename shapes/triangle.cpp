@@ -68,7 +68,7 @@ GeoVector Triangle::ComputeNormal(){
 }
 
 
-std::vector<Vertex> Triangle::ToVertices(){
+std::vector<Vertex> Triangle::ToVerticesEx(){
     return vertices;
 }
 

@@ -30,7 +30,7 @@ public:
     Quad();
     Quad( const Vertex& a, const Vertex& b, const Vertex& c, const Vertex& d );
    
-    virtual std::vector<Vertex> ToVertices();
+    virtual std::vector<Vertex> ToVerticesEx();
     virtual std::vector<vert3> Triangulate();
     virtual Shape& ReverseWinding();
 private:

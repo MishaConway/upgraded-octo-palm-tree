@@ -34,7 +34,8 @@ typedef std::triple<Vertex, Vertex, Vertex> vert3;
 class Shape {
 public:
     virtual ~Shape();
-    virtual std::vector<Vertex> ToVertices() = 0;
+    std::vector<Vertex> ToVertices();
+    virtual std::vector<Vertex> ToVerticesEx() = 0;
     virtual std::vector<vert3> Triangulate() = 0;
     virtual Shape& ReverseWinding() = 0;
     virtual Shape& Transform( const GeoMatrix& matrix );

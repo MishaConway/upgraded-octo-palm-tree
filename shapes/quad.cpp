@@ -168,7 +168,7 @@ void Quad::SquareTesselate(){
 }
 
 
-std::vector<Vertex> Quad::ToVertices(){
+std::vector<Vertex> Quad::ToVerticesEx(){
     auto tris = Triangulate();
     std::vector<Vertex> verts;
     for( int i = 0; i < tris.size(); i++ ){

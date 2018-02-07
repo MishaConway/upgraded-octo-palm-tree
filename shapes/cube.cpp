@@ -36,10 +36,10 @@ Cube Cube::UnitCube(){
     return Cube( GeoFloat3(0,0,0), 1, 1, 1);
 }
 
-std::vector<Vertex> Cube::ToVertices(){
+std::vector<Vertex> Cube::ToVerticesEx(){
     std::vector<Vertex> verts;
     for( int i = 0; i < quads.size(); i++ ){
-        auto quad_vertices = quads[i].ToVertices();
+        auto quad_vertices = quads[i].ToVerticesEx();
         for( int j = 0; j < quad_vertices.size(); j++ )
             verts.push_back(quad_vertices[j]);
     }

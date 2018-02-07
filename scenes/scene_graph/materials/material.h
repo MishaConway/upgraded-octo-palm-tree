@@ -16,6 +16,7 @@ namespace SceneGraph{
         GeoFloat3 emissive;
         float shininess;
         
+        static Material Zero();
         static Material Emerald();
         static Material Jade();
         static Material Obsidian();

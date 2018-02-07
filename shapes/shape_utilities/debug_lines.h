@@ -3,8 +3,8 @@
 
 
 
-std::vector< vert2 > < CalculateDebugNormalLines( std::vector<Vertex>& vertices );
-std::vector< vert2 > < CalculateDebugTangentLines( std::vector<Vertex>& vertices );
-std::vector< vert2 > < CalculateDebugBiTangentLines( std::vector<Vertex>& vertices );
+std::vector<Vertex> CalculateDebugNormalLines( std::vector<Vertex> vertices, const float length );
+std::vector<Vertex> CalculateDebugTangentLines( std::vector<Vertex> vertices, const float length );
+std::vector<Vertex> CalculateDebugBiTangentLines( std::vector<Vertex> vertices, const float length );
 
 

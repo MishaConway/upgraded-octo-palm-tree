@@ -9,6 +9,15 @@ SceneGraph::Material::Material(){
     shininess = 128;
 }
 
+SceneGraph::Material SceneGraph::Material::Zero(){
+    Material mat;
+    mat.ambient  = GeoFloat3( 0,0,0 );
+    mat.diffuse  = GeoFloat3( 0,0,0 );
+    mat.specular = GeoFloat3( 0,0,0 );
+    mat.shininess = 1;
+    return mat;
+}
+
 SceneGraph::Material SceneGraph::Material::Emerald(){
     Material mat;
     mat.ambient  = GeoFloat3( 0.0215f,  0.1745f,   0.0215f );

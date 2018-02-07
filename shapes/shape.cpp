@@ -1,4 +1,5 @@
 #include "shape.h"
+#include "shape_utilities/tangents.h"
 
 Vertex::Vertex(){
     colorUV.z = 0;
@@ -59,6 +60,12 @@ Vertex Vertex::Average( const std::vector<Vertex>& vertices ){
 
 Shape::~Shape(){
     
+}
+
+std::vector<Vertex> Shape::ToVertices(){
+    auto verts = ToVerticesEx();
+    CalculateTangentArray( verts );
+    return verts;
 }
 
 Shape& Shape::Transform( const GeoMatrix& matrix ){

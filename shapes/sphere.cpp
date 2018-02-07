@@ -36,10 +36,10 @@ Sphere::Sphere(){
     }
 }
 
-std::vector<Vertex> Sphere::ToVertices(){
+std::vector<Vertex> Sphere::ToVerticesEx(){
     std::vector<Vertex> verts;
     for( int i = 0; i < triangles.size(); i++ ){
-        auto triangle_vertices = triangles[i].ToVertices();
+        auto triangle_vertices = triangles[i].ToVerticesEx();
         for( int j = 0; j < triangle_vertices.size(); j++ )
             verts.push_back(triangle_vertices[j]);
     }

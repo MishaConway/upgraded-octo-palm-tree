@@ -14,7 +14,7 @@ public:
     Triangle( const vert3 vertices );
     bool PointInsideXYTriangle( const GeoFloat2& point );
     GeoVector ComputeNormal();
-    virtual std::vector<Vertex> ToVertices();
+    virtual std::vector<Vertex> ToVerticesEx();
     virtual std::vector<vert3> Triangulate();
     virtual Shape& ReverseWinding();
 private:
