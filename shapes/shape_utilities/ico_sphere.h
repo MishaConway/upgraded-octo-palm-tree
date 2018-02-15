@@ -110,9 +110,9 @@ namespace ShapeUtilities
             
             for(auto tri : faces)
             {
-                this->indices.push_back(tri->v1);
-                this->indices.push_back(tri->v2);
                 this->indices.push_back(tri->v3);
+                this->indices.push_back(tri->v2);
+                this->indices.push_back(tri->v1);
             }
         }
         

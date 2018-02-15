@@ -17,6 +17,10 @@ public:
     virtual std::vector<Vertex> ToVerticesEx();
     virtual std::vector<vert3> Triangulate();
     virtual Shape& ReverseWinding();
+    
+    float SignedArea( const GeoVector& reference_normal );
+    bool IsClockwise( const GeoVector& reference_normal );
+    bool IsCounterClockwise( const GeoVector& reference_normal );
 private:
     
 };

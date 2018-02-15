@@ -16,7 +16,7 @@ struct Vertex
     GeoFloat3 position;
     GeoFloat3 colorUV;
     GeoFloat3 normal;
-    GeoFloat3 tangent;
+    GeoFloat4 tangent;
     GeoFloat3 bitangent;
     Vertex();
     Vertex( GeoFloat3 position );
@@ -34,7 +34,7 @@ typedef std::triple<Vertex, Vertex, Vertex> vert3;
 class Shape {
 public:
     virtual ~Shape();
-    std::vector<Vertex> ToVertices();
+    virtual std::vector<Vertex> ToVertices();
     virtual std::vector<Vertex> ToVerticesEx() = 0;
     virtual std::vector<vert3> Triangulate() = 0;
     virtual Shape& ReverseWinding() = 0;

@@ -87,6 +87,25 @@ Shape& Triangle::ReverseWinding(){
     return *this;
 }
 
+float Triangle::SignedArea( const GeoVector& reference_normal ){
+    auto sum = GeoVector( 0, 0, 0, 0 );
+    for( int i = 0; i < vertices.size(); i++ ){
+        auto current_point = GeoVector(vertices[i].position);
+        auto next_point = GeoVector(vertices[i == vertices.size() - 1 ? 0 : i+1].position);
+        sum += current_point.Cross( next_point );
+    }
+    
+    return reference_normal.Dot(sum) / 2.0f;
+}
+
+bool Triangle::IsClockwise( const GeoVector& reference_normal ){
+    return SignedArea( reference_normal ) > 0.0f;
+}
+
+bool Triangle::IsCounterClockwise( const GeoVector& reference_normal ){
+ return SignedArea( reference_normal ) < 0.0f;
+}
+
 
 
 
