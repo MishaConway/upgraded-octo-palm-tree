@@ -12,6 +12,7 @@ struct GeoFloat3
 	GeoFloat3();
 	GeoFloat3( const float x, const float y, const float z );
     GeoFloat3( const int x, const int y, const int z );
+    GeoFloat3( const GeoFloat2& f );
 
 	float x,y,z;
 };

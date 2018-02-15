@@ -54,6 +54,14 @@ GeoVector::GeoVector( const GeoFloat3& vec )
 	w = 0;
 }
 
+GeoVector::GeoVector( const GeoFloat4& vec )
+{
+    x = vec.x;
+    y = vec.y;
+    z = vec.z;
+    w = vec.w;
+}
+
 GeoVector::GeoVector( const GeoVector& v, const float w )
 {
 	this->x = v.x;

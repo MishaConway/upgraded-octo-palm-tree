@@ -30,6 +30,12 @@ GeoFloat3::GeoFloat3( const int x, const int y, const int z )
     this->z = z;
 }
 
+GeoFloat3::GeoFloat3( const GeoFloat2& f ){
+    this->x = f.x;
+    this->y = f.y;
+    this->z = 0;
+}
+
 GeoFloat4::GeoFloat4()
 {
 	x = y = z = w = 0;

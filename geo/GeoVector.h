@@ -15,6 +15,7 @@ struct GeoVector : public IStringable
 	GeoVector( const float x, const float y, const float z );
     GeoVector( const float x, const float y, const float z, const float w );
 	GeoVector( const GeoFloat3& f );
+    GeoVector( const GeoFloat4& f );
 	GeoVector( const GeoVector& v, const float w );
 
 
