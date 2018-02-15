@@ -24,7 +24,8 @@ bool OpenGL::GraphicsDevice::Initialize()
     glDepthFunc(GL_LEQUAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     
-    glDisable(GL_CULL_FACE);
+    GetStateManager().SetDefaultFrontFaceRendering();
+    //GetStateManager().SetDefaultFrontAndBackRendering();
     
     initialized = true;
     return true;
@@ -55,6 +56,10 @@ OpenGL::Viewport OpenGL::GraphicsDevice::GetViewport()
 OpenGL::Capabilities& OpenGL::GraphicsDevice::GetCapabilities()
 {
     return capabilities;
+}
+
+OpenGL::StateManager& OpenGL::GraphicsDevice::GetStateManager(){
+    return state_manager;
 }
 
 void OpenGL::GraphicsDevice::Clear( Color c )

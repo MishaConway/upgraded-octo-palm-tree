@@ -37,3 +37,42 @@ std::vector<Vertex> CalculateDebugBiTangentLines( std::vector<Vertex> vertices, 
     return line_vertices;
     
 }
+
+std::pair< GeoFloat2, GeoFloat2 > FindMinMaxUvs( std::vector<Vertex> vertices ){
+    bool min_x_set = false;
+    bool max_x_set = false;
+    bool min_y_set = false;
+    bool max_y_set = false;
+    GeoFloat2 min, max;
+    
+    
+    for( int i = 0; i < vertices.size(); i++ ){
+        auto uv = vertices[i].colorUV;
+        
+        if( !min_x_set || uv.x < min.x ){
+            min_x_set = true;
+            min.x = uv.x;
+        }
+        
+        if( !max_x_set || uv.x > max.x ){
+            max_x_set = true;
+            max.x = uv.x;
+        }
+        
+        if( !min_y_set || uv.y < min.y ){
+            min_y_set = true;
+            min.y = uv.y;
+        }
+        
+        if( !max_y_set || uv.y > max.y ){
+            max_y_set = true;
+            max.y = uv.y;
+        }
+    }
+    
+    
+    return std::pair< GeoFloat2, GeoFloat2 >( min, max );
+}
+
+
+

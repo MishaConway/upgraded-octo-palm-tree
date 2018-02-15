@@ -319,6 +319,15 @@ int main(int argc, char *argv[])
                             MarkDirection(direction, sdlEvent.key.keysym.sym, true);
                             break;
                         }
+                            
+                        case SDLK_f: {
+                            if( scene.fudge == 0 ){
+                                scene.fudge = 1;
+                            } else {
+                                scene.fudge = 0;
+                            }
+                            break;
+                        }
                     }
                     
                     

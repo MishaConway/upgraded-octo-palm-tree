@@ -1,3 +1,12 @@
+vec3 dir_to_color( vec3 dir ){
+    return (normalize(dir) + vec3(1.0, 1.0, 1.0)) / 2.0;
+}
+
+vec3 dir_to_color( float dir ){
+    return dir_to_color( vec3(dir, dir, dir) );
+}
+
+
 float saturate( float val )
 {
     return clamp(val, 0.0, 1.0);

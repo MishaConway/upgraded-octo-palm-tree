@@ -13,10 +13,12 @@ namespace SceneGraph{
         std::vector<Node*> children;
         GeoMatrix cached_world_transform;
         GeoMatrix local_transform;
+        bool cached_world_transform_set;
     protected:
     };
     
     struct Rotor : public Node {
+        Rotor();
         virtual ~Rotor();
         GeoVector local_rotation_axis;
         float local_rotation_degrees;

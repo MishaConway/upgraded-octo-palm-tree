@@ -8,8 +8,13 @@
 void main()
 {
     vec4 world_position, view_position, homogenous_screenspace_position;
-    vec3 world_normal, world_eye_vec;
-    TransformPosition(  in_position, world_position, view_position, homogenous_screenspace_position, world_eye_vec );
-    TransformNormal( in_normal, world_normal );
-    CreateVertexShaderOut( homogenous_screenspace_position, world_position, world_normal, world_eye_vec, in_color_uv );
+    vec3 world_eye_vec;
+    
+    TransformPosition(  in_position, out_worldspace_position, view_position, homogenous_screenspace_position, out_worldposition_to_eye_position );
+    out_world_normal = TransformNormal( in_normal );
+    out_world_tangent = TransformNormal( in_tangent );
+    out_world_bitangent = TransformNormal( in_bitangent );
+    
+    out_color_uv = in_color_uv.xy;
+    gl_Position = homogenous_screenspace_position;
 }

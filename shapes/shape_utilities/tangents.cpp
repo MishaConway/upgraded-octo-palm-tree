@@ -56,13 +56,46 @@ std::pair< std::vector<GeoVector>, std::vector<GeoVector> > CalculateTangentArra
         GeoVector tdir((s1 * x2 - s2 * x1) * r, (s1 * y2 - s2 * y1) * r,
                       (s1 * z2 - s2 * z1) * r);
         
-        tangents[i1] += sdir;
-        tangents[i2] += sdir;
-        tangents[i3] += sdir;
         
-        bitangents[i1] += tdir;
-        bitangents[i2] += tdir;
-        bitangents[i3] += tdir;
+        int i1_sign = normal[i1].z > 0 ? -1 : 1;
+        int i2_sign = normal[i2].z > 0 ? -1 : 1;
+        int i3_sign = normal[i3].z > 0 ? -1 : 1;
+        
+        int sum = i1_sign + i2_sign + i3_sign;
+        if( sum != 3 && sum != -3 ){
+            auto i1_tangent = normal[i1].Cross( GeoVector(0,1,0) );
+            auto i2_tangent = normal[i2].Cross( GeoVector(0,1,0) );
+            auto i3_tangent = normal[i3].Cross( GeoVector(0,1,0) );
+            
+            auto i1_bitangent = normal[i1].Cross( i1_tangent );
+            auto i2_bitangent = normal[i1].Cross( i2_tangent );
+            auto i3_bitangent = normal[i1].Cross( i3_tangent );
+            
+            tangents[i1] += i1_tangent;
+            tangents[i2] += i2_tangent;
+            tangents[i3] += i3_tangent;
+            
+            bitangents[i1] += i1_bitangent;
+            bitangents[i2] += i2_bitangent;
+            bitangents[i3] += i3_bitangent;
+            
+            
+            
+        } else {
+            tangents[i1] += sdir * i1_sign;
+            tangents[i2] += sdir * i2_sign;
+            tangents[i3] += sdir * i3_sign;
+            
+            bitangents[i1] += tdir * i1_sign;
+            bitangents[i2] += tdir * i2_sign;
+            bitangents[i3] += tdir * i3_sign;
+        }
+       
+      
+        
+        
+
+       
     }
     
     for (long a = 0; a < vertexCount; a++)

@@ -20,3 +20,12 @@ vec4 InvertY( vec4 vec )
 	vec.y *= -1.0;
 	return vec;
 }
+
+vec3 transform_basis( vec3 vec, vec3 x_axis, vec3 y_axis, vec3 z_axis ){
+    return normalize(vec3(
+        dot( vec, x_axis),
+        dot( vec, y_axis),
+        dot( vec, z_axis)
+    ));
+}
+

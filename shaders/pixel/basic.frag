@@ -5,5 +5,5 @@
 
 void main(void)
 {
-    gl_FragColor =  SampleTex1(out_color_uv.xy);
+    gl_FragColor =  sample_tex_1(out_color_uv.xy);
 }

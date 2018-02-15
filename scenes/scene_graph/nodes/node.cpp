@@ -7,8 +7,7 @@
 
 SceneGraph::Node::Node(){
     local_transform = GeoMatrix::Identity();
-    
-    
+    cached_world_transform_set = false;
 }
 
 SceneGraph::Node::~Node(){
@@ -23,6 +22,10 @@ GeoMatrix SceneGraph::Node::GetUpdatedLocalTransform(){
 bool SceneGraph::Node::Update( const float elapsed_seconds ){
     
     return true;
+}
+
+SceneGraph::Rotor::Rotor(){
+    local_rotation_degrees = 0;
 }
 
 SceneGraph::Rotor::~Rotor(){

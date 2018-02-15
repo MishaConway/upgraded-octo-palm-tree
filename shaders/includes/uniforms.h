@@ -18,3 +18,7 @@ uniform int compute_projective_texture_coordinates;
 uniform vec4 clip_plane;
 uniform int clipping_enabled;
 
+
+
+uniform int fudge;
+

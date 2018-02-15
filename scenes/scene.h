@@ -42,6 +42,9 @@ public:
     
     Camera* GetCamera();
     
+    int fudge;
+
+    
 protected:
     void ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable  );
     
@@ -59,6 +62,7 @@ protected:
     OpenGL::RenderTarget render_target;
     
     std::vector<SceneGraph::LightNode*> light_nodes;
+    
     
     
     

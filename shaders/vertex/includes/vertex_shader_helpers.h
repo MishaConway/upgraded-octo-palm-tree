@@ -6,11 +6,12 @@ void TransformPosition( in vec3 objectspace_position, out vec4 worldspace_positi
 	worldposition_to_eye_position	= normalize(eye_position - worldspace_position.xyz);
 }
 
-void TransformNormal( in vec3 objectspace_normal, out vec3 worldspace_normal )
-{
-	worldspace_normal = normalize(world_inverse_transpose * vec4(objectspace_normal,0)).xyz;
-	//worldspace_normal = normalize(mul(objectspace_normal, WorldTransform));
-	//worldspace_normal = normalize( vec4(objectspace_normal,0) * WorldInverseTranspose).xyz;
+vec3 TransformNormal( vec3 normal ){
+    return normalize(world_inverse_transpose * vec4(normal,0)).xyz;
+}
+
+vec4 TransformNormal( vec4 normal ){
+    return vec4( TransformNormal(normal.xyz), normal.w );
 }
 
 void CreateVertexShaderOut( vec4 position, vec4 world_position, vec3 normal, vec3 worldposition_to_eye_position, vec3 color_uv )

@@ -13,6 +13,7 @@
 		956A32192029632000857BC7 /* lights.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A32152029632000857BC7 /* lights.cpp */; };
 		956A321A2029632000857BC7 /* node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A32172029632000857BC7 /* node.cpp */; };
 		956A321D20296E6100857BC7 /* drawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A321B20296E6100857BC7 /* drawable.cpp */; };
+		958055EA2032956E003D3D04 /* tgen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 958055E82032956E003D3D04 /* tgen.cpp */; };
 		9596D94F2017FD0E00D5BC04 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D94E2017FD0E00D5BC04 /* main.cpp */; };
 		9596D9562017FD7800D5BC04 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9596D9552017FD7800D5BC04 /* OpenGL.framework */; };
 		9596D9582017FD9100D5BC04 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9596D9572017FD9100D5BC04 /* SDL2.framework */; };
@@ -78,6 +79,9 @@
 		956A32182029632000857BC7 /* node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = node.h; path = scenes/scene_graph/nodes/node.h; sourceTree = SOURCE_ROOT; };
 		956A321B20296E6100857BC7 /* drawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = drawable.cpp; path = scenes/scene_graph/nodes/drawable.cpp; sourceTree = SOURCE_ROOT; };
 		956A321C20296E6100857BC7 /* drawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = drawable.h; path = scenes/scene_graph/nodes/drawable.h; sourceTree = SOURCE_ROOT; };
+		958055E82032956E003D3D04 /* tgen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tgen.cpp; path = shapes/shape_utilities/tgen.cpp; sourceTree = SOURCE_ROOT; };
+		958055E92032956E003D3D04 /* tgen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tgen.h; path = shapes/shape_utilities/tgen.h; sourceTree = SOURCE_ROOT; };
+		958055EB2032E8AF003D3D04 /* cry_tangents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cry_tangents.h; path = shapes/shape_utilities/cry_tangents.h; sourceTree = SOURCE_ROOT; };
 		9596D94B2017FD0E00D5BC04 /* volley */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = volley; sourceTree = BUILT_PRODUCTS_DIR; };
 		9596D94E2017FD0E00D5BC04 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		9596D9552017FD7800D5BC04 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -301,6 +305,9 @@
 		9596D9862019C0D200D5BC04 /* shape_utilities */ = {
 			isa = PBXGroup;
 			children = (
+				958055EB2032E8AF003D3D04 /* cry_tangents.h */,
+				958055E82032956E003D3D04 /* tgen.cpp */,
+				958055E92032956E003D3D04 /* tgen.h */,
 				9596D9F2201E97AB00D5BC04 /* debug_lines.cpp */,
 				9596D9F3201E97AB00D5BC04 /* debug_lines.h */,
 				9596D9EF201E92D500D5BC04 /* tangents.cpp */,
@@ -627,6 +634,7 @@
 				9596D97C2018145D00D5BC04 /* triangle.cpp in Sources */,
 				9596D9F1201E92D500D5BC04 /* tangents.cpp in Sources */,
 				9596D97D2018145D00D5BC04 /* shape.cpp in Sources */,
+				958055EA2032956E003D3D04 /* tgen.cpp in Sources */,
 				9596D9852019A8D800D5BC04 /* sphere.cpp in Sources */,
 				9596D97B2018145D00D5BC04 /* quad.cpp in Sources */,
 				9596D9AA201AB05500D5BC04 /* shader_program.cpp in Sources */,

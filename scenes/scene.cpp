@@ -6,6 +6,9 @@
 //https://www.keithlantz.net/2011/10/tangent-space-normal-mapping-with-glsl/
 
 void Scene::Initialize( const unsigned int width, const unsigned int height ){
+    fudge = 0;
+    
+    
     camera = new FirstPersonCamera();
     camera->SetProjection( width, height, 45.0f, 0.1f, 100.0f );
     camera->SetEyePosition(GeoVector(-1, 0.5f, 4 ));
@@ -13,7 +16,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     //camera->SetFocusPosition(GeoVector( 0, 1, 0 ));
 
     
-    shader_cache.RegisterShaderProgram( "basic" );
+    //shader_cache.RegisterShaderProgram( "basic" );
     shader_cache.RegisterShaderProgram( "phong" );
     
     render_target = OpenGL::RenderTarget( 512, 512 );
@@ -26,28 +29,28 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     root = new SceneGraph::Node();
     
+    
+    
 
     auto node = new SceneGraph::Geode();
     node->shader_program = "phong";
     auto quad = Quad::XZQuadCentered(GeoFloat3(), 5, court_depth);
-    quad.SquareTesselate();
-    quad.SquareTesselate();
-    quad.SquareTesselate();
-    quad.SquareTesselate();
+    //quad.SquareTesselate();
+    //quad.SquareTesselate();
+    //quad.SquareTesselate();
+    //quad.SquareTesselate();
+    printf( "START VERTS FOR FLOOR..\n");
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>( quad.ToVertices() );
-    node->textures["diffuse"] = SceneGraph::TextureDetails("stones.png", GeoFloat2(6,6));
-    node->material.specular = GeoFloat3(0,0,0);
+    printf( "END VERTS FOR FLOOR..\n");
+
+    auto tex_scale = GeoFloat2(6,6);
+    node->textures["diffuse"] = SceneGraph::TextureDetails("stones.png", tex_scale);
+    node->textures["normal"] = SceneGraph::TextureDetails("stones_normal.png", tex_scale);
+    //node->material.specular = GeoFloat3(0,0,0);
     root->children.push_back(node);
     
     
-    auto floor_lines = new SceneGraph::Geode;
-    floor_lines->vertex_buffer = OpenGL::VertexBuffer<Vertex>( CalculateDebugBiTangentLines( quad.ToVertices(), 0.05f ), OpenGL::PRIMITIVE_TYPE::LINELIST );
-    floor_lines->textures["diffuse"] = SceneGraph::TextureDetails("grass.jpg");
-    floor_lines->shader_program = "phong";
-    floor_lines->material = SceneGraph::Material::Zero();
-    floor_lines->material.emissive = GeoFloat3( 1, 0, 0 );
-    
-    root->children.push_back(floor_lines);
+  
     
     
     /* todo:  css/haml like system for defining scene graph... */
@@ -73,7 +76,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->textures["diffuse"] = SceneGraph::TextureDetails("metal1.jpg");
     node->local_transform = GeoMatrix::Scaling(small_cylinder_diameter, pole_height/2, small_cylinder_diameter ) *
     GeoMatrix::Translation(0, pole_height, -court_depth / 2.0f );
-    root->children.push_back(node);
+    //root->children.push_back(node);
     
     
     node = new SceneGraph::Geode();
@@ -93,21 +96,38 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     root->children.push_back(node);
     
     
+    auto sphere_vertices = Sphere( ).Transform( GeoMatrix::Scaling(0.25f) ).ToVertices();
+    
+    auto uv_min_max = FindMinMaxUvs(sphere_vertices);
+    
+    printf( "min.x, max.x is %f, %f\n", uv_min_max.first.x, uv_min_max.second.x );
     
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
-    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Sphere( ).Transform( GeoMatrix::Scaling(0.45f) ).ToVertices() );
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  sphere_vertices );
     node->textures["diffuse"] = SceneGraph::TextureDetails("volleyball.png");
+    node->textures["normal"] = SceneGraph::TextureDetails("volleyball_normal.png", GeoFloat2(1, 1) );
     node->local_transform = GeoMatrix::Translation(0, 1, 0 );
     //node->material = SceneGraph::Material::Silver();
     node->material.shininess = 64;
     root->children.push_back(node);
     
+    auto floor_lines = new SceneGraph::Geode;
+    floor_lines->vertex_buffer = OpenGL::VertexBuffer<Vertex>( CalculateDebugTangentLines( sphere_vertices, 0.04f ), OpenGL::PRIMITIVE_TYPE::LINELIST );
+    floor_lines->textures["diffuse"] = SceneGraph::TextureDetails("grass.jpg");
+    floor_lines->local_transform = GeoMatrix::Translation(0, 1, 0 );
+    floor_lines->shader_program = "phong";
+    floor_lines->material = SceneGraph::Material::Zero();
+    floor_lines->material.emissive = GeoFloat3( 1, 0, 0 );
+    
+    //root->children.push_back(floor_lines);
+    
     
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
-    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  RoundedCube::UnitRoundedCube().Transform( GeoMatrix::Scaling(0.3f)).ToVertices() );
-    node->textures["diffuse"] = SceneGraph::TextureDetails("roundcube0.jpg");
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Cube::UnitCube().Transform( GeoMatrix::Scaling(0.3f)).ToVertices() );
+    node->textures["diffuse"] = SceneGraph::TextureDetails("stones.png", tex_scale);
+    node->textures["normal"] = SceneGraph::TextureDetails("stones_normal.png", tex_scale);
     node->local_transform = GeoMatrix::Translation(-1, 1, 0 );
     root->children.push_back(node);
     
@@ -123,9 +143,9 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     // https://www.tomdalling.com/blog/modern-opengl/08-even-more-lighting-directional-lights-spotlights-multiple-lights/
     auto directional_light = new SceneGraph::LightNode;
     directional_light->IDirectionalLight::directional = true;
-    directional_light->IDirectionalLight::direction = GeoFloat3( 0, 0, 1 );
-    directional_light->IBaseLightDetails::diffuse = GeoFloat3( 0.25f, 0.25f, 0.25f );
-    directional_light->IBaseLightDetails::specular = GeoFloat3( 0.13f, 0.13f, 0.14f );
+    directional_light->IDirectionalLight::direction = GeoFloat3( 1, 0, 1 );
+    directional_light->IBaseLightDetails::diffuse = GeoFloat3( 0.55f, 0.55f, 0.55f );
+    directional_light->IBaseLightDetails::specular = GeoFloat3( 0.53f, 0.53f, 0.54f );
     root->children.push_back(directional_light);
     
     auto directional_light2 = new SceneGraph::LightNode;
@@ -137,9 +157,9 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     
     auto rotor = new SceneGraph::Rotor;
-    rotor->local_transform = GeoMatrix::Translation(-3, 1, 0);
+    rotor->local_transform = GeoMatrix::Translation(0, 1, 3);
     rotor->local_rotation_axis = GeoVector( 0, 1, 0 );
-    rotor->local_rotation_speed = 10;
+    rotor->local_rotation_speed = 0;
     root->children.push_back(rotor);
     
     
@@ -171,6 +191,9 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     drawable->vertex_buffer.Bind();
     shader_cache.ActivateShaderProgram( shader_program, sizeof(Vertex) );
     
+    
+    shader_cache.SetInt( "fudge", fudge);
+    
     // set material
     shader_cache.SetFloat3( "material.ambient", drawable->material.ambient );
     shader_cache.SetFloat3( "material.diffuse", drawable->material.diffuse );
@@ -179,17 +202,23 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     shader_cache.SetFloat( "material.shininess", drawable->material.shininess );
     
     
-    auto texture = texture_cache.FromFile("volleyball.png");
     
-    static bool saved = false;
-    if( !saved )
-        texture.SaveToFile("blah.jpg");
-    saved = true;
+   
     
-    auto tex_details = drawable->textures["diffuse"];
-    auto tex = texture_cache.FromFile(tex_details.texture_name);
-    shader_cache.SetTexture("tex1", tex, 0);
-    shader_cache.SetFloat2("tex1_scale", tex_details.scale );
+    auto diffuse_tex_details = drawable->textures["diffuse"];
+    if( diffuse_tex_details.texture_name.size() ){
+        auto diffuse_tex = texture_cache.FromFile(diffuse_tex_details.texture_name);
+        shader_cache.SetTexture("tex1", diffuse_tex, 0);
+        shader_cache.SetFloat2("tex1_scale", diffuse_tex_details.scale );
+    }
+    
+    auto normal_tex_details = drawable->textures["normal"];
+    if( normal_tex_details.texture_name.size() ){
+        auto normal_tex = texture_cache.FromFile(normal_tex_details.texture_name);
+        shader_cache.SetTexture("tex2", normal_tex, 1);
+        shader_cache.SetFloat2("tex2_scale", normal_tex_details.scale );
+    }
+    
     
     //todo: research uniform buffer objects to set all uniforms in one call
     auto transform = node->cached_world_transform;
@@ -255,7 +284,8 @@ void Scene::UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const floa
             configured_transform = camera->GetConstrainedBillboardTransform( transform.GetTranslationComponent() );
     }
     
-    node->cached_world_transform = configured_transform;
+    if( !node->cached_world_transform_set )
+        node->cached_world_transform = configured_transform;
     
     for( int i = 0; i < node->children.size(); i++ ){
         UpdateNodes( node->children[i], new_transform, elapsed_seconds );

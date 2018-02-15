@@ -61,15 +61,17 @@ OpenGL::ShaderProgram::ShaderProgram(  const std::string& vertex_shader_source, 
             }
         }
         else
-        {
+        {            
             GLint blen = 0;
             GLsizei slen = 0;
-            glGetShaderiv(program_id, GL_INFO_LOG_LENGTH , &blen);
+            glGetProgramiv(program_id, GL_INFO_LOG_LENGTH, &blen);
+
             if (blen > 1)
             {
                 GLchar* link_log = new GLchar[blen];
                 glGetProgramInfoLog(program_id, blen, &slen, link_log);
                 errors = std::string( link_log );
+                printf( "shader program link errors: %s\n", errors.c_str());
                 delete [] link_log;
             }
         }

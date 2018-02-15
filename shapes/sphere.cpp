@@ -79,12 +79,13 @@ Sphere::Sphere(){
         
         
         if( tan.w < 0 ){
-            tan *= -1;
-        } else {
-            bitan *= -1;
+        
+        }
+        else {
+            //bitan *= -1;
+            //tan *= -1;
         }
         
-        tan *= -1;
         
         v.tangent = tan.ToGeoFloat4();
         v.bitangent = bitan.ToGeoFloat3();
