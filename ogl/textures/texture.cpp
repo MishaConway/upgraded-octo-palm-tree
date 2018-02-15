@@ -19,10 +19,10 @@ OpenGL::Texture::Texture( const std::string& image_filename )
     int image_width, image_height, image_bpp;
     unsigned char* start_image_data = stbi_load(image_filename.c_str(), &image_width, &image_height, &image_bpp, STBI_rgb_alpha);
     
-    printf( "image filename is %s\n", image_filename.c_str() );
-    printf( "image_width is %i\n", image_width);
-    printf( "image_height is %i\n", image_height);
-    printf( "image_bpp is %i\n", image_bpp);
+    //printf( "image filename is %s\n", image_filename.c_str() );
+    //printf( "image_width is %i\n", image_width);
+    ///printf( "image_height is %i\n", image_height);
+    //printf( "image_bpp is %i\n", image_bpp);
 
 
 
@@ -104,7 +104,6 @@ void OpenGL::Texture::Setup( const unsigned int width, const unsigned int height
         
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        //glGenerateMipmap( GL_TEXTURE_2D );
     }
     
     valid = true;
@@ -213,7 +212,6 @@ bool OpenGL::Texture::SaveToFile( const std::string& filename )
     {
         unsigned char* pixels = new unsigned char[ width*height*bpp ];
         glGetTexImage( GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels );
-        printf( "saving and width is %i and height is %i\n", width, height);
         stbi_write_jpg("/Users/mconway/projects/volley/test.jpg", width, height, bpp, pixels, 0);
         
         delete [] pixels;
