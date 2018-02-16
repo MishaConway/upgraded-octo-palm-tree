@@ -26,21 +26,21 @@ Quad Quad::XZQuad( GeoFloat3 a, const float width, const float length )
         quad.vertices[i].position = a;
         quad.vertices[i].colorUV.x = 0;
         quad.vertices[i].colorUV.y = 1;
+        quad.vertices[i].normal = GeoFloat3(0,1,0);
+        quad.vertices[i].tangent = GeoFloat4(1,0,0,1);
+        quad.vertices[i].bitangent = GeoFloat3(0,0,1);
     }
     
-    quad.vertices[1].position.x += width;
-    quad.vertices[1].colorUV.x = 1;
+    quad.vertices[3].position.x += width;
+    quad.vertices[3].colorUV.x = 1;
     
     quad.vertices[2].position.x += width;
     quad.vertices[2].position.z += length;
     quad.vertices[2].colorUV.x = 1;
     quad.vertices[2].colorUV.y = 0;
     
-    quad.vertices[3].position.z += length;
-    quad.vertices[3].colorUV.y = 0;
-    
-    quad.ComputeNormals();
-    quad.ReverseWinding();
+    quad.vertices[1].position.z += length;
+    quad.vertices[1].colorUV.y = 0;
     
     return quad;
 }
@@ -65,6 +65,9 @@ Quad Quad::XYQuad( GeoFloat3 a, const float width, const float height )
     {
         quad.vertices[i].position = a;
         quad.vertices[i].colorUV.x = quad.vertices[i].colorUV.y = 0;
+        quad.vertices[i].normal = GeoFloat3( 0, 0, 1);
+        quad.vertices[i].tangent = GeoFloat4( 1, 0, 0, 1);
+        quad.vertices[i].bitangent = GeoFloat3( 0, 1, 0);
     }
     
     quad.vertices[1].position.x += width;
@@ -102,6 +105,9 @@ Quad Quad::ZYQuad( GeoFloat3 a, const float length, const float height )
     {
         quad.vertices[i].position = a;
         quad.vertices[i].colorUV.x = quad.vertices[i].colorUV.y = 0;
+        quad.vertices[i].normal = GeoFloat3( 1, 0, 0 );
+        quad.vertices[i].tangent = GeoFloat4( 0, 0, -1, 1);
+        quad.vertices[i].bitangent = GeoFloat3( 0, 1, 0);
     }
     
     quad.vertices[1].position.z += length;
@@ -211,13 +217,20 @@ Shape& Quad::ReverseWinding()
     Vertex temp = vertices[3];
     vertices[3] = vertices[1];
     vertices[1] = temp;
-    for( int i = 0; i < vertices.size(); i++ )
+    for( int i = 0; i < vertices.size(); i++ ){
         vertices[i].normal = (GeoVector( vertices[i].normal ) * -1).ToGeoFloat3();
+        vertices[i].tangent = (GeoVector( vertices[i].tangent ) * -1).ToGeoFloat4();
+        vertices[i].bitangent = (GeoVector( vertices[i].bitangent ) * -1).ToGeoFloat3();
+
+    }
     return *this;
 }
 
 void Quad::ComputeNormals(){
     GeoFloat3 normal = Triangle( Triangulate().front() ).ComputeNormal().ToGeoFloat3();
-    for( unsigned int i = 0; i < 4; i++ )
+    for( unsigned int i = 0; i < 4; i++ ){
         vertices[i].normal = normal;
+    }
+    
+    
 }

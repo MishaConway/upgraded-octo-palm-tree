@@ -106,6 +106,21 @@ bool Triangle::IsCounterClockwise( const GeoVector& reference_normal ){
  return SignedArea( reference_normal ) < 0.0f;
 }
 
+std::vector<Triangle> Triangle::ListFromIndexedVertices( const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices ){
+    return ListFromVertices( UnindexVertices(vertices, indices) );
+}
+
+std::vector<Triangle> Triangle::ListFromVertices( const std::vector<Vertex>& vertices ){
+    std::vector<Triangle> tris;
+    for( int i = 0; i < vertices.size(); i+=3 ){
+        auto a = vertices[i];
+        auto b = vertices[i+1];
+        auto c = vertices[i+2];
+        tris.push_back( Triangle(a,b,c) );
+    }
+    return tris;
+}
+
 
 
 

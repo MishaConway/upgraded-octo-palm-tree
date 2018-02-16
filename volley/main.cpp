@@ -328,6 +328,15 @@ int main(int argc, char *argv[])
                             }
                             break;
                         }
+                            
+                        case SDLK_g: {
+                            if( scene.fudge2 == 0 ){
+                                scene.fudge2 = 1;
+                            } else {
+                                scene.fudge2 = 0;
+                            }
+                            break;
+                        }
                     }
                     
                     

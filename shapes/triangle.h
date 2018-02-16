@@ -21,6 +21,11 @@ public:
     float SignedArea( const GeoVector& reference_normal );
     bool IsClockwise( const GeoVector& reference_normal );
     bool IsCounterClockwise( const GeoVector& reference_normal );
+    
+    static std::vector<Triangle> ListFromIndexedVertices( const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices );
+    
+    static std::vector<Triangle> ListFromVertices( const std::vector<Vertex>& vertices );
+    
 private:
     
 };

@@ -1,5 +1,6 @@
 #include "node.h"
 #include "../../../shapes/quad.h"
+#include "../../../geo/GeoQuaternion.h"
 
 
 

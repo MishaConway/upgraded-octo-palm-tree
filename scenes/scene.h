@@ -42,7 +42,7 @@ public:
     
     Camera* GetCamera();
     
-    int fudge;
+    int fudge, fudge2;
 
     
 protected:

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9542B6F520366B98002517F9 /* vertices.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9542B6F320366B98002517F9 /* vertices.cpp */; };
 		956A320A20252C5800857BC7 /* first_person_camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A320820252C5800857BC7 /* first_person_camera.cpp */; };
 		956A32122027932500857BC7 /* forward_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A320E2027932500857BC7 /* forward_renderer.cpp */; };
 		956A32132027932500857BC7 /* pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A32102027932500857BC7 /* pass.cpp */; };
@@ -65,6 +66,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9542B6F320366B98002517F9 /* vertices.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vertices.cpp; path = shapes/vertices.cpp; sourceTree = SOURCE_ROOT; };
+		9542B6F420366B98002517F9 /* vertices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vertices.h; path = shapes/vertices.h; sourceTree = SOURCE_ROOT; };
 		956A320820252C5800857BC7 /* first_person_camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = first_person_camera.cpp; path = scenes/camera/first_person_camera.cpp; sourceTree = SOURCE_ROOT; };
 		956A320920252C5800857BC7 /* first_person_camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = first_person_camera.h; path = scenes/camera/first_person_camera.h; sourceTree = SOURCE_ROOT; };
 		956A320B2025C6B800857BC7 /* stb_image_write.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_image_write.h; path = ogl/textures/stb_image_write.h; sourceTree = SOURCE_ROOT; };
@@ -275,6 +278,8 @@
 		9596D96E20180EB700D5BC04 /* shapes */ = {
 			isa = PBXGroup;
 			children = (
+				9542B6F320366B98002517F9 /* vertices.cpp */,
+				9542B6F420366B98002517F9 /* vertices.h */,
 				9596D9862019C0D200D5BC04 /* shape_utilities */,
 				9596D9832019A8D800D5BC04 /* sphere.cpp */,
 				9596D9842019A8D800D5BC04 /* sphere.h */,
@@ -637,6 +642,7 @@
 				958055EA2032956E003D3D04 /* tgen.cpp in Sources */,
 				9596D9852019A8D800D5BC04 /* sphere.cpp in Sources */,
 				9596D97B2018145D00D5BC04 /* quad.cpp in Sources */,
+				9542B6F520366B98002517F9 /* vertices.cpp in Sources */,
 				9596D9AA201AB05500D5BC04 /* shader_program.cpp in Sources */,
 				9596D9C7201B300E00D5BC04 /* color.cpp in Sources */,
 				9596D9AD201AB05500D5BC04 /* shader.cpp in Sources */,

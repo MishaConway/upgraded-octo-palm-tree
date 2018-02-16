@@ -5,6 +5,9 @@
 
 //https://www.keithlantz.net/2011/10/tangent-space-normal-mapping-with-glsl/
 
+
+//https://graphics.stanford.edu/~mdfisher/cloth.html
+
 void Scene::Initialize( const unsigned int width, const unsigned int height ){
     fudge = 0;
     
@@ -108,7 +111,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->textures["diffuse"] = SceneGraph::TextureDetails("volleyball.png");
     node->textures["normal"] = SceneGraph::TextureDetails("volleyball_normal.png", GeoFloat2(1, 1) );
     node->local_transform = GeoMatrix::Translation(0, 1, 0 );
-    //node->material = SceneGraph::Material::Silver();
+    //node->material = SceneGraph::Material::Gold();
     node->material.shininess = 64;
     root->children.push_back(node);
     
@@ -193,6 +196,8 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     
     
     shader_cache.SetInt( "fudge", fudge);
+    shader_cache.SetInt( "fudge2", fudge2);
+
     
     // set material
     shader_cache.SetFloat3( "material.ambient", drawable->material.ambient );

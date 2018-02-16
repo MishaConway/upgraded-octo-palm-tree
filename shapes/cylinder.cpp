@@ -50,11 +50,22 @@ Cylinder::Cylinder( const float width, const float height, const float length ){
                             half_length * sin(left_angle) ),
                  GeoFloat2( left_angle / GEO_2PI, top_uv ) );
         
-        
         a.normal = GeoVector( a.position.x, 0.0f, a.position.z ).Normalize().ToGeoFloat3();
+        a.tangent = GeoVector( a.normal ).Cross( GeoVector( 0,1,0,1) ).ToGeoFloat4();
+        a.bitangent = GeoFloat3( 0, 1, 0 );
+        
         b.normal = GeoVector( b.position.x, 0.0f, b.position.z ).Normalize().ToGeoFloat3();
+        b.tangent = GeoVector( b.normal ).Cross( GeoVector( 0,1,0,1) ).ToGeoFloat4();
+        b.bitangent = GeoFloat3( 0, 1, 0 );
+
         c.normal = GeoVector( c.position.x, 0.0f, c.position.z ).Normalize().ToGeoFloat3();
+        c.tangent = GeoVector( c.normal ).Cross( GeoVector( 0,1,0,1) ).ToGeoFloat4();
+        c.bitangent = GeoFloat3( 0, 1, 0 );
+        
         d.normal = GeoVector( d.position.x, 0.0f, d.position.z ).Normalize().ToGeoFloat3();
+        d.tangent = GeoVector( d.normal ).Cross( GeoVector( 0,1,0,1) ).ToGeoFloat4();
+        d.bitangent = GeoFloat3( 0, 1, 0 );
+
 
         
 

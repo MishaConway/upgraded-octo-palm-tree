@@ -57,10 +57,10 @@ void main()
     //gl_FragColor = vec4( abs(world_normal.x), abs(world_normal.x), abs(world_normal.x)  , 1 );
     gl_FragColor = vec4( linear_color, 1.0 );
     
-    //if( fudge == 1 )
-    //    world_bitangent *= -1.0;
+    if( fudge2 == 1 )
+        world_normal *= -1.0;
     
-   // gl_FragColor = vec4( dir_to_color(world_normal), 1.0 );
+    //gl_FragColor = vec4( world_normal, 1.0 );
 
     
     

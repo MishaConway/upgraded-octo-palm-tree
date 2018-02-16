@@ -21,4 +21,5 @@ uniform int clipping_enabled;
 
 
 uniform int fudge;
+uniform int fudge2;
 
