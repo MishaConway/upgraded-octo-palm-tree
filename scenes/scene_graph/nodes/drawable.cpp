@@ -16,3 +16,8 @@ SceneGraph::TextureDetails::TextureDetails( std::string texture_name, GeoFloat2 
     this->texture_name = texture_name;
     this->scale = scale;
 }
+
+SceneGraph::TextureDetails::TextureDetails( std::string texture_name, const float scale ){
+    this->texture_name = texture_name;
+    this->scale = GeoFloat2( scale, scale );
+}

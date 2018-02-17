@@ -15,6 +15,7 @@ OpenGL::RenderTarget::RenderTarget( const unsigned int width, const unsigned int
     glBindFramebuffer( GL_FRAMEBUFFER, fbo_id );
     
     //attach the texture object to this framebuffer object
+    printf( "render target texture id is %i\n", tex.GetOpenGLTextureId() );
     glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex.GetOpenGLTextureId(), 0 );
     
     glGenRenderbuffers(1, &depth_buffer_id);
@@ -33,6 +34,30 @@ OpenGL::RenderTarget::RenderTarget( const unsigned int width, const unsigned int
             break;
         case GL_FRAMEBUFFER_UNSUPPORTED:
             printf("framebuffer unsupported\n");
+            break;
+        case GL_FRAMEBUFFER_UNDEFINED:
+            printf("framebuffer undefined\n");
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+            printf("framebuffer incomplete attachment\n");
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+            printf( "framebuffer incomplete missing attachment\n");
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+            printf( "framebuffer incomplete draw buffer\n");
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+            printf( "framebuffer incomplete read buffer\n");
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+            printf( "framebuffer incomplete multisample\n");
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+            printf( "framebuffer incomplete layer targets\n");
+            break;
+        case 0:
+            printf( "framebuffer unknown error\n");
             break;
         default:
             printf("FORGET IT!\n");

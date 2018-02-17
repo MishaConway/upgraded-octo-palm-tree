@@ -12,12 +12,4 @@ void main()
     
     // compute uvs
     out_color_uv = in_color_uv.xy;
-
-    // compute normalish vectors
-    out_world_normal = transform_normal( in_normal );
-    out_world_tangent = transform_normal( in_tangent );
-    out_world_bitangent = transform_normal( in_bitangent );
-    
-    // compute eye vectors
-    out_worldposition_to_eye_position =	normalize(eye_position - out_worldspace_position.xyz);
 }

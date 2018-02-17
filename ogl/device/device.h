@@ -37,9 +37,9 @@ namespace OpenGL{
         //void    SetVertexBuffer( OpenGLVertexBuffer& pVertexBuffer );
         //void    SetVertexBuffer( OpenGLDynamicVertexBuffer& pVertexBuffer );
         
-        void SetDefaultRenderTarget();
-        void SetRenderTarget( RenderTarget& render_target );
-        void SetRenderTarget( RenderTarget& render_target, const Color& clear_color );
+        static void SetDefaultRenderTarget();
+        static void SetRenderTarget( RenderTarget& render_target );
+        static void SetRenderTarget( RenderTarget& render_target, const Color& clear_color );
     private:
         static StateManager state_manager;
         static Capabilities capabilities;

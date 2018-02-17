@@ -57,6 +57,14 @@ void OpenGL::StateManager::SetBlendType( const STATE_MANAGER_BLEND_TYPE blend_ty
     }
 }
 
+void OpenGL::StateManager::DisableDepthTest(){
+    glDisable( GL_DEPTH_TEST );
+}
+
+void OpenGL::StateManager::EnableDepthTest(){
+    glEnable(GL_DEPTH_TEST);
+}
+
 void OpenGL::StateManager::SetDefaultFrontFaceRendering()
 {
     if( locked )

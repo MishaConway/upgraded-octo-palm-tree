@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9542B6F520366B98002517F9 /* vertices.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9542B6F320366B98002517F9 /* vertices.cpp */; };
+		9542B6FA2037C1D0002517F9 /* hud_camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9542B6F82037C1D0002517F9 /* hud_camera.cpp */; };
 		956A320A20252C5800857BC7 /* first_person_camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A320820252C5800857BC7 /* first_person_camera.cpp */; };
 		956A32122027932500857BC7 /* forward_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A320E2027932500857BC7 /* forward_renderer.cpp */; };
 		956A32132027932500857BC7 /* pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A32102027932500857BC7 /* pass.cpp */; };
@@ -68,6 +69,10 @@
 /* Begin PBXFileReference section */
 		9542B6F320366B98002517F9 /* vertices.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vertices.cpp; path = shapes/vertices.cpp; sourceTree = SOURCE_ROOT; };
 		9542B6F420366B98002517F9 /* vertices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vertices.h; path = shapes/vertices.h; sourceTree = SOURCE_ROOT; };
+		9542B6F62037AD8C002517F9 /* hud.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = hud.vert; path = shaders/vertex/hud.vert; sourceTree = SOURCE_ROOT; };
+		9542B6F72037ADC1002517F9 /* hud.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = hud.frag; path = shaders/pixel/hud.frag; sourceTree = SOURCE_ROOT; };
+		9542B6F82037C1D0002517F9 /* hud_camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hud_camera.cpp; path = scenes/camera/hud_camera.cpp; sourceTree = SOURCE_ROOT; };
+		9542B6F92037C1D0002517F9 /* hud_camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hud_camera.h; path = scenes/camera/hud_camera.h; sourceTree = SOURCE_ROOT; };
 		956A320820252C5800857BC7 /* first_person_camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = first_person_camera.cpp; path = scenes/camera/first_person_camera.cpp; sourceTree = SOURCE_ROOT; };
 		956A320920252C5800857BC7 /* first_person_camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = first_person_camera.h; path = scenes/camera/first_person_camera.h; sourceTree = SOURCE_ROOT; };
 		956A320B2025C6B800857BC7 /* stb_image_write.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_image_write.h; path = ogl/textures/stb_image_write.h; sourceTree = SOURCE_ROOT; };
@@ -114,8 +119,6 @@
 		9596D9832019A8D800D5BC04 /* sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sphere.cpp; path = shapes/sphere.cpp; sourceTree = SOURCE_ROOT; };
 		9596D9842019A8D800D5BC04 /* sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sphere.h; path = shapes/sphere.h; sourceTree = SOURCE_ROOT; };
 		9596D9872019C0F500D5BC04 /* ico_sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ico_sphere.h; path = shapes/shape_utilities/ico_sphere.h; sourceTree = SOURCE_ROOT; };
-		9596D98B2019D07100D5BC04 /* basic.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = basic.frag; path = shaders/pixel/basic.frag; sourceTree = SOURCE_ROOT; };
-		9596D98C2019D07C00D5BC04 /* basic.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = basic.vert; path = shaders/vertex/basic.vert; sourceTree = SOURCE_ROOT; };
 		9596D98E2019D13E00D5BC04 /* file_io.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_io.cpp; path = io/file_io.cpp; sourceTree = SOURCE_ROOT; };
 		9596D98F2019D13E00D5BC04 /* file_io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = file_io.h; path = io/file_io.h; sourceTree = SOURCE_ROOT; };
 		9596D9922019D4D600D5BC04 /* string_utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = string_utils.cpp; path = string/string_utils.cpp; sourceTree = SOURCE_ROOT; };
@@ -335,7 +338,7 @@
 		9596D9892019CA3B00D5BC04 /* vertex */ = {
 			isa = PBXGroup;
 			children = (
-				9596D98C2019D07C00D5BC04 /* basic.vert */,
+				9542B6F62037AD8C002517F9 /* hud.vert */,
 				9596D9F6201EECD000D5BC04 /* phong.vert */,
 				9596D99D2019DEF100D5BC04 /* includes */,
 			);
@@ -345,7 +348,7 @@
 		9596D98A2019CA4800D5BC04 /* pixel */ = {
 			isa = PBXGroup;
 			children = (
-				9596D98B2019D07100D5BC04 /* basic.frag */,
+				9542B6F72037ADC1002517F9 /* hud.frag */,
 				9596D9F5201ED74300D5BC04 /* phong.frag */,
 				9596D9992019DEDA00D5BC04 /* includes */,
 			);
@@ -447,6 +450,8 @@
 		9596D9BC201B1D2300D5BC04 /* camera */ = {
 			isa = PBXGroup;
 			children = (
+				9542B6F82037C1D0002517F9 /* hud_camera.cpp */,
+				9542B6F92037C1D0002517F9 /* hud_camera.h */,
 				956A320820252C5800857BC7 /* first_person_camera.cpp */,
 				956A320920252C5800857BC7 /* first_person_camera.h */,
 				9596D9BD201B1D3300D5BC04 /* camera.cpp */,
@@ -642,6 +647,7 @@
 				958055EA2032956E003D3D04 /* tgen.cpp in Sources */,
 				9596D9852019A8D800D5BC04 /* sphere.cpp in Sources */,
 				9596D97B2018145D00D5BC04 /* quad.cpp in Sources */,
+				9542B6FA2037C1D0002517F9 /* hud_camera.cpp in Sources */,
 				9542B6F520366B98002517F9 /* vertices.cpp in Sources */,
 				9596D9AA201AB05500D5BC04 /* shader_program.cpp in Sources */,
 				9596D9C7201B300E00D5BC04 /* color.cpp in Sources */,

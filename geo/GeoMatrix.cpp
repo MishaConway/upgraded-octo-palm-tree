@@ -2,7 +2,28 @@
 #include <math.h>
 
 /* OGLXMATRIX IMPLEMENTATION */
-GeoMatrix::GeoMatrix() {}
+GeoMatrix::GeoMatrix() {
+    _11 = 0;
+    _12 = 0;
+    _13 = 0;
+    _14 = 0;
+    
+    _21 = 0;
+    _22 = 0;
+    _23 = 0;
+    _24 = 0;
+    
+    _31 = 0;
+    _32 = 0;
+    _33 = 0;
+    _34 = 0;
+    
+    _41 = 0;
+    _42 = 0;
+    _43 = 0;
+    _44 = 0;
+}
+
 GeoMatrix::GeoMatrix( const float* pM )
 {
 	_11 = pM[0];
@@ -494,6 +515,34 @@ XMFLOAT4X4 GeoMatrix::ToXMFLOAT4X4()
 }
 #endif
 
+GeoMatrix GeoMatrix::Zeroed(){
+    GeoMatrix zeroed_matrix;
+    
+    zeroed_matrix._11 = 0;
+    zeroed_matrix._12 = 0;
+    zeroed_matrix._13 = 0;
+    zeroed_matrix._14 = 0;
+    
+    zeroed_matrix._21 = 0;
+    zeroed_matrix._22 = 0;
+    zeroed_matrix._23 = 0;
+    zeroed_matrix._24 = 0;
+    
+    zeroed_matrix._31 = 0;
+    zeroed_matrix._32 = 0;
+    zeroed_matrix._33 = 0;
+    zeroed_matrix._34 = 0;
+    
+    zeroed_matrix._41 = 0;
+    zeroed_matrix._42 = 0;
+    zeroed_matrix._43 = 0;
+    zeroed_matrix._44 = 0;
+    
+    
+    return zeroed_matrix;
+}
+
+
 GeoMatrix GeoMatrix::Identity()
 {
 	GeoMatrix identity_matrix;
@@ -676,6 +725,58 @@ GeoMatrix GeoMatrix::MatrixPerspectiveFovLH( const float fovy, const float Aspec
 	matrix._14 = matrix._24 = matrix._44 = 0;
 
 	return matrix;
+}
+
+GeoMatrix GeoMatrix::MatrixOrthoRH( const float width, const float height, const float zn, const float zf ){
+    GeoMatrix matrix = Zeroed();
+    matrix._11 = 2.0f / width;
+    matrix._22 = 2.0f / height;
+    matrix._33 = 1.0f / (zn - zf);
+    matrix._44 = 1;
+    matrix._43 = zn / (zn - zf);
+    
+    /*
+    2/w  0    0           0
+    0    2/h  0           0
+    0    0    1/(zn-zf)   0
+    0    0    zn/(zn-zf)  1
+    
+    l = l.to_f
+    r = r.to_f
+    b = b.to_f
+    t = t.to_f
+    zn = zn.to_f
+    zf = zf.to_f
+    matrix = self.new
+    matrix._11 = 2.0 / (r-l)
+    matrix._22 = 2.0 / (t-b)
+    matrix._33 = -2.0 / (zf - zn)
+    matrix._41 = -(r+l) / (r-l)
+    matrix._42 = -(t+b) / (t-b)
+    matrix._43 = -(zf+zn) / (zf-zn)
+    matrix._44 = 1.0 */
+    
+    
+    
+    return matrix;
+}
+
+GeoMatrix GeoMatrix::MatrixOrthoRH2D( const float width, const float height ){
+    return MatrixOrthoRH( width, height, 1, -1);
+}
+
+GeoMatrix GeoMatrix::MatrixOrthoLH( const float width, const float height, const float zn, const float zf ){
+    GeoMatrix matrix;
+    
+    /*
+    2/w  0    0           0
+    0    2/h  0           0
+    0    0    1/(zf-zn)   0
+    0    0    zn/(zn-zf)  1 */
+    
+    
+    
+    return matrix;
 }
 
 	/* VIEW MATRIX CONSTRUCTORS */

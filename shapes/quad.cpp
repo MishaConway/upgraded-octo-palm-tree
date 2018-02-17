@@ -162,15 +162,15 @@ void Quad::SquareTesselate(){
     auto da = Vertex::Average( d, a );
     
     
-    //quads.push_back( Quad( a, ab, middle_vertex, da ) );
-    //quads.push_back( Quad( ab, b, bc, middle_vertex ) );
-    //quads.push_back( Quad( middle_vertex, bc, c, cd ) );
-    //quads.push_back( Quad( da, middle_vertex, cd, d ) );
+    quads.push_back( Quad( a, ab, middle_vertex, da ) );
+    quads.push_back( Quad( ab, b, bc, middle_vertex ) );
+    quads.push_back( Quad( middle_vertex, bc, c, cd ) );
+    quads.push_back( Quad( da, middle_vertex, cd, d ) );
     
-    quads.push_back( Quad( da, middle_vertex, ab, a ) );
-    quads.push_back( Quad( middle_vertex, bc, b, ab ) );
-    quads.push_back( Quad( cd, c, bc, middle_vertex ) );
-    quads.push_back( Quad( d, cd, middle_vertex, da ) );
+    //quads.push_back( Quad( da, middle_vertex, ab, a ) );
+    //quads.push_back( Quad( middle_vertex, bc, b, ab ) );
+    //quads.push_back( Quad( cd, c, bc, middle_vertex ) );
+    //quads.push_back( Quad( d, cd, middle_vertex, da ) );
 }
 
 

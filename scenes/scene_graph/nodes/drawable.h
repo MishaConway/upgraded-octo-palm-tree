@@ -16,6 +16,7 @@ namespace SceneGraph{
         TextureDetails();
         TextureDetails( std::string texture_name );
         TextureDetails( std::string texture_name, GeoFloat2 scale );
+        TextureDetails( std::string texture_name, const float scale );
     };
     
     

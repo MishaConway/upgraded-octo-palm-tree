@@ -11,20 +11,12 @@ void main()
 {
     vec2 uv = out_color_uv.xy;
     
-    //uv.x *= -1.0;
-    
+
     vec3 tex1_sample = sample_tex_1( uv ).rgb;
-    
-    
-    
     vec3 tangent_normal = sample_normal( sample_tex_2( uv ) );
-    
     //tangent_normal = vec3( 0.0, 0.0, 1.0);
     
-    
-    //tangent_normal.y *= -1.0;
-    
-    
+
     vec3 world_normal = normalize(out_world_normal);
     vec3 world_tangent = normalize(out_world_tangent.xyz);
     //vec3 world_bitangent =  cross(world_normal, world_tangent) * out_world_tangent.w;
@@ -36,12 +28,6 @@ void main()
     if( fudge == 1 ){
         world_normal = transform_basis( tangent_normal, world_tangent, world_bitangent, world_normal );
     }
-    
-    
-    //0, 0, 1
-    
-   // 0, 1, 0
-    
     
     
     
@@ -61,42 +47,4 @@ void main()
         world_normal *= -1.0;
     
     //gl_FragColor = vec4( world_normal, 1.0 );
-
-    
-    
-    
-    
-/*
-    vec3 light_dir = light_direction( lights[0], out_worldspace_position );
-    
-    float diffuse_factor = dot( light_dir, world_normal );
-    
-    vec3 incident_reflection = reflect( light_dir, world_normal);
-    
-    
-    
-    float cosAngle = max(0.0, dot(-world_position_to_eye_position, incident_reflection));
-    float specularCoefficient = pow(cosAngle, 64.0);
-    
-    
-    
-    
-    vec3 diffuse_color = diffuse_factor * tex1_sample;
-    vec3 specular_color = specularCoefficient * vec3(1,1,1);
-    
-    
-    vec4 linearColor =  vec4( saturate( diffuse_color + specular_color), 1 ); */
-    
-    
-    //gl_FragColor = linearColor;
-    
-    //gl_FragColor = vec4( tex1_sample, 1 );
-
-    //gl_FragColor = vec4( out_color_uv.y, out_color_uv.y, out_color_uv.y, 1 );//linearColor;
-    
-    //gl_FragColor = vec4( world_normal, 1);
-    
-    //gl_FragColor = vec4( world_normal, 1.0);
-
-    //gl_FragColor = gamma_correct( linearColor );
 }

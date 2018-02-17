@@ -70,13 +70,18 @@ struct GeoMatrix
     
     GeoFloat3 GetTranslationComponent();
     GeoMatrix SetTranslationComponent( GeoFloat3 translation );
-
+    
+    static GeoMatrix Zeroed();
+    
 	/* IDENTITY CONSTRUCTOR */
 	static GeoMatrix Identity();
 
 	/* PROJECTION MATRIX CONSTRUCTORS */
 	static GeoMatrix MatrixPerspectiveFovRH( const float fovy, const float Aspect, const float zn, const float zf );
 	static GeoMatrix MatrixPerspectiveFovLH( const float fovy, const float Aspect, const float zn, const float zf );
+    static GeoMatrix MatrixOrthoRH( const float width, const float height, const float zn, const float zf );
+    static GeoMatrix MatrixOrthoRH2D( const float width, const float height );
+    static GeoMatrix MatrixOrthoLH( const float width, const float height, const float zn, const float zf );
 
 	/* VIEW MATRIX CONSTRUCTORS */
 	static GeoMatrix LookAtRH( const GeoVector& eye_position, const GeoVector& look_at_position, const GeoVector& up_direction );

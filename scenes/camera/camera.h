@@ -13,7 +13,7 @@ public:
     
     unsigned int GetWidth();
     unsigned int GetHeight();
-    void SetWidthHeight( const unsigned int width, const unsigned int height );
+    virtual void SetWidthHeight( const unsigned int width, const unsigned int height );
     
     virtual void SetEyePosition( const GeoVector& eye_position );
     virtual void SetFocusPosition( const GeoVector& focus_position );

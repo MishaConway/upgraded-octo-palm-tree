@@ -1,25 +1,16 @@
-void TransformPosition( in vec3 objectspace_position, out vec4 worldspace_position, out vec4 viewspace_position, out vec4 homogenous_screenspace_position, out vec3 worldposition_to_eye_position )
+vec4 transform_position( in vec3 objectspace_position, out vec4 worldspace_position )
 {
 	worldspace_position				= world_transform * vec4(objectspace_position,1.0);
-	viewspace_position				= view_transform * worldspace_position;
-	homogenous_screenspace_position = projection_transform * viewspace_position;
-	worldposition_to_eye_position	= normalize(eye_position - worldspace_position.xyz);
+	vec4 viewspace_position			= view_transform * worldspace_position;
+	vec4 homogenous_screenspace_position = projection_transform * viewspace_position;
+    return homogenous_screenspace_position;
 }
 
-vec3 TransformNormal( vec3 normal ){
+vec3 transform_normal( vec3 normal ){
     return normalize(world_inverse_transpose * vec4(normal,0)).xyz;
 }
 
-vec4 TransformNormal( vec4 normal ){
-    return vec4( TransformNormal(normal.xyz), normal.w );
+vec4 transform_normal( vec4 normal ){
+    return vec4( transform_normal(normal.xyz), normal.w );
 }
 
-void CreateVertexShaderOut( vec4 position, vec4 world_position, vec3 normal, vec3 worldposition_to_eye_position, vec3 color_uv )
-{
-	gl_Position = position;
-    out_worldspace_position = world_position;
-	out_world_normal = normal;
-	out_worldposition_to_eye_position = worldposition_to_eye_position;
-	out_color_uv = color_uv.xy;
-	//output.color_index = color_uv.z;
-}

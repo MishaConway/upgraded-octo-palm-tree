@@ -6,6 +6,7 @@
 
 #include "camera/camera.h"
 #include "camera/first_person_camera.h"
+#include "camera/hud_camera.h"
 #include "../ogl/buffers/vertex_buffers/vertex_buffer.h"
 #include "../ogl/render_targets/render_target.h"
 
@@ -46,11 +47,11 @@ public:
 
     
 protected:
-    void ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable  );
+    void ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable, Camera* cam  );
     
     
     void UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const float elapsed_seconds );
-    void DrawNodes( SceneGraph::Node* node );
+    void DrawNodes( SceneGraph::Node* node, Camera* cam );
     
     
     
@@ -63,10 +64,9 @@ protected:
     
     std::vector<SceneGraph::LightNode*> light_nodes;
     
-    
-    
-    
     Camera* camera;
+    Camera* hud_camera;
     
     SceneGraph::Node* root;
+    SceneGraph::Node* hud_root;
 };

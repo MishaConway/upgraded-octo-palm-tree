@@ -18,6 +18,9 @@ namespace OpenGL{
         virtual void SetDefaultBackFaceRendering();
         virtual void SetDefaultFrontAndBackRendering();
         
+        virtual void DisableDepthTest();
+        virtual void EnableDepthTest();
+        
         virtual void SetBlendType( const STATE_MANAGER_BLEND_TYPE blend_type );
         virtual void SetParticleRendering();
         virtual void SetSpriteRendering( const STATE_MANAGER_BLEND_TYPE blend_type = STATE_MANAGER_BLEND_TYPE::NONE );

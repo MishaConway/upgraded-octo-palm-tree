@@ -16,18 +16,47 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     camera->SetProjection( width, height, 45.0f, 0.1f, 100.0f );
     camera->SetEyePosition(GeoVector(-1, 0.5f, 4 ));
     
-    //camera->SetFocusPosition(GeoVector( 0, 1, 0 ));
+    hud_camera = new HudCamera();
+    hud_camera->SetWidthHeight( width, height );
+    
+    
+    
 
     
-    //shader_cache.RegisterShaderProgram( "basic" );
+    shader_cache.RegisterShaderProgram( "hud" );
     shader_cache.RegisterShaderProgram( "phong" );
     
-    render_target = OpenGL::RenderTarget( 512, 512 );
     
+    render_target = OpenGL::RenderTarget( 512, 512 );
+    OpenGL::GraphicsDevice::SetRenderTarget( render_target );
+    OpenGL::GraphicsDevice::Clear(Color::ForestGreen());
+    OpenGL::GraphicsDevice::SetDefaultRenderTarget();
+    texture_cache.RegisterTexture( "render_target", render_target.GetTexture() );
+    
+    
+    
+
+    
+    
+    
+    /* BEGIN HUD */
+    
+    hud_root = new SceneGraph::Node();
+    
+    auto debug_window = new SceneGraph::Geode();
+    debug_window->shader_program = "hud";
+    debug_window->vertex_buffer = OpenGL::VertexBuffer<Vertex>( Quad::XYQuadCentered(GeoFloat3(), 256, 256).ToVertices() );
+    debug_window->textures["diffuse"] = SceneGraph::TextureDetails("render_target" );
+    hud_root->children.push_back(debug_window);
+    
+    
+    
+    /* END HUD   */
     
     
     const float court_depth = 4;
     const float pole_height = 1.0f;
+    
     
     
     root = new SceneGraph::Node();
@@ -38,14 +67,11 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     auto node = new SceneGraph::Geode();
     node->shader_program = "phong";
     auto quad = Quad::XZQuadCentered(GeoFloat3(), 5, court_depth);
-    //quad.SquareTesselate();
-    //quad.SquareTesselate();
-    //quad.SquareTesselate();
-    //quad.SquareTesselate();
-    printf( "START VERTS FOR FLOOR..\n");
+    quad.SquareTesselate();
+    quad.SquareTesselate();
+    quad.SquareTesselate();
+    quad.SquareTesselate();
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>( quad.ToVertices() );
-    printf( "END VERTS FOR FLOOR..\n");
-
     auto tex_scale = GeoFloat2(6,6);
     node->textures["diffuse"] = SceneGraph::TextureDetails("stones.png", tex_scale);
     node->textures["normal"] = SceneGraph::TextureDetails("stones_normal.png", tex_scale);
@@ -129,8 +155,9 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Cube::UnitCube().Transform( GeoMatrix::Scaling(0.3f)).ToVertices() );
-    node->textures["diffuse"] = SceneGraph::TextureDetails("stones.png", tex_scale);
-    node->textures["normal"] = SceneGraph::TextureDetails("stones_normal.png", tex_scale);
+    node->textures["diffuse"] = SceneGraph::TextureDetails("stones.png", 2);
+    node->textures["normal"] = SceneGraph::TextureDetails("stones_normal.png", 2);
+    //node->material.specular = GeoFloat3();
     node->local_transform = GeoMatrix::Translation(-1, 1, 0 );
     root->children.push_back(node);
     
@@ -138,8 +165,9 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     node = new SceneGraph::BillboardSprite();
     node->shader_program = "phong";
+    node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Quad::XYUnitQuad().ToVertices() );
     node->textures["diffuse"] = SceneGraph::TextureDetails("grass.jpg");
-    node->local_transform = GeoMatrix::Scaling(0.25f) * GeoMatrix::Translation(1, 1, 0 );
+    //node->local_transform = GeoMatrix::Scaling(0.25f) * GeoMatrix::Translation(1, 1, 0 );
     root->children.push_back(node);
     
     
@@ -188,7 +216,7 @@ Camera* Scene::GetCamera(){
 
 
 
-void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable  ){
+void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable, Camera* cam  ){
     auto shader_program = drawable->shader_program;
     
     drawable->vertex_buffer.Bind();
@@ -212,14 +240,14 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     
     auto diffuse_tex_details = drawable->textures["diffuse"];
     if( diffuse_tex_details.texture_name.size() ){
-        auto diffuse_tex = texture_cache.FromFile(diffuse_tex_details.texture_name);
+        auto diffuse_tex = texture_cache.FromName(diffuse_tex_details.texture_name);
         shader_cache.SetTexture("tex1", diffuse_tex, 0);
         shader_cache.SetFloat2("tex1_scale", diffuse_tex_details.scale );
     }
     
     auto normal_tex_details = drawable->textures["normal"];
     if( normal_tex_details.texture_name.size() ){
-        auto normal_tex = texture_cache.FromFile(normal_tex_details.texture_name);
+        auto normal_tex = texture_cache.FromName(normal_tex_details.texture_name);
         shader_cache.SetTexture("tex2", normal_tex, 1);
         shader_cache.SetFloat2("tex2_scale", normal_tex_details.scale );
     }
@@ -227,14 +255,14 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     
     //todo: research uniform buffer objects to set all uniforms in one call
     auto transform = node->cached_world_transform;
-    shader_cache.SetMatrix( "view_transform", camera->GetViewTransform() );
-    shader_cache.SetMatrix( "projection_transform", camera->GetProjectionTransform() );
+    shader_cache.SetMatrix( "view_transform", cam->GetViewTransform() );
+    shader_cache.SetMatrix( "projection_transform", cam->GetProjectionTransform() );
     shader_cache.SetMatrix( "world_transform", transform );
     shader_cache.SetMatrix( "world_inverse_transpose", transform.Inverse(0).Transpose() );
     
-    shader_cache.SetFloat( "viewport_width", camera->GetWidth() );
-    shader_cache.SetFloat( "viewport_height", camera->GetHeight() );
-    shader_cache.SetFloat3( "eye_position", camera->GetEyePosition() );
+    shader_cache.SetFloat( "viewport_width", cam->GetWidth() );
+    shader_cache.SetFloat( "viewport_height", cam->GetHeight() );
+    shader_cache.SetFloat3( "eye_position", cam->GetEyePosition() );
     
     shader_cache.SetInt("num_lights", (int) light_nodes.size() );
     
@@ -264,11 +292,17 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
 void Scene::Update( const float elapsed_seconds ){
     light_nodes.clear();
     UpdateNodes( root, GeoMatrix::Identity(), elapsed_seconds );
+    UpdateNodes( hud_root, GeoMatrix::Identity(), elapsed_seconds );
 }
 
 void Scene::Draw(){
     OpenGL::GraphicsDevice::Clear( Color::Beige() );
-    DrawNodes( root );
+    
+    OpenGL::GraphicsDevice::GetStateManager().EnableDepthTest();
+    DrawNodes( root, GetCamera() );
+    
+    OpenGL::GraphicsDevice::GetStateManager().DisableDepthTest();
+    DrawNodes( hud_root, hud_camera );
 }
 
 void Scene::UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const float elapsed_seconds ){
@@ -298,16 +332,16 @@ void Scene::UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const floa
 }
 
 
-void Scene::DrawNodes( SceneGraph::Node* node ){
+void Scene::DrawNodes( SceneGraph::Node* node, Camera* cam ){
     auto drawable = dynamic_cast<SceneGraph::IDrawable*>(node);
     
     if( drawable ){
-        ConfigureShaderProgram( node, drawable );
+        ConfigureShaderProgram( node, drawable, cam );
         drawable->vertex_buffer.Draw();
     }
     
     for( int i = 0; i < node->children.size(); i++ ){
-        DrawNodes( node->children[i] );
+        DrawNodes( node->children[i], cam );
     }
 }
 
