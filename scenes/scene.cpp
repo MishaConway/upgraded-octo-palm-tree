@@ -9,6 +9,9 @@
 //https://graphics.stanford.edu/~mdfisher/cloth.html
 
 void Scene::Initialize( const unsigned int width, const unsigned int height ){
+    screen_width = width;
+    screen_height = height;
+    
     fudge = 0;
     
     
@@ -216,8 +219,9 @@ Camera* Scene::GetCamera(){
 
 
 
-void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable, Camera* cam  ){
-    auto shader_program = drawable->shader_program;
+void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable, Camera* cam, const std::string& override_shader_program  ){
+    auto shader_program = override_shader_program.size() ? override_shader_program : drawable->shader_program;
+    
     
     drawable->vertex_buffer.Bind();
     shader_cache.ActivateShaderProgram( shader_program, sizeof(Vertex) );
@@ -296,13 +300,15 @@ void Scene::Update( const float elapsed_seconds ){
 }
 
 void Scene::Draw(){
-    OpenGL::GraphicsDevice::Clear( Color::Beige() );
-    
     OpenGL::GraphicsDevice::GetStateManager().EnableDepthTest();
-    DrawNodes( root, GetCamera() );
+    DrawNodesToRenderTarget( root, GetCamera(), render_target );
+  
+    OpenGL::GraphicsDevice::Clear( Color::Beige() );
+    OpenGL::GraphicsDevice::GetStateManager().EnableDepthTest();
+    DrawNodesToScreen( root, GetCamera() );
     
     OpenGL::GraphicsDevice::GetStateManager().DisableDepthTest();
-    DrawNodes( hud_root, hud_camera );
+    DrawNodesToScreen( hud_root, hud_camera );
 }
 
 void Scene::UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const float elapsed_seconds ){
@@ -331,17 +337,43 @@ void Scene::UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const floa
     }
 }
 
+void Scene::DrawNodesToRenderTarget( SceneGraph::Node* node, Camera* cam, OpenGL::RenderTarget render_target ){
+    DrawNodesToRenderTarget(node, cam, render_target, "");
+}
 
-void Scene::DrawNodes( SceneGraph::Node* node, Camera* cam ){
+void Scene::DrawNodesToRenderTarget( SceneGraph::Node* node, Camera* cam, OpenGL::RenderTarget rt, const std::string& override_shader_program ){
+    OpenGL::GraphicsDevice::SetRenderTarget( rt );
+    OpenGL::GraphicsDevice::SetViewport( rt.GetWidth(), rt.GetHeight() );
+    OpenGL::GraphicsDevice::Clear(Color::ForestGreen());
+    
+    //cam->SetWidthHeight( render_target.GetWidth(), render_target.GetHeight() );
+    DrawNodes( node, cam, override_shader_program );
+    OpenGL::GraphicsDevice::SetDefaultRenderTarget();
+    
+}
+
+void Scene::DrawNodesToScreen( SceneGraph::Node* node, Camera* cam ){
+    DrawNodesToScreen(node, cam, "");
+}
+
+void Scene::DrawNodesToScreen( SceneGraph::Node* node, Camera* cam, const std::string& override_shader_program  ){
+    OpenGL::GraphicsDevice::SetViewport( screen_width, screen_height );
+    cam->SetWidthHeight( screen_width, screen_height );
+    DrawNodes( node, cam, override_shader_program );
+}
+
+
+
+void Scene::DrawNodes( SceneGraph::Node* node, Camera* cam, const std::string& override_shader_program ){
     auto drawable = dynamic_cast<SceneGraph::IDrawable*>(node);
     
     if( drawable ){
-        ConfigureShaderProgram( node, drawable, cam );
+        ConfigureShaderProgram( node, drawable, cam, override_shader_program );
         drawable->vertex_buffer.Draw();
     }
     
     for( int i = 0; i < node->children.size(); i++ ){
-        DrawNodes( node->children[i], cam );
+        DrawNodes( node->children[i], cam, override_shader_program );
     }
 }
 

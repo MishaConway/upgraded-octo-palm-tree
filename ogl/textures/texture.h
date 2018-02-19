@@ -34,6 +34,8 @@ namespace OpenGL{
         bool ClearColor( Color color, const bool preserve_alpha );
         unsigned char* Map( unsigned int* pPitch );
         void Unmap();
+        unsigned int GetWidth();
+        unsigned int GetHeight();
     protected:
         void Setup( const unsigned int width, const unsigned int height, const TEXTURE_USAGE usage );
 

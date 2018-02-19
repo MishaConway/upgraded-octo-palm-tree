@@ -19,19 +19,7 @@
 #include "../shapes/cylinder.h"
 
 #include "scene_graph/nodes/node.h"
-
-
-
-//  1) render to back buffer
-//  2) render to render target
-
-// options...   enforce global shader
-
-struct RenderPass{
-    
-    
-    
-};
+#include "scene_graph/renderers/pass.h"
 
 
 
@@ -47,16 +35,27 @@ public:
 
     
 protected:
-    void ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable, Camera* cam  );
+    void ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawable* drawable, Camera* cam, const std::string& override_shader_program  );
     
     
     void UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const float elapsed_seconds );
-    void DrawNodes( SceneGraph::Node* node, Camera* cam );
+    void DrawNodesToRenderTarget( SceneGraph::Node* node, Camera* cam, OpenGL::RenderTarget render_target );
+    void DrawNodesToRenderTarget( SceneGraph::Node* node, Camera* cam, OpenGL::RenderTarget render_target, const std::string& override_shader_program );
+
+    
+    void DrawNodesToScreen( SceneGraph::Node* node, Camera* cam );
+    void DrawNodesToScreen( SceneGraph::Node* node, Camera* cam, const std::string& override_shader_program  );
+
+
+    void DrawNodes( SceneGraph::Node* node, Camera* cam, const std::string& override_shader_program );
+
     
     
     
     
 protected:
+    unsigned int screen_width, screen_height;
+    
     TextureCache texture_cache;
     ShaderCache shader_cache;
     
@@ -66,6 +65,9 @@ protected:
     
     Camera* camera;
     Camera* hud_camera;
+    
+    
+    RenderChain render_chain;
     
     SceneGraph::Node* root;
     SceneGraph::Node* hud_root;

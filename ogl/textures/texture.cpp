@@ -223,6 +223,14 @@ bool OpenGL::Texture::SaveToFile( const std::string& filename )
 }
 
 
+unsigned int OpenGL::Texture::GetWidth(){
+    return width;
+}
+
+unsigned int OpenGL::Texture::GetHeight(){
+    return height;
+}
+
 
 
 

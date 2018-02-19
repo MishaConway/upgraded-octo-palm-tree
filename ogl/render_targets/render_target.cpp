@@ -73,11 +73,17 @@ void OpenGL::RenderTarget::Free()
     
 }
 
-
-
 OpenGL::Texture& OpenGL::RenderTarget::GetTexture()
 {
     return tex;
+}
+
+unsigned int OpenGL::RenderTarget::GetWidth(){
+    return tex.GetWidth();
+}
+
+unsigned int OpenGL::RenderTarget::GetHeight(){
+    return tex.GetHeight();
 }
 
 GLuint OpenGL::RenderTarget::GetOpenGLFrameBufferId(){

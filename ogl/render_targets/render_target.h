@@ -24,6 +24,9 @@ namespace OpenGL{
         
         Texture& GetTexture();
         void Free();
+        
+        unsigned int GetWidth();
+        unsigned int GetHeight();
     private:
         Texture tex;
         GLuint fbo_id, depth_buffer_id;

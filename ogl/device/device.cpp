@@ -25,7 +25,6 @@ bool OpenGL::GraphicsDevice::Initialize()
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     
     GetStateManager().SetDefaultFrontFaceRendering();
-    //GetStateManager().SetDefaultFrontAndBackRendering();
     
     initialized = true;
     return true;
