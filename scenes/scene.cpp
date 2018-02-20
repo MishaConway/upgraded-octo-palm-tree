@@ -28,6 +28,8 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     shader_cache.RegisterShaderProgram( "hud" );
     shader_cache.RegisterShaderProgram( "phong" );
+    shader_cache.RegisterShaderProgram( "edge_detect", "simple", "edge_detect" );
+    shader_cache.RegisterShaderProgram( "normals", "phong", "normals" );
     
     
     render_target = OpenGL::RenderTarget( 512, 512 );
@@ -49,6 +51,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     auto debug_window = new SceneGraph::Geode();
     debug_window->shader_program = "hud";
     debug_window->vertex_buffer = OpenGL::VertexBuffer<Vertex>( Quad::XYQuadCentered(GeoFloat3(), 256, 256).ToVertices() );
+    debug_window->local_transform = GeoMatrix::Translation(1024 - 512 - 128 - 5, 0, 0);
     debug_window->textures["diffuse"] = SceneGraph::TextureDetails("render_target" );
     hud_root->children.push_back(debug_window);
     
@@ -247,6 +250,7 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
         auto diffuse_tex = texture_cache.FromName(diffuse_tex_details.texture_name);
         shader_cache.SetTexture("tex1", diffuse_tex, 0);
         shader_cache.SetFloat2("tex1_scale", diffuse_tex_details.scale );
+        shader_cache.SetFloat2("tex1_dimensions", diffuse_tex.GetWidth(), diffuse_tex.GetHeight() );
     }
     
     auto normal_tex_details = drawable->textures["normal"];
@@ -254,6 +258,8 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
         auto normal_tex = texture_cache.FromName(normal_tex_details.texture_name);
         shader_cache.SetTexture("tex2", normal_tex, 1);
         shader_cache.SetFloat2("tex2_scale", normal_tex_details.scale );
+        shader_cache.SetFloat2("tex2_dimensions", normal_tex.GetWidth(), normal_tex.GetHeight() );
+
     }
     
     
@@ -301,14 +307,14 @@ void Scene::Update( const float elapsed_seconds ){
 
 void Scene::Draw(){
     OpenGL::GraphicsDevice::GetStateManager().EnableDepthTest();
-    DrawNodesToRenderTarget( root, GetCamera(), render_target );
+    DrawNodesToRenderTarget( root, GetCamera(), render_target, "normals" );
   
     OpenGL::GraphicsDevice::Clear( Color::Beige() );
     OpenGL::GraphicsDevice::GetStateManager().EnableDepthTest();
     DrawNodesToScreen( root, GetCamera() );
     
     OpenGL::GraphicsDevice::GetStateManager().DisableDepthTest();
-    DrawNodesToScreen( hud_root, hud_camera );
+    DrawNodesToScreen( hud_root, hud_camera, "edge_detect" );
 }
 
 void Scene::UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const float elapsed_seconds ){

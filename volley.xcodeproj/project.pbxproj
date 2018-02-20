@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9542B6F520366B98002517F9 /* vertices.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9542B6F320366B98002517F9 /* vertices.cpp */; };
 		9542B6FA2037C1D0002517F9 /* hud_camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9542B6F82037C1D0002517F9 /* hud_camera.cpp */; };
+		9542B6FF203AD748002517F9 /* gaussian_blur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9542B6FD203AD748002517F9 /* gaussian_blur.cpp */; };
 		956A320A20252C5800857BC7 /* first_person_camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A320820252C5800857BC7 /* first_person_camera.cpp */; };
 		956A32122027932500857BC7 /* forward_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A320E2027932500857BC7 /* forward_renderer.cpp */; };
 		956A32132027932500857BC7 /* pass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A32102027932500857BC7 /* pass.cpp */; };
@@ -73,6 +74,14 @@
 		9542B6F72037ADC1002517F9 /* hud.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = hud.frag; path = shaders/pixel/hud.frag; sourceTree = SOURCE_ROOT; };
 		9542B6F82037C1D0002517F9 /* hud_camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hud_camera.cpp; path = scenes/camera/hud_camera.cpp; sourceTree = SOURCE_ROOT; };
 		9542B6F92037C1D0002517F9 /* hud_camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hud_camera.h; path = scenes/camera/hud_camera.h; sourceTree = SOURCE_ROOT; };
+		9542B6FD203AD748002517F9 /* gaussian_blur.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gaussian_blur.cpp; path = post_processing/blur/gaussian_blur.cpp; sourceTree = SOURCE_ROOT; };
+		9542B6FE203AD748002517F9 /* gaussian_blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gaussian_blur.h; path = post_processing/blur/gaussian_blur.h; sourceTree = SOURCE_ROOT; };
+		9542B700203AD764002517F9 /* edge_detection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = edge_detection.h; path = shaders/pixel/includes/edge_detection.h; sourceTree = SOURCE_ROOT; };
+		9542B701203AD772002517F9 /* edge_detect.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = edge_detect.frag; path = shaders/pixel/edge_detect.frag; sourceTree = SOURCE_ROOT; };
+		9542B702203AD781002517F9 /* simple.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = simple.vert; path = shaders/vertex/simple.vert; sourceTree = SOURCE_ROOT; };
+		9542B703203BD8F6002517F9 /* normals.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = normals.frag; path = shaders/pixel/normals.frag; sourceTree = SOURCE_ROOT; };
+		9542B704203BD8F6002517F9 /* toon.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = toon.frag; path = shaders/pixel/toon.frag; sourceTree = SOURCE_ROOT; };
+		9542B705203C00C7002517F9 /* toon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toon.h; path = shaders/pixel/includes/toon.h; sourceTree = SOURCE_ROOT; };
 		956A320820252C5800857BC7 /* first_person_camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = first_person_camera.cpp; path = scenes/camera/first_person_camera.cpp; sourceTree = SOURCE_ROOT; };
 		956A320920252C5800857BC7 /* first_person_camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = first_person_camera.h; path = scenes/camera/first_person_camera.h; sourceTree = SOURCE_ROOT; };
 		956A320B2025C6B800857BC7 /* stb_image_write.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_image_write.h; path = ogl/textures/stb_image_write.h; sourceTree = SOURCE_ROOT; };
@@ -189,6 +198,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9542B6FB203AD728002517F9 /* post_processing */ = {
+			isa = PBXGroup;
+			children = (
+				9542B6FC203AD734002517F9 /* blur */,
+			);
+			name = post_processing;
+			sourceTree = "<group>";
+		};
+		9542B6FC203AD734002517F9 /* blur */ = {
+			isa = PBXGroup;
+			children = (
+				9542B6FD203AD748002517F9 /* gaussian_blur.cpp */,
+				9542B6FE203AD748002517F9 /* gaussian_blur.h */,
+			);
+			name = blur;
+			sourceTree = "<group>";
+		};
 		956A320D2027930D00857BC7 /* renderers */ = {
 			isa = PBXGroup;
 			children = (
@@ -235,6 +261,7 @@
 		9596D94D2017FD0E00D5BC04 /* volley */ = {
 			isa = PBXGroup;
 			children = (
+				9542B6FB203AD728002517F9 /* post_processing */,
 				9596D9C4201B2FFD00D5BC04 /* colors */,
 				9596D9B4201B02B000D5BC04 /* scenes */,
 				9596D9A0201AAF5F00D5BC04 /* ogl */,
@@ -338,6 +365,7 @@
 		9596D9892019CA3B00D5BC04 /* vertex */ = {
 			isa = PBXGroup;
 			children = (
+				9542B702203AD781002517F9 /* simple.vert */,
 				9542B6F62037AD8C002517F9 /* hud.vert */,
 				9596D9F6201EECD000D5BC04 /* phong.vert */,
 				9596D99D2019DEF100D5BC04 /* includes */,
@@ -348,6 +376,9 @@
 		9596D98A2019CA4800D5BC04 /* pixel */ = {
 			isa = PBXGroup;
 			children = (
+				9542B703203BD8F6002517F9 /* normals.frag */,
+				9542B704203BD8F6002517F9 /* toon.frag */,
+				9542B701203AD772002517F9 /* edge_detect.frag */,
 				9542B6F72037ADC1002517F9 /* hud.frag */,
 				9596D9F5201ED74300D5BC04 /* phong.frag */,
 				9596D9992019DEDA00D5BC04 /* includes */,
@@ -386,6 +417,8 @@
 		9596D9992019DEDA00D5BC04 /* includes */ = {
 			isa = PBXGroup;
 			children = (
+				9542B705203C00C7002517F9 /* toon.h */,
+				9542B700203AD764002517F9 /* edge_detection.h */,
 				956A320C20270D9400857BC7 /* lights.h */,
 				9596D99A2019DEEB00D5BC04 /* fragment_shader_helpers.h */,
 				9596D99C2019DEEB00D5BC04 /* textures.h */,
@@ -635,6 +668,7 @@
 				9596D96A201808F500D5BC04 /* GeoQuaternion.cpp in Sources */,
 				9596D9F4201E97AB00D5BC04 /* debug_lines.cpp in Sources */,
 				9596D9792018145D00D5BC04 /* cylinder.cpp in Sources */,
+				9542B6FF203AD748002517F9 /* gaussian_blur.cpp in Sources */,
 				9596D9BF201B1D3300D5BC04 /* camera.cpp in Sources */,
 				956A32122027932500857BC7 /* forward_renderer.cpp in Sources */,
 				9596D9D3201B347700D5BC04 /* state_manager.cpp in Sources */,

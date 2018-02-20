@@ -34,7 +34,7 @@ OpenGL::ShaderProgram::ShaderProgram(  const std::string& vertex_shader_source, 
             auto attribute_name = attribute_line[2];
             auto attribute_type = attribute_line[1];
             input_attributes.push_back( ShaderAttributeDetails( attribute_name, attribute_type ) );
-            printf( "binding attribute %s to slot %i\n", attribute_name.c_str(), i );
+            //printf( "binding attribute %s to slot %i\n", attribute_name.c_str(), i );
             glBindAttribLocation(program_id, i, attribute_name.c_str() );
         }
         
@@ -54,7 +54,7 @@ OpenGL::ShaderProgram::ShaderProgram(  const std::string& vertex_shader_source, 
                 char name[256];
                 glGetActiveUniform( program_id, GLuint(i), sizeof(name)-1, &name_len, &num, &type, name );
                 name[name_len] = 0;
-                printf( "adding used unifom %s\n", name );
+                //printf( "adding used unifom %s\n", name );
                 auto normalized_name =StringReplace( std::string(name), "[0]", "");
                 
                 used_uniforms[normalized_name] = ShaderUniformDetails( num, type);

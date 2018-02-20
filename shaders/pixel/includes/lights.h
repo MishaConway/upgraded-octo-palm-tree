@@ -69,6 +69,7 @@ vec3 apply_light(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, v
     
     //diffuse
     float diffuse_coefficient = max(0.0, dot(normal, surfaceToLight));
+    diffuse_coefficient = toonify_diffuse_factor( diffuse_coefficient, 3 );
     vec3 diffuse = diffuse_coefficient * surfaceColor.rgb * light.diffuse * material.diffuse;
     
     //specular
@@ -80,7 +81,7 @@ vec3 apply_light(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, v
     vec3 emissive = material.emissive * surfaceColor;
     
     //linear color (color before gamma correction)
-    return ambient + attenuation*(diffuse + specular) + emissive;
+    return ambient + attenuation*(diffuse) + emissive;
 }
 
 

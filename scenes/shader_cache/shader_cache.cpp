@@ -43,6 +43,7 @@ bool ShaderCache::RegisterShaderProgram( std::string name, std::string vertex_sh
     
     if( program->IsValid() ){
         shader_programs[name] = program;
+        printf( "shader program %s is valid \n", name.c_str() );
         return true;
     }
     
@@ -83,6 +84,11 @@ bool ShaderCache::SetFloat2( const std::string& variable_name, GeoFloat2 float2)
         return active_shader_program->SetFloat2( variable_name, float2 );
     return false;
 }
+
+bool ShaderCache::SetFloat2( const std::string& variable_name, const float a, const float b ){
+    return SetFloat2( variable_name, GeoFloat2(a, b) );
+}
+
 
 bool ShaderCache::SetFloat3( const std::string& variable_name, GeoVector float3 ){
     if( active_shader_program )
