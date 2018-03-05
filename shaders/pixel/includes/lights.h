@@ -5,6 +5,7 @@ uniform struct Material {
     vec3 diffuse;
     vec3 specular;
     vec3 emissive;
+    vec3 rim;
     float shininess;
 };
 
@@ -44,7 +45,7 @@ vec3 light_direction( Light light, vec4 position ){
     return light_direction( light, position.xyz );
 }
 
-vec3 apply_light(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera) {
+vec3 apply_light(Light light, vec3 surfaceColor, vec3 normal, vec3 vertex_normal, vec3 surfacePos, vec3 surfaceToCamera) {
     vec3 surfaceToLight;
     float attenuation = 1.0;
     if(light.position.w == 0.0) {
@@ -69,19 +70,31 @@ vec3 apply_light(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, v
     
     //diffuse
     float diffuse_coefficient = max(0.0, dot(normal, surfaceToLight));
-    diffuse_coefficient = toonify_diffuse_factor( diffuse_coefficient, 3 );
+  
+    
+    //vec3 diffuse = diffuse_coefficient * light.diffuse * material.diffuse;
     vec3 diffuse = diffuse_coefficient * surfaceColor.rgb * light.diffuse * material.diffuse;
     
     //specular
     float specular_coefficient = 0.0;
-    if(diffuse_coefficient > 0.0)
+    if(diffuse_coefficient > 0.0){
         specular_coefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.shininess );
+        //specular_coefficient = ramp( specular_coefficient );
+    }
     vec3 specular = specular_coefficient * material.specular * light.specular;
     
     vec3 emissive = material.emissive * surfaceColor;
     
+    float vdn = 1.0 - max(dot(surfaceToCamera, vertex_normal), 0.0);
+    float rim_coefficient = smoothstep(0.6, 1.0, vdn);
+    vec3 rim = rim_coefficient * material.rim;
+    
+    //rim = vec3( vdn, vdn, vdn );
+    
+    
     //linear color (color before gamma correction)
-    return ambient + attenuation*(diffuse) + emissive;
+    return ambient + attenuation*(diffuse+specular) + emissive + rim;
+    //return rim;
 }
 
 
