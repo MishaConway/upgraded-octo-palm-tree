@@ -25,6 +25,7 @@ bool OpenGL::GraphicsDevice::Initialize()
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     
     GetStateManager().SetDefaultFrontFaceRendering();
+    GetStateManager().EnableMultiSampling();
     
     initialized = true;
     return true;

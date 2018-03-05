@@ -142,3 +142,11 @@ void OpenGL::StateManager::SetDefaultBlendState()
         return;
     glDisable( GL_BLEND );
 }
+
+void OpenGL::StateManager::EnableMultiSampling(){
+    glEnable(GL_MULTISAMPLE);
+}
+
+void OpenGL::StateManager::DisableMultiSampling(){
+    glDisable(GL_MULTISAMPLE);
+}

@@ -29,6 +29,9 @@ namespace OpenGL{
         virtual void EnableAdditiveBlending();
         virtual void DisableBlending();
         
+        virtual void EnableMultiSampling();
+        virtual void DisableMultiSampling();
+        
         virtual void Lock();
         virtual void Unlock();
         

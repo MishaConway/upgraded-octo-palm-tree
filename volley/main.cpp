@@ -222,6 +222,13 @@ int main(int argc, char *argv[])
     // set opengl version to use in this program
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
+    
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+
+
     
     // create window
     gWindow = SDL_CreateWindow("Opengl", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
@@ -240,6 +247,7 @@ int main(int argc, char *argv[])
     }
     
     OpenGL::GraphicsDevice::Initialize();
+    
     
  
     Scene scene;
@@ -273,6 +281,7 @@ int main(int argc, char *argv[])
             elapsed_milliseconds = time - old_time;
             elapsed_seconds = elapsed_milliseconds / 1000.0f;
         }
+        
         
         while (SDL_PollEvent(&sdlEvent) != 0)
         {
