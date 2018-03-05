@@ -8,9 +8,17 @@
 
 //https://graphics.stanford.edu/~mdfisher/cloth.html
 
+// http://www.alkemi-games.com/a-game-of-tricks/
+
+// http://andrew.wang-hoyer.com/experiments/cloth/
+
 void Scene::Initialize( const unsigned int width, const unsigned int height ){
     screen_width = width;
     screen_height = height;
+    
+    
+    unit_quad_vertex_buffer = OpenGL::VertexBuffer<Vertex>(Quad::XYUnitQuad().Transform( GeoMatrix::Scaling(2)).ToVertices());
+    
     
     fudge = 0;
     
@@ -22,7 +30,8 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     hud_camera = new HudCamera();
     hud_camera->SetWidthHeight( width, height );
     
-    
+    // todo: consider replacing so that different programs get their own global textures
+    global_textures["ramp"] = SceneGraph::TextureDetails( "ramp.png" );
     
 
     
@@ -30,17 +39,47 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     shader_cache.RegisterShaderProgram( "phong" );
     shader_cache.RegisterShaderProgram( "edge_detect", "simple", "edge_detect" );
     shader_cache.RegisterShaderProgram( "normals", "phong", "normals" );
+    shader_cache.RegisterShaderProgram( "tonemap", "fullscreen", "tonemap" );
+    shader_cache.RegisterShaderProgram( "texture_full_screen", "fullscreen", "hud" );
+
     
-    
-    render_target = OpenGL::RenderTarget( 512, 512 );
+    printf( "before creating render_target\n");
+    render_target = OpenGL::RenderTarget( 1024, 768 );
+    printf( "before AttachTexture\n");
+    render_target.AttachTexture();
+    printf( "after AttachTexture\n");
     OpenGL::GraphicsDevice::SetRenderTarget( render_target );
     OpenGL::GraphicsDevice::Clear(Color::ForestGreen());
     OpenGL::GraphicsDevice::SetDefaultRenderTarget();
-    texture_cache.RegisterTexture( "render_target", render_target.GetTexture() );
     
-    
+    printf( "before creating msaa_render_target\n");
+    msaa_render_target = OpenGL::RenderTarget( 1024, 768, true );
+    printf( "before EnableMultisampling\n");
+    msaa_render_target.EnableMultisampling();
+    printf( "after EnableMultisampling\n");
+
     
 
+    
+    printf( "before creating float_render_target\n");
+    float_render_target = OpenGL::RenderTarget( 1024, 768, true );
+    printf( "before AttachTexture\n");
+    float_render_target.AttachTexture();
+    printf( "after AttachTexture\n");
+    OpenGL::GraphicsDevice::SetRenderTarget( render_target );
+    OpenGL::GraphicsDevice::Clear(Color::Yellow());
+    OpenGL::GraphicsDevice::SetDefaultRenderTarget();
+    
+   
+    
+    
+    texture_cache.RegisterTexture( "render_target", render_target.GetTexture() );
+    texture_cache.RegisterTexture( "float_render_target", float_render_target.GetTexture() );
+    
+    
+    
+    
+    
     
     
     
@@ -95,6 +134,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     auto cylinder_vertex_buffer =  OpenGL::VertexBuffer<Vertex>(  Cylinder(1,1,1).ToVertices() );
     const float large_cylinder_diameter = 0.1f;
     const float small_cylinder_diameter = 0.06f;
+    GeoFloat3 cylinder_rim_color;// = GeoFloat3( 1.0f, 0.95f, 0.95f);
     
     node = new SceneGraph::Geode();
     node->shader_program = "phong";
@@ -102,6 +142,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->textures["diffuse"] = SceneGraph::TextureDetails("metal1.jpg");
     node->local_transform = GeoMatrix::Scaling(large_cylinder_diameter, pole_height, large_cylinder_diameter ) *
                             GeoMatrix::Translation(0, pole_height / 2.0f, -court_depth / 2.0f );
+    node->material.rim = cylinder_rim_color;
     root->children.push_back(node);
     
     
@@ -111,7 +152,9 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->textures["diffuse"] = SceneGraph::TextureDetails("metal1.jpg");
     node->local_transform = GeoMatrix::Scaling(small_cylinder_diameter, pole_height/2, small_cylinder_diameter ) *
     GeoMatrix::Translation(0, pole_height, -court_depth / 2.0f );
-    //root->children.push_back(node);
+    node->material.rim = cylinder_rim_color;
+
+    root->children.push_back(node);
     
     
     node = new SceneGraph::Geode();
@@ -120,6 +163,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->textures["diffuse"] = SceneGraph::TextureDetails("metal1.jpg");
     node->local_transform = GeoMatrix::Scaling(large_cylinder_diameter, pole_height, large_cylinder_diameter ) *
                             GeoMatrix::Translation(0, pole_height / 2.0f, court_depth / 2.0f );
+    node->material.rim = cylinder_rim_color;
     root->children.push_back(node);
     
     node = new SceneGraph::Geode();
@@ -128,6 +172,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->textures["diffuse"] = SceneGraph::TextureDetails("metal1.jpg");
     node->local_transform = GeoMatrix::Scaling(small_cylinder_diameter, pole_height/2, small_cylinder_diameter ) *
     GeoMatrix::Translation(0, pole_height, court_depth / 2.0f );
+    node->material.rim = cylinder_rim_color;
     root->children.push_back(node);
     
     
@@ -144,6 +189,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->textures["normal"] = SceneGraph::TextureDetails("volleyball_normal.png", GeoFloat2(1, 1) );
     node->local_transform = GeoMatrix::Translation(0, 1, 0 );
     //node->material = SceneGraph::Material::Gold();
+    node->material.rim = GeoFloat3( 0.8f, 0.8f, 1.0f );
     node->material.shininess = 64;
     root->children.push_back(node);
     
@@ -183,14 +229,14 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     directional_light->IDirectionalLight::direction = GeoFloat3( 1, 0, 1 );
     directional_light->IBaseLightDetails::diffuse = GeoFloat3( 0.55f, 0.55f, 0.55f );
     directional_light->IBaseLightDetails::specular = GeoFloat3( 0.53f, 0.53f, 0.54f );
-    root->children.push_back(directional_light);
+    //root->children.push_back(directional_light);
     
     auto directional_light2 = new SceneGraph::LightNode;
     directional_light2->IDirectionalLight::directional = true;
     directional_light2->IDirectionalLight::direction = GeoFloat3( 0, 0, -1 );
     directional_light2->IBaseLightDetails::diffuse = GeoFloat3( 0.25f, 0.25f, 0.25f );
     directional_light2->IBaseLightDetails::specular = GeoFloat3( 0.13f, 0.13f, 0.14f );
-    root->children.push_back(directional_light2);
+    //root->children.push_back(directional_light2);
     
     
     auto rotor = new SceneGraph::Rotor;
@@ -239,30 +285,27 @@ void Scene::ConfigureShaderProgram( SceneGraph::Node* node, SceneGraph::IDrawabl
     shader_cache.SetFloat3( "material.diffuse", drawable->material.diffuse );
     shader_cache.SetFloat3( "material.specular", drawable->material.specular );
     shader_cache.SetFloat3( "material.emissive", drawable->material.emissive );
+    shader_cache.SetFloat3( "material.rim", drawable->material.rim );
     shader_cache.SetFloat( "material.shininess", drawable->material.shininess );
     
     
     
+    std::vector<SceneGraph::TextureDetails> texture_details;
+    texture_details.push_back( drawable->textures["diffuse"] );
+    texture_details.push_back( drawable->textures["normal"] );
+    texture_details.push_back( global_textures["ramp"] );
+    
+    for( int i = 0; i < texture_details.size(); i++ ){
+        auto tex_details = texture_details[i];
+        if( tex_details.texture_name.size() ){
+            auto sampler_name = StringSubstituteNumber( "tex%i", i+1);
+            auto tex = texture_cache.FromName(tex_details.texture_name);
+            shader_cache.SetTexture( sampler_name, tex, i);
+            shader_cache.SetFloat2( sampler_name + "_scale", tex_details.scale );
+            shader_cache.SetFloat2( sampler_name + "_dimensions", tex.GetWidth(), tex.GetHeight() );
+        }
+    }
    
-    
-    auto diffuse_tex_details = drawable->textures["diffuse"];
-    if( diffuse_tex_details.texture_name.size() ){
-        auto diffuse_tex = texture_cache.FromName(diffuse_tex_details.texture_name);
-        shader_cache.SetTexture("tex1", diffuse_tex, 0);
-        shader_cache.SetFloat2("tex1_scale", diffuse_tex_details.scale );
-        shader_cache.SetFloat2("tex1_dimensions", diffuse_tex.GetWidth(), diffuse_tex.GetHeight() );
-    }
-    
-    auto normal_tex_details = drawable->textures["normal"];
-    if( normal_tex_details.texture_name.size() ){
-        auto normal_tex = texture_cache.FromName(normal_tex_details.texture_name);
-        shader_cache.SetTexture("tex2", normal_tex, 1);
-        shader_cache.SetFloat2("tex2_scale", normal_tex_details.scale );
-        shader_cache.SetFloat2("tex2_dimensions", normal_tex.GetWidth(), normal_tex.GetHeight() );
-
-    }
-    
-    
     //todo: research uniform buffer objects to set all uniforms in one call
     auto transform = node->cached_world_transform;
     shader_cache.SetMatrix( "view_transform", cam->GetViewTransform() );
@@ -306,15 +349,27 @@ void Scene::Update( const float elapsed_seconds ){
 }
 
 void Scene::Draw(){
+    // render scene into float render target
     OpenGL::GraphicsDevice::GetStateManager().EnableDepthTest();
-    DrawNodesToRenderTarget( root, GetCamera(), render_target, "normals" );
+    DrawNodesToRenderTarget( root, GetCamera(), msaa_render_target );
+    
+    msaa_render_target.BlitToRenderTarget( float_render_target );
+    
+    // tonemap float render target and render into int render target
+    OpenGL::GraphicsDevice::GetStateManager().DisableDepthTest();
+    DrawFullScreenTextureToRenderTarget( float_render_target.GetTexture(), render_target, "tonemap");
+    
   
     OpenGL::GraphicsDevice::Clear( Color::Beige() );
     OpenGL::GraphicsDevice::GetStateManager().EnableDepthTest();
-    DrawNodesToScreen( root, GetCamera() );
+    //DrawNodesToScreen( root, GetCamera() );
     
     OpenGL::GraphicsDevice::GetStateManager().DisableDepthTest();
-    DrawNodesToScreen( hud_root, hud_camera, "edge_detect" );
+    render_target.BlitToScreen(screen_width, screen_height);
+    //DrawFullScreenTextureToScreen( render_target.GetTexture(), "texture_full_screen" );
+    
+    OpenGL::GraphicsDevice::GetStateManager().DisableDepthTest();
+    DrawNodesToScreen( hud_root, hud_camera, "hud" );
 }
 
 void Scene::UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const float elapsed_seconds ){
@@ -342,6 +397,28 @@ void Scene::UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const floa
         UpdateNodes( node->children[i], new_transform, elapsed_seconds );
     }
 }
+
+void Scene::DrawFullScreenTextureToRenderTarget( OpenGL::Texture texture, OpenGL::RenderTarget render_target, const std::string& shader_program ){
+    auto geode_and_camera = BuildFullScreenNode( texture );
+    DrawNodesToRenderTarget( &geode_and_camera.first, &geode_and_camera.second, render_target, shader_program );
+}
+
+void Scene::DrawFullScreenTextureToScreen( OpenGL::Texture texture, const std::string& shader_program ){
+    auto geode_and_camera = BuildFullScreenNode( texture );
+    DrawNodesToScreen( &geode_and_camera.first, &geode_and_camera.second, shader_program );
+}
+
+std::pair< SceneGraph::Geode, HudCamera > Scene::BuildFullScreenNode( OpenGL::Texture texture){
+    texture_cache.RegisterTexture("fullscreen", texture);
+    
+    SceneGraph::Geode geode;
+    geode.vertex_buffer = unit_quad_vertex_buffer;
+    geode.textures["diffuse"] = SceneGraph::TextureDetails( "fullscreen" );
+    
+    return std::tuple< SceneGraph::Geode, HudCamera >( geode, HudCamera(1,1));
+}
+
+
 
 void Scene::DrawNodesToRenderTarget( SceneGraph::Node* node, Camera* cam, OpenGL::RenderTarget render_target ){
     DrawNodesToRenderTarget(node, cam, render_target, "");

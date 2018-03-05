@@ -41,6 +41,16 @@ protected:
     void UpdateNodes( SceneGraph::Node* node, GeoMatrix transform, const float elapsed_seconds );
     void DrawNodesToRenderTarget( SceneGraph::Node* node, Camera* cam, OpenGL::RenderTarget render_target );
     void DrawNodesToRenderTarget( SceneGraph::Node* node, Camera* cam, OpenGL::RenderTarget render_target, const std::string& override_shader_program );
+    
+    
+    void DrawFullScreenTextureToRenderTarget( OpenGL::Texture texture, OpenGL::RenderTarget render_target, const std::string& shader_program );
+    void DrawFullScreenTextureToScreen( OpenGL::Texture texture, const std::string& shader_program );
+    std::pair< SceneGraph::Geode, HudCamera > BuildFullScreenNode( OpenGL::Texture texture );
+    
+    
+    
+    
+    
 
     
     void DrawNodesToScreen( SceneGraph::Node* node, Camera* cam );
@@ -56,10 +66,14 @@ protected:
 protected:
     unsigned int screen_width, screen_height;
     
+    OpenGL::VertexBuffer<Vertex> unit_quad_vertex_buffer;
+    
     TextureCache texture_cache;
     ShaderCache shader_cache;
     
-    OpenGL::RenderTarget render_target;
+    std::map< std::string, SceneGraph::TextureDetails > global_textures;
+    
+    OpenGL::RenderTarget render_target, float_render_target, msaa_render_target;
     
     std::vector<SceneGraph::LightNode*> light_nodes;
     

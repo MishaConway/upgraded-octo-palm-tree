@@ -6,6 +6,7 @@
 #include <vector>
 #include "glew.h"
 #include "../../interfaces/IValidatable.h"
+#include "../../interfaces/IHasErrors.h"
 #include "../../geo/GeoFloat.h"
 #include "../../colors/color.h"
 
@@ -16,7 +17,8 @@ namespace OpenGL{
     enum TEXTURE_USAGE
     {
         SHADER_RESOURCE = 0,
-        RENDER_TARGET
+        RENDER_TARGET,
+        FLOAT_RENDER_TARGET
     };
     
 
@@ -31,11 +33,10 @@ namespace OpenGL{
         GLenum GetFormat();
         bool IsFloatTexture();
         bool SaveToFile( const std::string& filename );
-        bool ClearColor( Color color, const bool preserve_alpha );
         unsigned char* Map( unsigned int* pPitch );
         void Unmap();
-        unsigned int GetWidth();
-        unsigned int GetHeight();
+        unsigned int GetWidth() const;
+        unsigned int GetHeight() const;
     protected:
         void Setup( const unsigned int width, const unsigned int height, const TEXTURE_USAGE usage );
 

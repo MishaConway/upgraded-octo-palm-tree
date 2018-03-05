@@ -82,6 +82,9 @@
 		9542B703203BD8F6002517F9 /* normals.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = normals.frag; path = shaders/pixel/normals.frag; sourceTree = SOURCE_ROOT; };
 		9542B704203BD8F6002517F9 /* toon.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = toon.frag; path = shaders/pixel/toon.frag; sourceTree = SOURCE_ROOT; };
 		9542B705203C00C7002517F9 /* toon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = toon.h; path = shaders/pixel/includes/toon.h; sourceTree = SOURCE_ROOT; };
+		9542B707203EC197002517F9 /* tone_mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tone_mapping.h; path = shaders/pixel/includes/hdr/tone_mapping.h; sourceTree = SOURCE_ROOT; };
+		9542B70820420601002517F9 /* tonemap.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = tonemap.frag; path = shaders/pixel/tonemap.frag; sourceTree = SOURCE_ROOT; };
+		9542B70920469FFA002517F9 /* fullscreen.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = fullscreen.vert; path = shaders/vertex/fullscreen.vert; sourceTree = SOURCE_ROOT; };
 		956A320820252C5800857BC7 /* first_person_camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = first_person_camera.cpp; path = scenes/camera/first_person_camera.cpp; sourceTree = SOURCE_ROOT; };
 		956A320920252C5800857BC7 /* first_person_camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = first_person_camera.h; path = scenes/camera/first_person_camera.h; sourceTree = SOURCE_ROOT; };
 		956A320B2025C6B800857BC7 /* stb_image_write.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_image_write.h; path = ogl/textures/stb_image_write.h; sourceTree = SOURCE_ROOT; };
@@ -213,6 +216,14 @@
 				9542B6FE203AD748002517F9 /* gaussian_blur.h */,
 			);
 			name = blur;
+			sourceTree = "<group>";
+		};
+		9542B706203EC157002517F9 /* hdr */ = {
+			isa = PBXGroup;
+			children = (
+				9542B707203EC197002517F9 /* tone_mapping.h */,
+			);
+			name = hdr;
 			sourceTree = "<group>";
 		};
 		956A320D2027930D00857BC7 /* renderers */ = {
@@ -365,6 +376,7 @@
 		9596D9892019CA3B00D5BC04 /* vertex */ = {
 			isa = PBXGroup;
 			children = (
+				9542B70920469FFA002517F9 /* fullscreen.vert */,
 				9542B702203AD781002517F9 /* simple.vert */,
 				9542B6F62037AD8C002517F9 /* hud.vert */,
 				9596D9F6201EECD000D5BC04 /* phong.vert */,
@@ -376,6 +388,7 @@
 		9596D98A2019CA4800D5BC04 /* pixel */ = {
 			isa = PBXGroup;
 			children = (
+				9542B70820420601002517F9 /* tonemap.frag */,
 				9542B703203BD8F6002517F9 /* normals.frag */,
 				9542B704203BD8F6002517F9 /* toon.frag */,
 				9542B701203AD772002517F9 /* edge_detect.frag */,
@@ -417,6 +430,7 @@
 		9596D9992019DEDA00D5BC04 /* includes */ = {
 			isa = PBXGroup;
 			children = (
+				9542B706203EC157002517F9 /* hdr */,
 				9542B705203C00C7002517F9 /* toon.h */,
 				9542B700203AD764002517F9 /* edge_detection.h */,
 				956A320C20270D9400857BC7 /* lights.h */,

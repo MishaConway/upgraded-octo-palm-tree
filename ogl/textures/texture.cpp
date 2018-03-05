@@ -86,10 +86,16 @@ void OpenGL::Texture::Setup( const unsigned int width, const unsigned int height
     //bind our created opengl texture object so we may define its parameters
     glBindTexture( GL_TEXTURE_2D, texture_id  );
     
-    if( TEXTURE_USAGE::RENDER_TARGET == usage  ){
+    if( TEXTURE_USAGE::RENDER_TARGET == usage || TEXTURE_USAGE::FLOAT_RENDER_TARGET == usage  ){
         internal_format = format = GL_RGBA;
         component_type = GL_UNSIGNED_BYTE;
-
+        if( TEXTURE_USAGE::FLOAT_RENDER_TARGET == usage ){
+            component_type = GL_FLOAT;
+            internal_format = GL_RGBA16F;
+            format = GL_RGBA;
+        }
+        
+        
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         
@@ -175,23 +181,7 @@ void OpenGL::Texture::Unmap()
     glGenerateMipmap( GL_TEXTURE_2D );
 }
 
-bool OpenGL::Texture::ClearColor( Color color, const bool preserve_alpha )
-{
-    float red = color.GetNormalizedRed();
-    float green = color.GetNormalizedGreen();
-    float blue = color.GetNormalizedBlue();
-    float alpha = color.GetNormalizedAlpha();
-    
-    unsigned char* pMappedBytes = Map(0);
-    for( int y = 0; y < height; y++ )
-        for( int x = 0; x < width; x++ ){
-            
-        }
-    
-    Unmap();
-    
-    return true;
-}
+
 
 bool OpenGL::Texture::SaveToFile( const std::string& filename )
 {
@@ -223,11 +213,11 @@ bool OpenGL::Texture::SaveToFile( const std::string& filename )
 }
 
 
-unsigned int OpenGL::Texture::GetWidth(){
+unsigned int OpenGL::Texture::GetWidth() const{
     return width;
 }
 
-unsigned int OpenGL::Texture::GetHeight(){
+unsigned int OpenGL::Texture::GetHeight() const{
     return height;
 }
 
