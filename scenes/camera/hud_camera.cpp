@@ -4,6 +4,11 @@ HudCamera::HudCamera(){
     
 }
 
+HudCamera::HudCamera( const unsigned int width, const unsigned int height ){
+    SetProjection2D( width, height);
+}
+
+
 HudCamera::~HudCamera(){
     
 }
