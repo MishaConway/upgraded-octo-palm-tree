@@ -14,6 +14,7 @@ namespace SceneGraph{
         GeoFloat3 diffuse;
         GeoFloat3 specular;
         GeoFloat3 emissive;
+        GeoFloat3 rim;
         float shininess;
         
         static Material Zero();
