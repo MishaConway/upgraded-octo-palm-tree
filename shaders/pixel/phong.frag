@@ -19,6 +19,7 @@ void main()
     vec3 tangent_normal = sample_normal( sample_tex_2( uv ) );
     
     vec3 world_normal = normalize(out_world_normal);
+    vec3 world_vertex_normal = world_normal;
     vec3 world_tangent = normalize(out_world_tangent.xyz);
     vec3 world_bitangent =  normalize(out_world_bitangent);
 
@@ -31,10 +32,10 @@ void main()
     
     vec3 linear_color = vec3(0);
     for(int i = 0; i < num_lights; ++i){
-        linear_color += apply_light(lights[i], tex1_sample, world_normal, world_position, world_position_to_eye_position);
+        linear_color += apply_light(lights[i], tex1_sample, world_normal, world_vertex_normal, world_position, world_position_to_eye_position);
     }
-    linear_color = saturate( linear_color );
+    //linear_color = saturate( linear_color );
     
     
-    gl_FragColor = vec4( gamma_correct(linear_color), 1.0 );
+    gl_FragColor = vec4( linear_color, 1.0 );
 }

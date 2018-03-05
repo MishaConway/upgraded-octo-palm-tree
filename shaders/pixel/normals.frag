@@ -3,6 +3,7 @@
 #include "../includes/helpers.h"
 #include "includes/fragment_shader_helpers.h"
 #include "includes/textures.h"
+#include "includes/toon.h"
 #include "includes/lights.h"
 
 
