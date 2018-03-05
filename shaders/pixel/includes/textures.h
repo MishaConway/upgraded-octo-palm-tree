@@ -6,6 +6,10 @@ uniform sampler2D tex2;
 uniform vec2 tex2_scale;
 uniform vec2 tex2_dimensions;
 
+uniform sampler2D tex3;
+uniform vec2 tex3_scale;
+uniform vec2 tex3_dimensions;
+
 
 vec4 sample_tex_1( vec2 uv )
 {
@@ -15,6 +19,11 @@ vec4 sample_tex_1( vec2 uv )
 vec4 sample_tex_2( vec2 uv )
 {
     return texture2D( tex2, vec2( uv.x * tex2_scale.x, uv.y * tex2_scale.y ) );
+}
+
+vec4 sample_tex_3( vec2 uv )
+{
+    return texture2D( tex3, vec2( uv.x * tex3_scale.x, uv.y * tex3_scale.y ) );
 }
 
 vec3 sample_normal( vec4 color ){
