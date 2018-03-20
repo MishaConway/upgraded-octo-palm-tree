@@ -107,6 +107,10 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     root = new SceneGraph::Node();
     
     
+    auto garbage_can = NodeTreeFromWavefrontModel("/Users/mconway/projects/volley/models/can2.obj");
+    root->children.push_back(garbage_can);
+    
+    
     
 
     auto node = new SceneGraph::Geode();
@@ -220,7 +224,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(  Quad::XYUnitQuad().ToVertices() );
     node->textures["diffuse"] = SceneGraph::TextureDetails("grass.jpg");
     //node->local_transform = GeoMatrix::Scaling(0.25f) * GeoMatrix::Translation(1, 1, 0 );
-    root->children.push_back(node);
+    //root->children.push_back(node);
     
     
     // https://www.tomdalling.com/blog/modern-opengl/08-even-more-lighting-directional-lights-spotlights-multiple-lights/

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../../../geo/GeoFloat.h"
 
 // http://devernay.free.fr/cours/opengl/materials.html

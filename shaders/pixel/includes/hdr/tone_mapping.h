@@ -9,6 +9,8 @@
  http://imdoingitwrong.wordpress.com/2010/08/19/why-reinhard-desaturates-my-blacks-3/
  http://mynameismjp.wordpress.com/2010/04/30/a-closer-look-at-tone-mapping/
  http://renderwonk.com/publications/s2010-color-course/
+ 
+ http://alaingalvan.tumblr.com/post/79864187609/glsl-color-correction-shaders
  --
  Zavie
  */
@@ -73,7 +75,7 @@ vec3 Uncharted2ToneMapping(vec3 color)
     float E = 0.02;
     float F = 0.30;
     float W = 11.2;
-    float exposure = 2.;
+    float exposure = 1.;
     color *= exposure;
     color = ((color * (A * color + C * B) + D * E) / (color * (A * color + B) + D * F)) - E / F;
     float white = ((W * (A * W + C * B) + D * E) / (W * (A * W + B) + D * F)) - E / F;

@@ -26,6 +26,7 @@ bool OpenGL::GraphicsDevice::Initialize()
     
     GetStateManager().SetDefaultFrontFaceRendering();
     GetStateManager().EnableMultiSampling();
+    //GetStateManager().SetDefaultFrontAndBackRendering();
     
     initialized = true;
     return true;

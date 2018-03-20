@@ -19,6 +19,7 @@
 #include "../shapes/cylinder.h"
 
 #include "scene_graph/nodes/node.h"
+#include "scene_graph/meshes/wavefront_obj.h"
 #include "scene_graph/renderers/pass.h"
 
 
