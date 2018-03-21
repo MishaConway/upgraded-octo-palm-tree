@@ -1,5 +1,6 @@
 #pragma once
 #include "../buffer.h"
+#include "../index_buffers/index_buffer.h"
 
 
 namespace OpenGL{
@@ -18,14 +19,42 @@ namespace OpenGL{
     public:
         VertexBuffer(){
             num_vertices = 0;
+            indexed = false;
         }
         
         VertexBuffer( const std::vector<T>& vertices ){
+            indexed = false;
             InitializeVertexBuffer( vertices, PRIMITIVE_TYPE::TRIANGLELIST, GL_STATIC_DRAW );
         }
         
         
         VertexBuffer( const std::vector<T>& vertices, const PRIMITIVE_TYPE primitive_type ){
+            indexed = false;
+            InitializeVertexBuffer( vertices, primitive_type, GL_STATIC_DRAW );
+        }
+        
+      
+        VertexBuffer( const std::vector<unsigned int>& indices, const std::vector<T>& vertices ){
+            indexed = true;
+            index_buffer = IndexBuffer(indices);
+            InitializeVertexBuffer( vertices, PRIMITIVE_TYPE::TRIANGLELIST, GL_STATIC_DRAW );
+        }
+        
+        VertexBuffer( const std::vector<unsigned short>& indices, const std::vector<T>& vertices ){
+            indexed = true;
+            index_buffer = IndexBuffer(indices);
+            InitializeVertexBuffer( vertices, PRIMITIVE_TYPE::TRIANGLELIST, GL_STATIC_DRAW );
+        }
+        
+        VertexBuffer( const std::vector<unsigned int>& indices, const std::vector<T>& vertices, const PRIMITIVE_TYPE primitive_type  ){
+            indexed = true;
+            index_buffer = IndexBuffer(indices);
+            InitializeVertexBuffer( vertices, primitive_type, GL_STATIC_DRAW );
+        }
+        
+        VertexBuffer( const std::vector<unsigned short>& indices, const std::vector<T>& vertices, const PRIMITIVE_TYPE primitive_type  ){
+            indexed = true;
+            index_buffer = IndexBuffer(indices);
             InitializeVertexBuffer( vertices, primitive_type, GL_STATIC_DRAW );
         }
         
@@ -56,21 +85,43 @@ namespace OpenGL{
         
         virtual bool IsValid()
         {
-            return buffer.IsValid();
+            return buffer.IsValid() && (!indexed || index_buffer.IsValid());
+        }
+        
+        bool IsIndexed(){
+            return indexed;
         }
         
         unsigned int GetNumVertices(){
             return num_vertices;
         }
         
+        unsigned int GetNumIndices(){
+            return index_buffer.GetNumIndices();
+        }
+        
         bool Bind(){
             glBindBuffer(GL_ARRAY_BUFFER, buffer.GetOpenGLBufferId() );
+            if( indexed )
+                index_buffer.Bind();
+            return true;
+        }
+        
+        bool UnBind(){
+            glBindBuffer(GL_ARRAY_BUFFER, 0 );
+            if( indexed )
+                index_buffer.UnBind();
             return true;
         }
         
         bool Draw(){
-            glBindBuffer(GL_ARRAY_BUFFER, buffer.GetOpenGLBufferId() );
-            glDrawArrays( GetOpenGLPrimitiveType(), 0, GetNumVertices() );
+            Bind();
+            if( indexed ){
+                glDrawElements( GetOpenGLPrimitiveType(), GetNumIndices(), index_buffer.GetIndexType(), 0 );
+            } else {
+                glDrawArrays( GetOpenGLPrimitiveType(), 0, GetNumVertices() );
+            }
+            UnBind();
             return true;
         }
         
@@ -88,5 +139,8 @@ namespace OpenGL{
         Buffer buffer;
         PRIMITIVE_TYPE primitive_type;
         unsigned int num_vertices;
+        
+        bool indexed;
+        IndexBuffer index_buffer;
     };
 }

@@ -107,7 +107,7 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     root = new SceneGraph::Node();
     
     
-    auto garbage_can = NodeTreeFromWavefrontModel("/Users/mconway/projects/volley/models/can2.obj");
+    auto garbage_can = NodeTreeFromWavefrontModel("/Users/mconway/projects/volley/models/fox/1.obj");
     root->children.push_back(garbage_can);
     
     
