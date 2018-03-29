@@ -107,7 +107,9 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     root = new SceneGraph::Node();
     
     
-    auto garbage_can = NodeTreeFromWavefrontModel("/Users/mconway/projects/volley/models/fox/1.obj");
+    //auto garbage_can = NodeTreeFromWavefrontModel("/Users/mconway/projects/volley/models/box/box.obj", 1);
+    auto garbage_can = NodeTreeFromWavefrontModel("/Users/mconway/projects/volley/models/coke/coke.obj", 0.01f);
+
     root->children.push_back(garbage_can);
     
     
@@ -233,14 +235,14 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     directional_light->IDirectionalLight::direction = GeoFloat3( 1, 0, 1 );
     directional_light->IBaseLightDetails::diffuse = GeoFloat3( 0.55f, 0.55f, 0.55f );
     directional_light->IBaseLightDetails::specular = GeoFloat3( 0.53f, 0.53f, 0.54f );
-    //root->children.push_back(directional_light);
+    root->children.push_back(directional_light);
     
     auto directional_light2 = new SceneGraph::LightNode;
     directional_light2->IDirectionalLight::directional = true;
     directional_light2->IDirectionalLight::direction = GeoFloat3( 0, 0, -1 );
     directional_light2->IBaseLightDetails::diffuse = GeoFloat3( 0.25f, 0.25f, 0.25f );
     directional_light2->IBaseLightDetails::specular = GeoFloat3( 0.13f, 0.13f, 0.14f );
-    //root->children.push_back(directional_light2);
+    root->children.push_back(directional_light2);
     
     
     auto rotor = new SceneGraph::Rotor;

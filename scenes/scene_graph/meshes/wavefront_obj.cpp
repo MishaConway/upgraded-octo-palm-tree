@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <set>
 
+#include "../../../shapes/shape_utilities/tangents.h"
+
 
 typedef std::triple<int,int,int> int3;
 typedef std::pair<int,int> int2;
@@ -43,7 +45,7 @@ Vertex VertexFromWavefrontIndex( const wavefront_index w_index,
 
 
 
-SceneGraph::Node* NodeTreeFromWavefrontModel( const std::string& filepath ){
+SceneGraph::Node* NodeTreeFromWavefrontModel( const std::string& filepath, const float scale ){
     auto root = new SceneGraph::Node;
     
     tinyobj::attrib_t attrib;
@@ -156,6 +158,11 @@ SceneGraph::Node* NodeTreeFromWavefrontModel( const std::string& filepath ){
                 normalized_face_vertices.push_back( normalized_vertices[normalized_face_index] );
             }
             
+            
+            
+            normalized_vertices = CalculateTangentArray( normalized_face_indices, normalized_vertices );
+
+            
                 
             
             
@@ -170,17 +177,22 @@ SceneGraph::Node* NodeTreeFromWavefrontModel( const std::string& filepath ){
             //auto wavefront_material = materials[material_id];
 
             std::vector<Vertex> vertices;
+            std::vector<unsigned int> flat_indices;
             for( int i = 0; i < indices.size(); i++ ){
                 vertices.push_back(VertexFromWavefrontIndex(indices[i], attrib.vertices, attrib.normals, attrib.texcoords));
+                flat_indices.push_back(i);
             }
+            vertices = CalculateTangentArray(flat_indices, vertices);
             
             auto node = new SceneGraph::Geode;
             //node->textures["diffuse"] = SceneGraph::TextureDetails( wavefront_material.diffuse_texname );
             node->textures["diffuse"] = SceneGraph::TextureDetails( "metal1.jpg" );
             printf( "vertices.size is %i\n", vertices.size() );
             printf( "normalzed vertices size is %i\n", normalized_vertices.size() );
-            node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(normalized_face_indices, normalized_vertices);
-            node->local_transform = GeoMatrix::Scaling( 0.1f );
+            //node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(normalized_face_indices, normalized_vertices);
+            node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(flat_indices, vertices);
+
+            node->local_transform = GeoMatrix::Scaling( scale );
             node->shader_program = "phong";
             root->children.push_back(node);
             

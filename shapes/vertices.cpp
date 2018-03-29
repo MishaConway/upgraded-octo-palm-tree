@@ -80,3 +80,58 @@ std::vector<Vertex> UnindexVertices( const std::vector<Vertex>& vertices, const 
     return unindexed_vertices;
 }
 
+std::triple< std::vector<GeoFloat3>, std::vector<GeoVector>, std::vector<GeoFloat2> > DecomposeVertices( const std::vector<Vertex>& vertices ){
+    
+    std::vector<GeoFloat3> positions;
+    std::vector<GeoVector> normals;
+    std::vector<GeoFloat2> texcoords;
+    
+    for( int i = 0; i < vertices.size(); i++ ){
+        positions.push_back(vertices[i].position);
+        normals.push_back(GeoVector(vertices[i].normal));
+        texcoords.push_back(GeoFloat2(vertices[i].colorUV));
+    }
+    
+    return std::triple<std::vector<GeoFloat3>, std::vector<GeoVector>, std::vector<GeoFloat2>>( positions, normals, texcoords );
+}
+
+std::pair< std::vector<Vertex>, std::vector<unsigned int> > DuplicateVerticesOnNormalCreaseAngle(
+    const float normal_crease_angle,
+    const std::vector<Vertex>& vertices,
+    const std::vector<unsigned int>& indices
+){
+    auto duplicated_vertices = vertices;
+    auto duplicated_indices = indices;
+    
+    std::vector<GeoVector> face_averaged_normals;
+    face_averaged_normals.resize( vertices.size() );
+    
+    for (long a = 0; a < vertices.size(); a += 3)
+    {
+        int nCount[5] = {0, 1, 2, 3, 4};
+        
+        auto p1 = GeoVector(vertices[a].position);
+        auto p2 = GeoVector(vertices[a+1].position);
+        auto p3 = GeoVector(vertices[a+2].position);
+        
+        auto e1 = p1 - p2;
+        auto e2 = p3 - p2;
+        auto face_normal = e1.Cross(e2);
+        
+        face_averaged_normals[a] += face_normal;
+        face_averaged_normals[a+1] += face_normal;
+        face_averaged_normals[a+2] += face_normal;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    return std::pair< std::vector<Vertex>, std::vector<unsigned int> >( duplicated_vertices, duplicated_indices );
+}
+
+
+

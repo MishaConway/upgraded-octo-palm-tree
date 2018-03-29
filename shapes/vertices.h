@@ -28,3 +28,19 @@ typedef std::triple<Vertex, Vertex, Vertex> vert3;
 
 
 std::vector<Vertex> UnindexVertices( const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices );
+
+
+std::triple< std::vector<GeoFloat3>, std::vector<GeoVector>, std::vector<GeoFloat2> > DecomposeVertices( const std::vector<Vertex>& vertices );
+
+
+std::pair< std::vector<Vertex>, std::vector<unsigned int> > DuplicateVerticesOnNormalCreaseAngle(
+    const float normal_crease_angle,
+    const std::vector<Vertex>& vertices,
+    const std::vector<unsigned int>& indices
+);
+
+
+
+
+
+

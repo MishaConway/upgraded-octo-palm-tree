@@ -23,7 +23,7 @@ Sphere::Sphere(){
         texcoords.push_back( GeoFloat2( asinf(position.x) / M_PI+0.5f, asinf(position.y) / M_PI+0.5f) );
     }
     
-    auto tan_bitans = CalculateTangentArray( positions, normals, texcoords, icoSphere.indices );
+    auto tan_bitans = CalculateMirroredSphereTangentArray( positions, normals, texcoords, icoSphere.indices );
     auto tangents = tan_bitans.first;
     auto bitangents = tan_bitans.second;
     

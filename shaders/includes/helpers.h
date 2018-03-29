@@ -29,3 +29,8 @@ vec3 transform_basis( vec3 vec, vec3 x_axis, vec3 y_axis, vec3 z_axis ){
     ));
 }
 
+vec3 transform_basis2( vec3 vec, vec3 x_axis, vec3 y_axis, vec3 z_axis ){
+    mat3 tbn = mat3( x_axis, y_axis, z_axis );
+    return tbn * vec;
+}
+

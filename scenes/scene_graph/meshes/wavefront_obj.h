@@ -6,5 +6,5 @@
 
 
 
-SceneGraph::Node* NodeTreeFromWavefrontModel( const std::string& filepath );
+SceneGraph::Node* NodeTreeFromWavefrontModel( const std::string& filepath, const float scale );
 
