@@ -11,6 +11,12 @@ GeoFloat2::GeoFloat2( const float x, const float y )
 	this->y = y;
 }
 
+GeoFloat2::GeoFloat2( const GeoFloat3& f ){
+    this->x = f.x;
+    this->y = f.y;
+}
+
+
 GeoFloat3::GeoFloat3()
 {
 	x = y = z = 0;
