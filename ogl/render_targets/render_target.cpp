@@ -2,25 +2,59 @@
 
 OpenGL::RenderTarget::RenderTarget(){
     valid = false;
+    fbo_id = 0;
+    depth_buffer_id = 0;
 }
 
 OpenGL::RenderTarget::RenderTarget( const unsigned int width, const unsigned int height ){
-    Setup( width, height, false );
+    Setup( width, height );
 }
 
-OpenGL::RenderTarget::RenderTarget( const unsigned int width, const unsigned int height, const bool use_float_format ){
-    Setup( width, height, use_float_format );
+OpenGL::RenderTarget::RenderTarget( const unsigned int width, const unsigned int height, const RenderTargetUsageMask usage ){
+    Setup(width, height);
+    const bool use_float_format = usage & RENDER_TARGET_USAGE::RENDER_TARGET_FLOAT;
+    
+    if( usage & RENDER_TARGET_USAGE::RENDER_TARGET_ATTACH_DEPTH_BUFFER )
+        AttachDepthBuffer();
+    
+    if( usage & RENDER_TARGET_USAGE::RENDER_TARGET_MSAA ){
+      EnableMultisampling( use_float_format );
+    } else {
+        if( usage & RENDER_TARGET_USAGE::RENDER_TARGET_ATTACH_TEXTURE ){
+            if( usage & RENDER_TARGET_USAGE::RENDER_TARGET_CUBEMAP ){
+                if( use_float_format )
+                    AttachFloatCubeMap();
+                else
+                    AttachCubeMap();
+            } else {
+                if( use_float_format )
+                    AttachFloatTexture();
+                else
+                    AttachTexture();
+            }
+        }
+    }
+    
+    
 }
+
 
 bool OpenGL::RenderTarget::EnableMultisampling(){
+    return EnableMultisampling(false);
+}
+
+bool OpenGL::RenderTarget::EnableFloatMultisampling(){
+    return EnableMultisampling(true);
+}
+
+bool OpenGL::RenderTarget::EnableMultisampling(const bool use_float_format){
     GLint max_samples;
     glGetIntegerv(GL_MAX_SAMPLES, &max_samples);
-    
-    printf( "max samples is %i\n", max_samples);
     
     GLenum internal_format = GL_RGBA;
     if( use_float_format )
         internal_format = GL_RGBA16F;
+    
     glBindFramebuffer( GL_FRAMEBUFFER, fbo_id );
     
     GLuint m_ColorId;
@@ -29,13 +63,11 @@ bool OpenGL::RenderTarget::EnableMultisampling(){
     glRenderbufferStorageMultisample(GL_RENDERBUFFER, max_samples, internal_format, width, height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_ColorId);
 
-        
-    glBindRenderbuffer(GL_RENDERBUFFER, depth_buffer_id);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, max_samples, GL_DEPTH24_STENCIL8, width, height);
+    if( depth_buffer_id ){
+        glBindRenderbuffer(GL_RENDERBUFFER, depth_buffer_id);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, max_samples, GL_DEPTH24_STENCIL8, width, height);
+    }
 
-    
-    
-    
     auto gl_error = glGetError();
     switch( gl_error ){
         case GL_NO_ERROR:
@@ -66,10 +98,22 @@ bool OpenGL::RenderTarget::EnableMultisampling(){
 }
 
 bool OpenGL::RenderTarget::AttachTexture(){
-    auto texture_usage = TEXTURE_USAGE::RENDER_TARGET;
-    if( use_float_format )
-        texture_usage = TEXTURE_USAGE::FLOAT_RENDER_TARGET;
-    
+    return AttachTexture( TEXTURE_USAGE_RENDER_TARGET );
+}
+
+bool OpenGL::RenderTarget::AttachFloatTexture(){
+    return AttachTexture( TEXTURE_USAGE_RENDER_TARGET | TEXTURE_USAGE_FLOAT );;
+}
+
+bool OpenGL::RenderTarget::AttachCubeMap(){
+    return AttachTexture( TEXTURE_USAGE_RENDER_TARGET | TEXTURE_USAGE_CUBEMAP );
+}
+
+bool OpenGL::RenderTarget::AttachFloatCubeMap(){
+    return AttachTexture( TEXTURE_USAGE_RENDER_TARGET | TEXTURE_USAGE_FLOAT | TEXTURE_USAGE_CUBEMAP );
+}
+
+bool OpenGL::RenderTarget::AttachTexture( const TextureUsageMask texture_usage){
     tex = Texture( width, height, texture_usage );
     glBindFramebuffer( GL_FRAMEBUFFER, fbo_id );
     glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex.GetOpenGLTextureId(), 0 );
@@ -77,36 +121,21 @@ bool OpenGL::RenderTarget::AttachTexture(){
     return CheckStatus();
 }
 
-void OpenGL::RenderTarget::Setup( const unsigned int width, const unsigned int height, const bool use_float_format ){
-    this->width = width;
-    this->height = height;
-    this->use_float_format = use_float_format;
-    
-    auto texture_usage = TEXTURE_USAGE::RENDER_TARGET;
-    if( use_float_format )
-        texture_usage = TEXTURE_USAGE::FLOAT_RENDER_TARGET;
-    
-    
-    tex = Texture( width, height, texture_usage );
-    
-    //generate and bind an opengl frame buffer object for this texture
-    glGenFramebuffers( 1, &fbo_id );
+bool OpenGL::RenderTarget::AttachDepthBuffer(){
     glBindFramebuffer( GL_FRAMEBUFFER, fbo_id );
-    
     glGenRenderbuffers(1, &depth_buffer_id);
     glBindRenderbuffer(GL_RENDERBUFFER, depth_buffer_id);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
-    
-    //-------------------------
-    //Attach depth buffer to FBO
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_buffer_id);
-    
-   
-   // CheckStatus();
-    
-    //now that a framebuffer object has been created and attached to this texture, we can unbind it
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-    
+    return CheckStatus();
+}
+
+void OpenGL::RenderTarget::Setup( const unsigned int width, const unsigned int height ){
+    this->width = width;
+    this->height = height;
+    glGenFramebuffers( 1, &fbo_id );
+    depth_buffer_id = 0;
 }
 
 void OpenGL::RenderTarget::BlitToScreen(const unsigned int screen_width, const unsigned int screen_height){
@@ -184,13 +213,11 @@ bool OpenGL::RenderTarget::CheckStatus(){
 
 
 
-void OpenGL::RenderTarget::Free()
-{
+void OpenGL::RenderTarget::Free(){
     
 }
 
-OpenGL::Texture& OpenGL::RenderTarget::GetTexture()
-{
+OpenGL::Texture& OpenGL::RenderTarget::GetTexture(){
     return tex;
 }
 

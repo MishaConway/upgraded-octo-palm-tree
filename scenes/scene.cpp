@@ -43,44 +43,17 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     shader_cache.RegisterShaderProgram( "texture_full_screen", "fullscreen", "hud" );
 
     
-    printf( "before creating render_target\n");
-    render_target = OpenGL::RenderTarget( 1024, 768 );
-    printf( "before AttachTexture\n");
-    render_target.AttachTexture();
-    printf( "after AttachTexture\n");
-    OpenGL::GraphicsDevice::SetRenderTarget( render_target );
-    OpenGL::GraphicsDevice::Clear(Color::ForestGreen());
-    OpenGL::GraphicsDevice::SetDefaultRenderTarget();
+    auto RT_ATTACH_TEX = OpenGL::RENDER_TARGET_USAGE::RENDER_TARGET_ATTACH_TEXTURE;
+    auto RT_FLOAT = OpenGL::RENDER_TARGET_USAGE::RENDER_TARGET_FLOAT;
+    auto RT_MSAA = OpenGL::RENDER_TARGET_USAGE::RENDER_TARGET_MSAA;
+    auto RT_ATTACH_DEPTH = OpenGL::RENDER_TARGET_USAGE::RENDER_TARGET_ATTACH_DEPTH_BUFFER;
     
-    printf( "before creating msaa_render_target\n");
-    msaa_render_target = OpenGL::RenderTarget( 1024, 768, true );
-    printf( "before EnableMultisampling\n");
-    msaa_render_target.EnableMultisampling();
-    printf( "after EnableMultisampling\n");
-
-    
-
-    
-    printf( "before creating float_render_target\n");
-    float_render_target = OpenGL::RenderTarget( 1024, 768, true );
-    printf( "before AttachTexture\n");
-    float_render_target.AttachTexture();
-    printf( "after AttachTexture\n");
-    OpenGL::GraphicsDevice::SetRenderTarget( render_target );
-    OpenGL::GraphicsDevice::Clear(Color::Yellow());
-    OpenGL::GraphicsDevice::SetDefaultRenderTarget();
-    
-   
-    
-    
+    render_target = OpenGL::RenderTarget( 1024, 768, RT_ATTACH_TEX  );
+    msaa_render_target = OpenGL::RenderTarget( 1024, 768, RT_MSAA | RT_FLOAT | RT_ATTACH_DEPTH  );
+    float_render_target = OpenGL::RenderTarget( 1024, 768, RT_ATTACH_TEX | RT_FLOAT );
+  
     texture_cache.RegisterTexture( "render_target", render_target.GetTexture() );
     texture_cache.RegisterTexture( "float_render_target", float_render_target.GetTexture() );
-    
-    
-    
-    
-    
-    
     
     
     /* BEGIN HUD */
@@ -108,7 +81,9 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     
     
     //auto garbage_can = NodeTreeFromWavefrontModel("/Users/mconway/projects/volley/models/box/box.obj", 1);
-    auto garbage_can = NodeTreeFromWavefrontModel("/Users/mconway/projects/volley/models/coke/coke.obj", 0.01f);
+    //auto garbage_can = NodeTreeFromWavefrontModel("/Users/mconway/projects/volley/models/coke/coke.obj", 0.01f);
+    auto garbage_can = NodeTreeFromWavefrontModel("/Users/mconway/projects/volley/models/fox/fox.obj", 0.1f);
+
 
     root->children.push_back(garbage_can);
     
@@ -233,15 +208,15 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     auto directional_light = new SceneGraph::LightNode;
     directional_light->IDirectionalLight::directional = true;
     directional_light->IDirectionalLight::direction = GeoFloat3( 1, 0, 1 );
-    directional_light->IBaseLightDetails::diffuse = GeoFloat3( 0.55f, 0.55f, 0.55f );
-    directional_light->IBaseLightDetails::specular = GeoFloat3( 0.53f, 0.53f, 0.54f );
+  //  directional_light->IBaseLightDetails::diffuse = GeoFloat3( 0.55f, 0.55f, 0.55f );
+  //  directional_light->IBaseLightDetails::specular = GeoFloat3( 0.53f, 0.53f, 0.54f );
     root->children.push_back(directional_light);
     
     auto directional_light2 = new SceneGraph::LightNode;
     directional_light2->IDirectionalLight::directional = true;
     directional_light2->IDirectionalLight::direction = GeoFloat3( 0, 0, -1 );
-    directional_light2->IBaseLightDetails::diffuse = GeoFloat3( 0.25f, 0.25f, 0.25f );
-    directional_light2->IBaseLightDetails::specular = GeoFloat3( 0.13f, 0.13f, 0.14f );
+  //  directional_light2->IBaseLightDetails::diffuse = GeoFloat3( 0.25f, 0.25f, 0.25f );
+  //  directional_light2->IBaseLightDetails::specular = GeoFloat3( 0.13f, 0.13f, 0.14f );
     root->children.push_back(directional_light2);
     
     
@@ -256,8 +231,8 @@ void Scene::Initialize( const unsigned int width, const unsigned int height ){
     auto light = new SceneGraph::LightGeode();
     light->shader_program = "phong";
     light->textures["diffuse"] = SceneGraph::TextureDetails("grass.jpg");
-    light->IBaseLightDetails::diffuse = GeoFloat3( 0.55f, 0.55f, 0.55f );
-    light->IBaseLightDetails::specular = GeoFloat3( 0.63f, 0.63f, 0.64f );
+    //light->IBaseLightDetails::diffuse = GeoFloat3( 0.55f, 0.55f, 0.55f );
+    //light->IBaseLightDetails::specular = GeoFloat3( 0.63f, 0.63f, 0.64f );
     light->material.emissive = GeoFloat3( 1, 1, 1 );
     light->vertex_buffer = OpenGL::VertexBuffer<Vertex>( Cube::UnitCube().Transform( GeoMatrix::Scaling(0.1f)).ToVertices() );
     rotor->children.push_back(light);

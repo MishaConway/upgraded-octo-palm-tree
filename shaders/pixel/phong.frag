@@ -40,7 +40,7 @@ void main()
         linear_color += apply_light(lights[i], tex1_sample, world_normal, world_vertex_normal, world_position, world_position_to_eye_position);
     }
     
-    linear_color = saturate( linear_color );
+    //linear_color = linear_color );
     
     //linear_color = world_normal;
     //linear_color = world_bitangent;
