@@ -19,7 +19,6 @@
 		956A321D20296E6100857BC7 /* drawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956A321B20296E6100857BC7 /* drawable.cpp */; };
 		956B0F882060F15700E96D28 /* index_buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956B0F862060F15700E96D28 /* index_buffer.cpp */; };
 		958055EA2032956E003D3D04 /* tgen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 958055E82032956E003D3D04 /* tgen.cpp */; };
-		95959ABD206D7A4200E096A5 /* cube_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95959ABB206D7A4200E096A5 /* cube_map.cpp */; };
 		9596D94F2017FD0E00D5BC04 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9596D94E2017FD0E00D5BC04 /* main.cpp */; };
 		9596D9562017FD7800D5BC04 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9596D9552017FD7800D5BC04 /* OpenGL.framework */; };
 		9596D9582017FD9100D5BC04 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9596D9572017FD9100D5BC04 /* SDL2.framework */; };
@@ -109,8 +108,6 @@
 		958055E82032956E003D3D04 /* tgen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tgen.cpp; path = shapes/shape_utilities/tgen.cpp; sourceTree = SOURCE_ROOT; };
 		958055E92032956E003D3D04 /* tgen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tgen.h; path = shapes/shape_utilities/tgen.h; sourceTree = SOURCE_ROOT; };
 		958055EB2032E8AF003D3D04 /* cry_tangents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cry_tangents.h; path = shapes/shape_utilities/cry_tangents.h; sourceTree = SOURCE_ROOT; };
-		95959ABB206D7A4200E096A5 /* cube_map.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cube_map.cpp; path = ogl/textures/cube_map.cpp; sourceTree = SOURCE_ROOT; };
-		95959ABC206D7A4200E096A5 /* cube_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cube_map.h; path = ogl/textures/cube_map.h; sourceTree = SOURCE_ROOT; };
 		9596D94B2017FD0E00D5BC04 /* volley */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = volley; sourceTree = BUILT_PRODUCTS_DIR; };
 		9596D94E2017FD0E00D5BC04 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		9596D9552017FD7800D5BC04 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -537,8 +534,6 @@
 		9596D9C0201B2DE800D5BC04 /* textures */ = {
 			isa = PBXGroup;
 			children = (
-				95959ABB206D7A4200E096A5 /* cube_map.cpp */,
-				95959ABC206D7A4200E096A5 /* cube_map.h */,
 				956A320B2025C6B800857BC7 /* stb_image_write.h */,
 				9596D9DE201C771600D5BC04 /* stb_image.h */,
 				9596D9C1201B2DFD00D5BC04 /* texture.cpp */,
@@ -700,7 +695,6 @@
 			files = (
 				9596D9D7201C11CD00D5BC04 /* buffer.cpp in Sources */,
 				9596D96B201808F500D5BC04 /* GeoVector.cpp in Sources */,
-				95959ABD206D7A4200E096A5 /* cube_map.cpp in Sources */,
 				956A321A2029632000857BC7 /* node.cpp in Sources */,
 				956A321D20296E6100857BC7 /* drawable.cpp in Sources */,
 				9596D9B2201AE76F00D5BC04 /* IHasErrors.cpp in Sources */,
