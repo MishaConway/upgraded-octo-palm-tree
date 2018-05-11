@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../textures/texture.h"
-#include "../textures/cube_map.h"
 #include <vector>
 
 
@@ -35,6 +34,8 @@ namespace OpenGL{
         bool AttachCubeMap();
         bool AttachDepthBuffer();
         
+        bool AttachCubemapSide( const CUBEMAP_SIDE side );
+        
         
         GLuint GetOpenGLFrameBufferId() const;
         GLuint GetOpenGLDepthBufferId();
@@ -55,6 +56,7 @@ namespace OpenGL{
         void Setup( const unsigned int width, const unsigned int height );
         bool AttachTexture( const TextureUsageMask texture_usage);
         bool EnableMultisampling( const bool use_float_format );
+        RenderTargetUsageMask render_target_usage;
 
 
         

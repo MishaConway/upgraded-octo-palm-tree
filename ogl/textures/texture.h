@@ -43,6 +43,8 @@ namespace OpenGL{
         }
     };
     
+    GLenum ToOpenGLCubeMapSide( const CUBEMAP_SIDE cubemap_side );
+
 
     class Texture : public IValidatable
     {
@@ -68,12 +70,6 @@ namespace OpenGL{
         void Setup( const unsigned int width, const unsigned int height, const TextureUsageMask usage );
         unsigned char* MapEx( unsigned int* pPitch );
         
-        GLenum ToOpenGLCubeMapSide( const CUBEMAP_SIDE cubemap_side );
-
-
-        
-        
-
     private:
         GLuint texture_id, pbo_id;
         GLenum internal_format, format, component_type, enable_target;

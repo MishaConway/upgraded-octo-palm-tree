@@ -4,6 +4,7 @@ OpenGL::RenderTarget::RenderTarget(){
     valid = false;
     fbo_id = 0;
     depth_buffer_id = 0;
+    render_target_usage = 0;
 }
 
 OpenGL::RenderTarget::RenderTarget( const unsigned int width, const unsigned int height ){
@@ -12,6 +13,7 @@ OpenGL::RenderTarget::RenderTarget( const unsigned int width, const unsigned int
 
 OpenGL::RenderTarget::RenderTarget( const unsigned int width, const unsigned int height, const RenderTargetUsageMask usage ){
     Setup(width, height);
+    render_target_usage = usage;
     const bool use_float_format = usage & RENDER_TARGET_USAGE::RENDER_TARGET_FLOAT;
     
     if( usage & RENDER_TARGET_USAGE::RENDER_TARGET_ATTACH_DEPTH_BUFFER )
@@ -116,10 +118,23 @@ bool OpenGL::RenderTarget::AttachFloatCubeMap(){
 bool OpenGL::RenderTarget::AttachTexture( const TextureUsageMask texture_usage){
     tex = Texture( width, height, texture_usage );
     glBindFramebuffer( GL_FRAMEBUFFER, fbo_id );
-    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex.GetOpenGLTextureId(), 0 );
+    
+    if( !(render_target_usage & RENDER_TARGET_USAGE::RENDER_TARGET_CUBEMAP) )
+        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex.GetOpenGLTextureId(), 0 );
+    
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
     return CheckStatus();
 }
+
+bool OpenGL::RenderTarget::AttachCubemapSide( const CUBEMAP_SIDE side ){
+    GLenum opengl_cubemap_side = ToOpenGLCubeMapSide( side );
+    
+    glBindFramebuffer( GL_FRAMEBUFFER, fbo_id );
+    glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, opengl_cubemap_side, tex.GetOpenGLTextureId(), 0);
+    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    return CheckStatus();
+}
+
 
 bool OpenGL::RenderTarget::AttachDepthBuffer(){
     glBindFramebuffer( GL_FRAMEBUFFER, fbo_id );
@@ -132,6 +147,7 @@ bool OpenGL::RenderTarget::AttachDepthBuffer(){
 }
 
 void OpenGL::RenderTarget::Setup( const unsigned int width, const unsigned int height ){
+    render_target_usage = 0;
     this->width = width;
     this->height = height;
     glGenFramebuffers( 1, &fbo_id );

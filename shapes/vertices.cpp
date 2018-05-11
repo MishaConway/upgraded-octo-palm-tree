@@ -108,7 +108,6 @@ std::pair< std::vector<Vertex>, std::vector<unsigned int> > DuplicateVerticesOnN
     
     for (long a = 0; a < vertices.size(); a += 3)
     {
-        int nCount[5] = {0, 1, 2, 3, 4};
         
         auto p1 = GeoVector(vertices[a].position);
         auto p2 = GeoVector(vertices[a+1].position);

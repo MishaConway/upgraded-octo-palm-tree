@@ -187,8 +187,8 @@ SceneGraph::Node* NodeTreeFromWavefrontModel( const std::string& filepath, const
             auto node = new SceneGraph::Geode;
             //node->textures["diffuse"] = SceneGraph::TextureDetails( wavefront_material.diffuse_texname );
             node->textures["diffuse"] = SceneGraph::TextureDetails( "metal1.jpg" );
-            printf( "vertices.size is %i\n", vertices.size() );
-            printf( "normalzed vertices size is %i\n", normalized_vertices.size() );
+            printf( "vertices.size is %lu\n", vertices.size() );
+            printf( "normalzed vertices size is %lu\n", normalized_vertices.size() );
             //node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(normalized_face_indices, normalized_vertices);
             node->vertex_buffer = OpenGL::VertexBuffer<Vertex>(flat_indices, vertices);
 

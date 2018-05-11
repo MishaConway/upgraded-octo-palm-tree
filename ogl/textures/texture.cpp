@@ -236,7 +236,7 @@ unsigned int OpenGL::Texture::GetHeight() const{
     return height;
 }
 
-GLenum OpenGL::Texture::ToOpenGLCubeMapSide( const CUBEMAP_SIDE cubemap_side ){
+GLenum OpenGL::ToOpenGLCubeMapSide( const CUBEMAP_SIDE cubemap_side ){
     switch( cubemap_side ){
         case CUBEMAP_SIDE::CUBEMAP_NEGATIVE_X:
             return GL_TEXTURE_CUBE_MAP_NEGATIVE_X;
@@ -250,6 +250,8 @@ GLenum OpenGL::Texture::ToOpenGLCubeMapSide( const CUBEMAP_SIDE cubemap_side ){
             return GL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
         case CUBEMAP_SIDE::CUBEMAP_POSITIVE_Z:
             return GL_TEXTURE_CUBE_MAP_POSITIVE_Z;
+        case CUBEMAP_SIDE::CUBEMAP_NONE:
+            return -1;
     }
     return -1;
 }
